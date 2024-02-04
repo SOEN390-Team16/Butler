@@ -1,0 +1,22 @@
+.continue__button{
+    text-align: center;
+}
+
+.continue__button button{
+    justify-content: center;
+    width:100%;
+    font-family: 'inter';
+    font-weight: 700;
+    padding:12px;
+    border-radius: 5px;
+    background: #000;
+    color:white;
+    cursor:grab;
+}
+
+@media (Max-width: 768px){
+
+    .continue__button {
+        width:100%;
+    }
+}

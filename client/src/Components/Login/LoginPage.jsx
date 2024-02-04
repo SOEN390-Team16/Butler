@@ -14,6 +14,7 @@ const LoginPage = () => {
     return(
         <div className="login__main__page">
           
+          
            <SidePicture>
                 {isMobile && (<LoginCard/>)}  
            </SidePicture>

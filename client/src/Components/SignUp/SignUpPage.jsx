@@ -1,24 +1,28 @@
 import React from "react";
 import {useState} from "react"
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import SidePicture from "../Login/SidePicture";
 import InformationHolder from "./InformationHolder";
-import { FcGoogle } from "react-icons/fc";
+
 import './SignUpPage.css'
+import GoogleSignUp from "./GoogleSignUp";
 
 
 
 const LoginPage = () => {
 
-    const isMobile = useMediaQuery({ query: `(max-width: 760px)` })
-    
+// This logingPage is for hosting the googlesignup component where the software directs to when 
+// youre first accessing the sign up page. its the "Parent" page for the first sign up option
 
+
+    const isMobile = useMediaQuery({ query: `(max-width: 760px)` })
+   
     return(
         <div className="signup__main__page">
                 <SidePicture>
-                    <InformationHolder>
-                        <div className="first__signup__card">
+                  { isMobile && (<InformationHolder>
+                        {/* <div className="first__signup__card">
                             <h1>Sign up to Butler.</h1>
                             <div className="googleSignUp__button">
                                <Link><button><p><FcGoogle size={25}/> Sign up with google</p></button></Link> 
@@ -33,10 +37,18 @@ const LoginPage = () => {
                                 <p>Already have an account ?</p>
                                 <Link><p>Sign in</p></Link>
                             </div>
-                        </div>
-                        
-                    </InformationHolder>
+                        </div> */}
+                        <GoogleSignUp />
+                    </InformationHolder>)}
+
+                   
                 </SidePicture>
+
+                {!isMobile && (
+                        <InformationHolder>
+                            <GoogleSignUp />
+                        </InformationHolder>
+                    )}
         </div>
        
     )

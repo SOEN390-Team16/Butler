@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 
 import './LoginCard.css'
+import ContinueButton from "../Buttons/ContinueButton";
 
 
 const LoginCard = () => {
@@ -54,9 +55,10 @@ const LoginCard = () => {
                     <div className="forgot__password">
                         <Link to ="/">Forgot Password?</Link>
                     </div>
-                    <div className="continue__button">
+                    {/* <div className="continue__button">
                         <Link to="/" onClick={handleClick}><button>Continue</button></Link>
-                    </div>
+                    </div> */}
+                    <ContinueButton name={"Continue"}/>
                 </div>
                     
             </div>
