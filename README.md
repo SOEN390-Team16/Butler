@@ -49,3 +49,13 @@ The Condo Management Application is built using the MERN (MongoDB, Express.js, R
 | Mohammed Rahman | 	40203098 | Afifr2001 |
 | Khalil Garaali	| 40226310 | KhalilGarali |
 | Youssef Alsheghri	| 40108014 | yousfino |
+
+
+## How to run
+
+1. Pull the repository into IDE of your choice.
+2. Open a new terminal in the console. 
+3. Navigate to the client folder by doing the following command: cd client
+4. Once in client, run the following command in the terminal: npm run dev
+5. A localhost will appear, use that localhost url into your browser
+6. Enjoy :)

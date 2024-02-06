@@ -11,10 +11,6 @@ import { MdWavingHand } from "react-icons/md";
 
 const SideDrawer = props => {
 
-
-
-
-
   return (
 
     // Conditional rendering on wether the drawer is open or not.
