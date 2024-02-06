@@ -3,3 +3,19 @@
 body{
     margin:0;
 }
+
+hr{
+    width:90%;
+    height:1.5px;
+    background-color: #d1d1d1
+}
+
+h1{
+    font-family: Raleway;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 48px;
+    letter-spacing: 0em;
+    text-align: left;
+
+}

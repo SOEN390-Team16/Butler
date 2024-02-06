@@ -6,8 +6,20 @@
     font-style: normal;
     font-weight: 700;
     margin: 10% 0;
-    text-align: center;
 }
+
+.signup__entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0; /* This property removes the margin between the child elements */
+
+}
+
+.signup__entry p {
+    margin: 0; /* Remove margin on p elements */
+    font-weight: 700;
+}
+
 .signup__credentials{
     padding:0 20px;
 }
@@ -16,19 +28,19 @@
     opacity: 0.5;
     border:none;
     width:90%;
-    padding:15px 10px;
+    padding:16px 10px;
     outline:none;
+    align-self: start;
     
 }
 
 .signup__credentials .input__holder{
     display: flex;
-    align-items: center;
+    margin-top: 2%;
     align-self: stretch;
     border: 1px solid #D9D9D9;
     background: #FFF;
     border-radius: 10px;
-    margin:6% 0;
 }
 
 .redirect{
@@ -43,4 +55,10 @@
 
 .redirect p{
     margin-top: 10%!important;
+}
+
+@media (Max-width:768px){
+    .signup__credentials input{
+        padding:12px 10px;
+    }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import {useState, useEffect} from 'react'
 import {useMediaQuery} from 'react-responsive'
 import { FcGoogle } from "react-icons/fc";
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 
 
 import './LoginCard.css'
@@ -11,7 +11,7 @@ import ContinueButton from "../Buttons/ContinueButton";
 
 const LoginCard = () => {
     const [next, setNext] = useState(false)
-
+    const navigation = useNavigate();
     // Basic object that will temporarily hold the users information that will be requested to the DB
     const [userInfo, setUserInfo] = useState({ 
         email: '',
@@ -21,10 +21,10 @@ const LoginCard = () => {
 
     const isMobile = useMediaQuery({ query: `(max-width: 760px)` })
 
-    // On click of button, 
+    // On click of button, this will login the users and redirect them to their profiles
     const handleClick = async e => {
         e.preventDefault();
-        setNext(true)
+        navigation('/DashboardHome')
         console.log(userInfo)
     }
     // Function that stores the users information into the object for querying
@@ -58,7 +58,7 @@ const LoginCard = () => {
                     {/* <div className="continue__button">
                         <Link to="/" onClick={handleClick}><button>Continue</button></Link>
                     </div> */}
-                    <ContinueButton name={"Continue"}/>
+                    <ContinueButton onClick={handleClick} name={"Sign In"}/>
                 </div>
                     
             </div>

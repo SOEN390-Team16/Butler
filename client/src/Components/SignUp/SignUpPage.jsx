@@ -43,7 +43,6 @@ const LoginPage = () => {
 
                    
                 </SidePicture>
-
                 {!isMobile && (
                         <InformationHolder>
                             <GoogleSignUp />

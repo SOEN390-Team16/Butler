@@ -12,11 +12,9 @@
     background: #000;
     color:white;
     cursor:grab;
+    margin:4% 0;
 }
 
 @media (Max-width: 768px){
 
-    .continue__button {
-        width:100%;
-    }
 }

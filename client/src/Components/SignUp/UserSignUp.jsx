@@ -12,25 +12,33 @@ import CreateAccount from "./CreateAccount";
 const UserSignUp = () => {
     const navigate = useNavigate()
     const isMobile = useMediaQuery({ query: `(max-width: 760px)` })
+    
+    // Userinfo object that stores the inserted info
     const [userInfo,setUserInfo] = useState({
+        username: '',
+        name:'',
         email: '',
-        password:'',
-        confirmed: ''
+        password: ''
     })
     const [route,setRoute] = useState('/SignUp/userSignUp')
     const [wrongInformation, setIsWrongInformation] = useState(false)
     
+
+    // Onclick function that will take care of all the login API calls
     const handleClick = async e => {
         e.preventDefault();
-        navigate('/SignUp/userSignUp/Finalize', {state: userInfo} )
+        if( userInfo.username === '' || userInfo.name === '' || userInfo.email === '' || userInfo.password === ''){
+            console.log('not good')
+        }else{
+            navigate('/')
+        }
 
     }
-    // Function that stores the users information into the object for querying
+    // Function that stores the users information into the object for querying as theyre typing
     const handleChange  = e => {
         setUserInfo(prev => ({...prev, [e.target.name]:e.target.value}))
         console.log(userInfo)
         console.log(route)
-       
     }
 
     return(
