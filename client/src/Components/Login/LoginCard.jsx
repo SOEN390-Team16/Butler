@@ -52,9 +52,16 @@ const LoginCard = () => {
                     <div className="credentials__section c2">
                         <input type="password" placeholder="password" name="password" onChange={handleChange}/>
                     </div>
-                    <div className="forgot__password">
-                        <Link to ="/">Forgot Password?</Link>
+                    <div className="row redirect__container">
+                        <div className="col-lg-6 col-sm-3 signup__redirect">
+                            <Link to="/SignUp">New user, sign up!</Link>
+                        </div>
+                        <div className="col-lg-6 col-sm-3 forgot__password">
+                            <Link to ="/">Forgot Password?</Link>
+                        </div>
                     </div>
+                    
+                    
                     {/* <div className="continue__button">
                         <Link to="/" onClick={handleClick}><button>Continue</button></Link>
                     </div> */}
