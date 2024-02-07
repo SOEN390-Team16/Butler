@@ -16,7 +16,7 @@ const GoogleSignUp = () => {
         <div className="googleSignUp__button">
         <Link><button><p><FcGoogle size={25}/> Sign up with google</p></button></Link> 
         </div>
-        <div>
+        <div style={{margin:'4% 0'}}>
             <p>Or</p>
         </div>
         <div className="email__signUp">

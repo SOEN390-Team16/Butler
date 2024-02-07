@@ -2,7 +2,9 @@
     text-align: center;
 }
 
-
+.first__signup__card h1{
+   margin: 10% 0;
+}
 .googleSignUp__button button{
     cursor:grab;
     width:70%;
