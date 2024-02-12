@@ -5,13 +5,23 @@
 }
 
 .sidedrawer__open{
-    padding:3% 4%
+    background-image: url('../../pictures/dashboardHero.jpg');
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding:8% 4%
+}
+
+.sidedrawer__open .customIcon{
+    background: transparent !important;
 }
 
 
-
 .patty__button{
-    background-color: #eee;
+    background-color: #B1C6D3;
+    margin-top:50px;
+    color:white;
+    border-radius:0px 10px 10px 0px;
     border:none;
 }
 
@@ -29,7 +39,7 @@
     line-height: 16px;
     letter-spacing: 0em;
     text-align: left;
-    color: #D1D1D1;
+    color: #5D5D5D;;
     margin-left:5%;
 }
 

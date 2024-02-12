@@ -44,12 +44,13 @@ const [isDrawerOpen, setDrawerOpen] = useState(false);
   }, 1000)
 
 
+
   return (
     <div className="dashboard__home">
         <div className="sidedrawer__open">
-            <button className="patty__button" onClick={toggleDrawer}><RxHamburgerMenu  size={40}/></button>
+           
         </div>
-     
+        <button className="patty__button" onClick={toggleDrawer}><RxHamburgerMenu size={40}/></button>
       <SideDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} firstName={dummyUser.fName} lastName={dummyUser.lName}>
         <div className="link__holder">
            {options && (
@@ -64,10 +65,13 @@ const [isDrawerOpen, setDrawerOpen] = useState(false);
            </div>
       </SideDrawer>
       {/* Your main content goes here */}
-              <div className="construction__sign">
+     <div className="container">
+     <div className="construction__sign">
                   <LuConstruction size={60}/>
                   <h1>Site in construction {dots}</h1>
               </div>
+     </div>
+              
     </div>
   
     )

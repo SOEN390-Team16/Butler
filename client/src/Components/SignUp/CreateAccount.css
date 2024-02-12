@@ -28,7 +28,6 @@
     opacity: 0.5;
     border:none;
     width:90%;
-    padding:16px 10px;
     outline:none;
     align-self: start;
     
@@ -54,11 +53,15 @@
 }
 
 .redirect p{
-    margin-top: 10%!important;
+   margin-top: 4% !important;
 }
 
 @media (Max-width:768px){
     .signup__credentials input{
         padding:12px 10px;
+    }
+
+    .input__holder{
+        padding:0
     }
 }
