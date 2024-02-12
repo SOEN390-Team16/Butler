@@ -50,17 +50,32 @@
   
   }
 
-  .profile__picture{
-    
+  .profile__picture{ 
     margin-right: 10%;
-    border-radius: 50%;
-    background-color: #d1d1d1;
     width:35%;
     
-
   }
+
+
+.company__tag a{
+  text-decoration: none;
+  color:black;
+}
+
+  .profile__picture img{
+    border-radius: 50%; /* Make it round */
+    object-fit: cover;
+    height:100px;
+    width:100%;
+  }
+
+
   .greeting {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     width:50%;
+    align-items: center;
   }
 
   .sideDrawer h1{
