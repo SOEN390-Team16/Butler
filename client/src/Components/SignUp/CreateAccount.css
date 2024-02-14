@@ -11,6 +11,7 @@
 .signup__entry {
     display: flex;
     flex-direction: column;
+    transition: left 0.9s ease-out;
     gap: 0; /* This property removes the margin between the child elements */
 
 }
@@ -55,6 +56,22 @@
 .redirect p{
    margin-top: 4% !important;
 }
+
+
+.signup__options{
+    display:flex;
+    flex-direction: row;
+    justify-content:space-around;
+}
+
+.signup__options p{
+    font-weight: 700;
+}
+
+.active{
+    border-bottom: 2px solid black;
+}
+
 
 @media (Max-width:768px){
     .signup__credentials input{

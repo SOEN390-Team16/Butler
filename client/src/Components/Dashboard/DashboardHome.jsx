@@ -4,6 +4,9 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { RxHamburgerMenu } from "react-icons/rx";
 import './DashboardHome.css'
 import SideDrawer from "./SideDrawer";
+// Firebase imports
+import {db} from '../../../../firebase/firebaseConfig'
+import { collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "firebase/firestore"
 import { LuConstruction } from "react-icons/lu";
 
 // Dashboard home is the home component where clients will enter
@@ -51,6 +54,8 @@ const [isDrawerOpen, setDrawerOpen] = useState(false);
            
         </div>
         <button className="patty__button" onClick={toggleDrawer}><RxHamburgerMenu size={40}/></button>
+
+        {/* The Side drawer is whats being opened for main navigation */}
       <SideDrawer isOpen={isDrawerOpen} onClose={toggleDrawer} firstName={dummyUser.fName} lastName={dummyUser.lName}>
         <div className="link__holder">
            {options && (

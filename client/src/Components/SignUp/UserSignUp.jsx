@@ -53,11 +53,6 @@ const UserSignUp = () => {
                 {!isMobile && (
                     <InformationHolder>
                         <CreateAccount route = {route} credentials ={userInfo} onChange={handleChange} onClick={handleClick}/>
-                        {/* <ContinueButton onClick={handleClick} name={"Continue"}/>
-                        <div className="redirect">
-                            <p>Already have an account ?</p>
-                            <Link to="/" ><p>Sign in</p></Link>
-                        </div> */}
                     </InformationHolder>
                 )}
         </div>

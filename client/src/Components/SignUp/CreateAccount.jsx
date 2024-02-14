@@ -1,13 +1,15 @@
-import React , {useState} from "react";
+import React from "react";
+import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import { Link } from "react-router-dom";
 import './CreateAccount.css'
-
-
+import CompanySignUp from "./CompanySignUp";
+import FadeIn from 'react-fade-in';
 const CreateAccount = props => {
 
-    
+    const [userAccount, setIsUserAccount] = useState(true)
 
+  
 // Create account holds the information records for when a client signs up.
 // 1. when a client signs up , there will be an axios post method to see whether the email/password combo already exists
 // 2. IF verified and good, add the client to the database.
@@ -16,7 +18,16 @@ const CreateAccount = props => {
     return(
         <div className="signup__credentials">
             <h1>Sign up to Butler.</h1>
-            <div className="signup__entry">
+            <div className="signup__options">
+                <div><p className= {`${userAccount ? 'active':''}`} onClick={()=>setIsUserAccount(true)}>Public User</p></div>
+        
+                <div><p className= {`${!userAccount ? 'active':''}`} onClick={()=>setIsUserAccount(false)}>Company User</p></div>
+            </div>
+           { userAccount ? (
+           
+           <>
+           <FadeIn >
+           <div className="signup__entry">
                 <p>Username</p>
                 <div className="input__holder">
                     <input type="email" className="" name ="username" onChange={props.onChange} required/>
@@ -40,7 +51,18 @@ const CreateAccount = props => {
                     <input type="password"  className="" onChange={props.onChange} name="password" required/>
                 </div>
             </div>
+            </FadeIn>
             <ContinueButton onClick={props.onClick} name={"Create Account"}/>
+            </>) : (
+                <FadeIn>
+                    <CompanySignUp />
+                </FadeIn>
+            )
+            
+            
+            
+            
+            }
             <div className="redirect">
                 <p>Already have an account ?</p>
                 <Link to="/" ><p>Sign in</p></Link>
