@@ -1,0 +1,26 @@
+.information__holder__box{
+    display: flex;
+    background-color: white;
+    width:33%;
+
+    flex-direction: column;
+    align-self: center;
+    /* justify-content: center; */
+    border-radius: 10px; /* Adjust the border-radius value as needed for a sleek look */
+
+}
+
+
+
+@media (Max-width:768px){
+
+    .information__holder__box{
+        height:fit-content;
+        background-color: white;
+        width:70%;
+        padding-bottom:5%;
+        margin-bottom: 20%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow for depth */        
+    }
+
+}

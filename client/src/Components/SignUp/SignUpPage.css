@@ -1,0 +1,9 @@
+.signup__main__page{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 18%;
+    align-items: center;
+    
+}
+

@@ -1,0 +1,21 @@
+.continue__button{
+    text-align: center;
+    margin: 4% 0;
+}
+
+.continue__button button{
+    justify-content: center;
+    width:100%;
+    font-family: 'inter';
+    font-weight: 700;
+    padding:12px;
+    border-radius: 5px;
+    background: #000;
+    color:white;
+    cursor:grab;
+    margin:2% 0;
+}
+
+@media (Max-width: 768px){
+
+}

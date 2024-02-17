@@ -29,7 +29,7 @@ Condo management companies can create property profiles, manage files, and set u
 
 The Condo Management Application is built using the MERN (MongoDB, Express.js, React.js, Node.js) stack. The technology stack ensures a scalable, efficient, and modern web application.
 
-- PostgreSQL: SQL database for clear relationships and fast queries.
+- MySQL: SQL database for clear relationships and fast queries.
 - Express.js: Backend framework for handling server-side operations.
 - React.js: Frontend library for building dynamic user interfaces.
 - Node.js: JavaScript runtime for server-side scripting.
@@ -43,7 +43,7 @@ The Condo Management Application is built using the MERN (MongoDB, Express.js, R
 | Wadeh Hamati	| 40216893 | wade3hamati |
 | Walid Achlaf	| 40210355 | walidoow |
 | Charles Eimer	| 26747310 | eimcharles |
-| Houssam Righi	| 40155074 | Horisofine |
+| Houssam Righi	| 40155074 | |
 | Ceyhun Topcu	| 40159200 | ceyhuntopcu |
 | Monika Moanes	| 40188452 | MonikaaMoanes |
 | Mohammed Rahman | 	40203098 | Afifr2001 |
