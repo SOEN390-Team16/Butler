@@ -1,11 +1,11 @@
 .login__picture{
     background-image: url('../../pictures/loginHero.jpg');
-    min-height: 820px; 
+    height: 100vh; 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     width:33%;
-
+    
 }
 
 @media (Max-width:768px){
@@ -25,7 +25,4 @@
     .login__section{
         width:90%;
     }
-
-
-
 }
