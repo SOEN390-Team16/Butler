@@ -15,8 +15,7 @@ const LoginCard = () => {
     // Basic object that will temporarily hold the users information that will be requested to the DB
     const [userInfo, setUserInfo] = useState({ 
         email: '',
-        password: '',
-        username: ''
+        password: ''
     })
 
     const isMobile = useMediaQuery({ query: `(max-width: 760px)` })
