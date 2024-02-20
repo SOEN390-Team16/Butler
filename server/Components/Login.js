@@ -8,17 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/database_name', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// Create a User model
-const User = mongoose.model('User', {
-  email: String,
-  password: String
-});
 
 // Login endpoint
 app.post('/api/login', async (req, res) => {
@@ -47,7 +36,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.DB_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
