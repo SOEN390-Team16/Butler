@@ -139,7 +139,6 @@
     .login__card{
         background-color: white;
         width:70%;
-        height: 55%;
         margin-bottom: 20%;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow for depth */        
     }
