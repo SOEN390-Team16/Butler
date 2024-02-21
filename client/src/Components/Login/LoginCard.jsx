@@ -7,7 +7,7 @@ import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
 
 const LoginCard = () => {
-  // const navigation = useNavigate();
+  const navigation = useNavigate();
 
   // Basic object that will temporarily hold the users information that will be requested to the DB
   const [userInfo, setUserInfo] = useState({
@@ -33,7 +33,7 @@ const LoginCard = () => {
         console.log("Error logging in:", err.response.data.message);
       });
 
-    // navigation("/DashboardHome");
+    navigation("/DashboardHome");
   };
   // Function that stores the users information into the object for querying
   const handleChange = (e) => {
