@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import "./DashboardHome.css";
+import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
 import { LuConstruction } from "react-icons/lu";
 
