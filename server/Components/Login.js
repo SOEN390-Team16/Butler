@@ -1,42 +1,42 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const cors = require('cors');
+const pool = require('./db.js');
 
 const app = express();
+const PORT = process.env.DB_PORT;
+
 app.use(express.json());
-app.use(cors());
 
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
-// Login endpoint
-app.post('/api/login', async (req, res) => {
+// Login
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
   try {
-    const { email, password } = req.body;
+    const result = await pool.query('SELECT * FROM public_user WHERE email = $1', [email]);
 
-    // Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    if (result.rows.length === 0) {
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Compare passwords
+    const user = result.rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
+
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Create a JWT token for authentication
-    const token = jwt.sign({ userId: user._id }, 'secret_key');
+    const token = jwt.sign({ userId: user.userid }, jwtSecretKey, { expiresIn: '1h' });
+    res.json({ token });
 
-    res.status(200).json({ token });
   } catch (error) {
-    console.error(error);
+    console.error('Error during login:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
-const PORT = process.env.DB_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
