@@ -1,6 +1,8 @@
 const pool = require('../../db');
 const queries = require('./queries')
 
+
+
 const getCondoOwners = (req, res) => {
     console.log('get all users')
     pool.query(queries.getCondoOwners, (error, results) => {

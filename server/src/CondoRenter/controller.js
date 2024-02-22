@@ -2,7 +2,7 @@ const pool = require('../../db');
 const queries = require('./queries')
 
 const getCondoRenters = (req, res) => {
-    console.log('get all students')
+    console.log('get all Condo Renters')
     pool.query(queries.getCondoRenters, (error, results) => {
         if(error) throw error;
         res.status(200).json(results.rows);
@@ -25,7 +25,7 @@ const addCondoRenter = (req,res) => {
         }
         pool.query(queries.addCondoRenter, [name, email, age, dob0], (error, result) => {
             if(error) throw error;
-            res.status(201).send("Student Created Successfully!");
+            res.status(201).send("Condo Renter Created Successfully!");
             
         }); 
     })
