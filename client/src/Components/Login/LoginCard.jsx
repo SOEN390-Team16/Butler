@@ -45,47 +45,44 @@ const LoginCard = () => {
     <div className="login__card">
       <div className="login__content">
         <h1>Sign in to Butler. </h1>
-        <div>
-          <div className="google__button">
-            <button>
-              <Link to="/googleSignin" className="google__link">
-                <p>
-                  <FcGoogle size={25} /> Sign in With Google
-                </p>
-              </Link>
-            </button>
-          </div>
+        <div className="flex flex-col gap-6 justify-center text-center">
+          <Link
+            to="/googleSignin"
+            className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
+          >
+            <FcGoogle size={25} />
+            <p className="text font-semibold">Sign in With Google</p>
+          </Link>
+
+          <p> Or sign in with email</p>
+
           <div>
-            <p> Or sign in with email.</p>
-          </div>
-          <div className="credentials__section c1">
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="credentials__section c2">
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="row redirect__container">
-            <div className="col-lg-6 col-sm-3 signup__redirect">
-              <Link to="/SignUp">New user, sign up!</Link>
+            <div className="credentials__section c1">
+              <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                onChange={handleChange}
+              />
             </div>
-            <div className="col-lg-6 col-sm-3 forgot__password">
-              <Link to="/">Forgot Password?</Link>
+            <div className="credentials__section c2">
+              <input
+                type="password"
+                placeholder="Password"
+                name="password"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="row redirect__container">
+              <div className="col-lg-6 col-sm-3 signup__redirect">
+                <Link to="/SignUp">New user, sign up!</Link>
+              </div>
+              <div className="col-lg-6 col-sm-3 forgot__password">
+                <Link to="/">Forgot Password?</Link>
+              </div>
             </div>
           </div>
 
-          {/* <div className="continue__button">
-                        <Link to="/" onClick={handleClick}><button>Continue</button></Link>
-                    </div> */}
           <ContinueButton onClick={handleClick} name={"Sign In"} />
         </div>
       </div>

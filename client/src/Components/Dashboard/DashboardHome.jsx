@@ -3,7 +3,6 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
 import { LuConstruction } from "react-icons/lu";
-import StatCard from "../Cards/StatCard";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
