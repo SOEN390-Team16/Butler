@@ -73,7 +73,7 @@ const LoginCard = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="row redirect__container">
+            <div className="row">
               <div className="col-lg-6 col-sm-3 signup__redirect">
                 <Link to="/SignUp">New user, sign up!</Link>
               </div>

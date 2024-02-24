@@ -118,12 +118,10 @@
 }
 
 .signup__redirect a{
-    color:#000
+    color:#000;
+    text-decoration: underline;
 }
 
-.redirect__container{
-    margin-bottom:7%;
-}
 
 @media (Max-width:768px){
 
