@@ -11,9 +11,9 @@ const getPublicUsers = (req, res) => {
 
 const getPublicUserById = (req, res) => {
   console.log("Getting Public User With ID:");
-  console.log(req.params.id);
-  const id = parseInt(req.params.id);
-  pool.query(queries.getPublicUserById, [id], (error, results) => {
+  console.log(req.params.userid);
+  const userid = parseInt(req.params.userid);
+  pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (results.rows.length == 0) res.send("No Public User found.");
     else res.status(200).json(results.rows);
   });
