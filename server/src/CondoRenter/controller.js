@@ -30,6 +30,7 @@ const addCondoRenter = (req,res) => {
     })
 }
 
+
 module.exports = {
     getCondoRenters,
     getCondoRenterById,

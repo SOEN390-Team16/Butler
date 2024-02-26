@@ -6,9 +6,6 @@ const getPublicUsers = (req, res) => {
     console.log('get all Public Users')
     pool.query(queries.getPublicUsers, (error, results) => {
         if(error) throw error;
-        console.log('before')
-        console.log(results.rows);
-        console.log('after')
         res.status(200).json(results.rows);
     });
 }
