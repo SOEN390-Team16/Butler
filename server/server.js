@@ -3,15 +3,12 @@ const CondoOwnerRoutes = require('./src/CondoOwner/routes')
 const CondoRenterRoutes = require('./src/CondoRenter/routes')
 const CMCRoutes = require('./src/CMC/routes')
 const PublicUserRoutes = require('./src/PublicUser/routes')
+const tokenRouter = require('./src/auth/token');
 
 const app = express()
 const port = 3000
 
 app.use(express.json())
-
-app.get("/", (req,res) => {
-    res.send("Hello World");
-})
 
 app.use('/api/v1/co', CondoOwnerRoutes);
 app.use('/api/v1/cr', CondoRenterRoutes);

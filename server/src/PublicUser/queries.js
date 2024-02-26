@@ -1,11 +1,13 @@
-const getPublicUsers = "SELECT * FROM PublicUser";
-const getPublicUserById = "SELECT * FROM PublicUser WHERE id = $1";
-const checkIfEmailExists = "SLECT * FROM PublicUser pu WHERE pu.email = $1";
-const addPublicUser = "INSERT INTO PublicUser(name, email, age,  dob) VALUES ($1, $2, $3, $4)"
+const getPublicUsers = "SELECT * FROM public_user";
+const getPublicUserById = "SELECT * FROM public_user WHERE userid = $1";
+const checkIfEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1";
+const addPublicUser = "INSERT INTO public_user(first_name, last_name, email, password, role, profile_picture) VALUES ($1, $2, $3, $4, $5, $6)"
+const removePublicUser = "DELETE FROM public_user WHERE id = $1 "
 
 module.exports = {
     getPublicUsers,
     getPublicUserById,
     checkIfEmailExists,
-    addPublicUser
+    addPublicUser,
+    removePublicUser
 }
