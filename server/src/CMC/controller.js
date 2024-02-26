@@ -18,16 +18,30 @@ const getCMCById = (req, res) => {
 }
 
 const addCMC = (req,res) => {
-    const {name, email, age, dob} = req.body;
+    console.log("Adding Public User");
+    const {
+      companyid,
+      company_name,
+      email,
+      password
+    } = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) => {
+        if (error) {
+            console.error("Error checking if email exists:", error);
+            return res
+              .status(500)
+              .send("An error occurred while checking email existence.");
+        }
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addCMC, [name, email, age, dob0], (error, result) => {
-            if(error) throw error;
-            res.status(201).send("Condo Management Company Created Successfully!");
-            
-        }); 
+        else{
+            pool.query(queries.addCMC, [companyid, company_name, email, password], (error, result) => {
+                if(error) return res.json(error);
+                res.status(201).send("Condo Management Company Created Successfully!");
+                
+            }); 
+        }   
     })
 }
 

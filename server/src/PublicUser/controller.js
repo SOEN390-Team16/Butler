@@ -3,15 +3,12 @@ const queries = require('./queries')
 const {getCondoOwners} = require("../CondoOwner/controller");
 
 const getPublicUsers = (req, res) => {
-    console.log('get all Public Users')
+    console.log("Get All Public Users");
     pool.query(queries.getPublicUsers, (error, results) => {
-        if(error) throw error;
-        console.log('before')
-        console.log(results.rows);
-        console.log('after')
-        res.status(200).json(results.rows);
+      if (error) return res.json(error);
+      res.status(200).json(results.rows);
     });
-}
+  };
 
 const getPublicUserById = (req, res) => {
     console.log('get a specific Public User')
