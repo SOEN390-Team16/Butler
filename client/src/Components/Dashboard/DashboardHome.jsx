@@ -45,7 +45,7 @@ const DashBoardHome = () => {
         <RxHamburgerMenu size={40} />
       </button>
 
-      {/* The Side drawer is whats being opened for main navigation */}
+      {/* The Side drawer is what's being opened for main navigation */}
       <SideDrawer
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}

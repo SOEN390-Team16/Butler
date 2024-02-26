@@ -1,10 +1,8 @@
-import React from "react";
 import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import { Link } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
-import FadeIn from "react-fade-in";
 import axios from "axios";
 
 const CreateAccount = () => {
@@ -44,8 +42,8 @@ const CreateAccount = () => {
   // Create account holds the information records for when a client signs up.
   // 1. when a client signs up , there will be an axios post method to see whether the email/password combo already exists
   // 2. IF verified and good, add the client to the database.
-  //3. A client will be able to edit their information as well as add a profile picture once theyre logged in
-  //4. Also if good, this will redirect them to the sign in page
+  //3. A client will be able to edit their information as well as add a profile picture once they're logged in
+  //4. Also, if good, this will redirect them to the sign-in page
   return (
     <div className="signup__credentials">
       <h1>Sign up to Butler.</h1>
@@ -70,7 +68,6 @@ const CreateAccount = () => {
       </div>
       {userAccount ? (
         <>
-          <FadeIn>
             <div className="signup__entry">
               <p>First name</p>
               <div className="input__holder">
@@ -119,13 +116,10 @@ const CreateAccount = () => {
                 />
               </div>
             </div>
-          </FadeIn>
           <ContinueButton onClick={handleSignup} name={"Create Account"} />
         </>
       ) : (
-        <FadeIn>
           <CompanySignUp />
-        </FadeIn>
       )}
       <div className="redirect">
         <p>Already have an account ?</p>
