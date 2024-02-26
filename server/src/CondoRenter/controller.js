@@ -26,7 +26,11 @@ const addCondoRenter = (req,res) => {
         pool.query(queries.addCondoRenter, [email], (error, result) => {
             if(error) throw error;
             res.status(201).send("Condo Renter Created Successfully!");
-        }); 
+        });
+        pool.query(queries.updateRole, [email], (error, result) => {
+            if(error) throw error;
+            res.status(201).send("User Role Updated Successfully!");
+        });
     })
 }
 

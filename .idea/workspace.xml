@@ -10,8 +10,6 @@
       <change beforePath="$PROJECT_DIR$/server/src/CondoOwner/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/CondoOwner/queries.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/CondoRenter/controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/CondoRenter/controller.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/CondoRenter/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/CondoRenter/queries.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/PublicUser/controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/PublicUser/controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/PublicUser/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/PublicUser/routes.js" afterDir="false" />
     </list>
     <list id="e66fd809-6c11-4f2f-ab29-4343db5dcced" name="Changes by walidachlaf" comment="" />
     <option name="SHOW_DIALOG" value="false" />

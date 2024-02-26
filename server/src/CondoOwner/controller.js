@@ -29,7 +29,7 @@ const addCondoOwner = (req,res) => {
             if(error) throw error;
             res.status(201).send("User Created Successfully!");
         });
-        pool.query(queries.updateCondoOwnerRole, ['condo_owner', email], (error, result) => {
+        pool.query(queries.updateRole, [email], (error, result) => {
             if(error) throw error;
             res.status(201).send("User Role Updated Successfully!");
         });
