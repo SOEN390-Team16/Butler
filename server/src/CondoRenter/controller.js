@@ -18,15 +18,14 @@ const getCondoRenterById = (req, res) => {
 }
 
 const addCondoRenter = (req,res) => {
-    const {name, email, age, dob} = req.body;
+    const {email} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) => {
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addCondoRenter, [name, email, age, dob0], (error, result) => {
+        pool.query(queries.addCondoRenter, [email], (error, result) => {
             if(error) throw error;
             res.status(201).send("Condo Renter Created Successfully!");
-            
         }); 
     })
 }

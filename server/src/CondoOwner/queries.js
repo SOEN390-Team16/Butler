@@ -1,7 +1,10 @@
-const getCondoOwners = "SELECT * FROM CondoOwner";
-const getCondoOwnerById = "SELECT * FROM CondoOwner WHERE id = $1";
-const checkIfEmailExists = "SELECT * FROM CondoOwner co WHERE co.email = $1";
-const addCondoOwner = "INSERT INTO CondoOwner(name, email, age,  dob) VALUES ($1, $2, $3, $4)"
+const getCondoOwners = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, " +
+    "co.ownerid, co.role FROM public_user pu, condo_owner co WHERE pu.userID = co.userID";
+const getCondoOwnerById = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, " +
+"co.ownerid, co.role FROM public_user pu, condo_owner co WHERE co.ownerid = $1";
+const checkIfEmailExists = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, " +
+    "co.ownerid, co.role FROM public_user pu, condo_owner co WHERE pu.userID = co.userID AND pu.email = $1";
+const addCondoOwner = "INSERT INTO condo_owner(userID) VALUES ((SELECT userID FROM public_user pu WHERE pu.email= $1))"
 
 module.exports = {
     getCondoOwners,

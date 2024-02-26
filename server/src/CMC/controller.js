@@ -18,12 +18,12 @@ const getCMCById = (req, res) => {
 }
 
 const addCMC = (req,res) => {
-    const {name, email, age, dob} = req.body;
+    const {company_name, email, password} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) => {
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addCMC, [name, email, age, dob0], (error, result) => {
+        pool.query(queries.addCMC, [company_name, email, password], (error, result) => {
             if(error) throw error;
             res.status(201).send("Condo Management Company Created Successfully!");
             
