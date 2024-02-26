@@ -1,11 +1,11 @@
-const getCondoRenters = "SELECT * FROM CondoRenter";
-const getCondoRenterById = "SELECT * FROM CondoRenter WHERE id = $1";
-const checkIfEmailExists = "SLECT * FROM CondoRenter cr WHERE cr.email = $1";
-const addCondoRenter = "INSERT INTO CondoRenter(name, email, age,  dob) VALUES ($1, $2, $3, $4)"
+const getCondoRenters = "SELECT * FROM renter";
+const getCondoRenterById = "SELECT * FROM renter WHERE id = $1";
+const checkIfEmailExists = "SLECT * FROM renter r WHERE r.email = $1";
+const addCondoRenter = "INSERT INTO renter(renterid) VALUES ($1, $2, $3, $4)";
 
 module.exports = {
-    getCondoRenters,
-    getCondoRenterById,
-    checkIfEmailExists,
-    addCondoRenter
-}
+  getCondoRenters,
+  getCondoRenterById,
+  checkIfEmailExists,
+  addCondoRenter,
+};

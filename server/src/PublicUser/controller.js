@@ -20,8 +20,16 @@ const getPublicUserById = (req, res) => {
 };
 
 const addPublicUser = (req, res) => {
-  console.log("Adding Public User: ");
-  const { userid, username, email, password, token } = req.body;
+  console.log("Adding Public User");
+  const {
+    userid,
+    first_name,
+    last_name,
+    email,
+    password,
+    role,
+    profile_picture,
+  } = req.body;
   pool.query(queries.checkIfEmailExists, [email], (error, results) => {
     if (error) {
       console.error("Error checking if email exists:", error);
@@ -34,10 +42,10 @@ const addPublicUser = (req, res) => {
     } else {
       pool.query(
         queries.addPublicUser,
-        [userid, username, email, password, token],
+        [userid, first_name, last_name, email, password, role, profile_picture],
         (error, result) => {
           if (error) return res.json(error);
-          res.status(201).send("Student Created Successfully!");
+          res.status(201).send("Public User Created Successfully!");
         }
       );
     }
