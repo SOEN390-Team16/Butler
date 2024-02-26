@@ -10,8 +10,8 @@ import axios from "axios";
 const CreateAccount = () => {
   const [userAccount, setIsUserAccount] = useState(true);
   const [userInfo, setUserInfo] = useState({
-    username: "",
-    name: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
   });
@@ -20,11 +20,19 @@ const CreateAccount = () => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(userInfo);
   };
+  const userData = {
+    first_name: userInfo.first_name,
+    last_name: userInfo.last_name,
+    email: userInfo.email,
+    password: userInfo.password,
+    profile_picture: "not a real picture"
+  }
+  console.log(userData);
   const handleSignup = () => {
     axios
-      .post("localhost:3000/api/v1/pu/", userInfo)
+      .post("http://localhost:3000/api/v1/pu/addPublicUser", userData)
       .then((res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           console.log("Success");
         }
       })
@@ -64,25 +72,25 @@ const CreateAccount = () => {
         <>
           <FadeIn>
             <div className="signup__entry">
-              <p>Username</p>
+              <p>First name</p>
               <div className="input__holder">
                 <input
-                  type="email"
+                  type="text"
                   className=""
-                  name="username"
+                  name="first_name"
                   onChange={handleChange}
                   required
                 />
               </div>
             </div>
             <div className="signup__entry">
-              <p>Name</p>
+              <p>Last name</p>
               <div className="input__holder">
                 <input
                   type="text"
                   className=""
                   onChange={handleChange}
-                  name="name"
+                  name="last_name"
                   required
                 />
               </div>
