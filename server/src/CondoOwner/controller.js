@@ -1,6 +1,8 @@
 const pool = require('../../db');
 const queries = require('./queries')
 
+
+
 const getCondoOwners = (req, res) => {
     console.log('get all users')
     pool.query(queries.getCondoOwners, (error, results) => {
@@ -18,12 +20,12 @@ const getCondoOwnerById = (req, res) => {
 }
 
 const addCondoOwner = (req,res) => {
-    const {name, email, age, dob} = req.body;
+    const {email} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) => {
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addCondoOwner, [name, email, age, dob0], (error, result) => {
+        pool.query(queries.addCondoOwner, [email], (error, result) => {
             if(error) throw error;
             res.status(201).send("User Created Successfully!");
             
