@@ -3,6 +3,8 @@ const queries = require('../PublicUser/queries');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
 const login = (req, res) => {
   console.log("Logging in: ");
   const { email, password } = req.body;
@@ -16,9 +18,7 @@ const login = (req, res) => {
       }
 
       const user = result.rows[0];
-      const passwordMatch = await bcrypt.compare(password, user.password);
-
-      if (!passwordMatch) {
+      if (password !== user.password) {
         return { success: false, message: 'Invalid email or password' };
       }
 
@@ -30,6 +30,7 @@ const login = (req, res) => {
       };
 
       const token = jwt.sign(tokenPayload, jwtSecretKey, { expiresIn: '1h' });
+      console.log(token);
 
       return { success: true, token };
 
