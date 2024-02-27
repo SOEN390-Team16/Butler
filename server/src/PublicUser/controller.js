@@ -25,16 +25,17 @@ const addPublicUser = (req,res) => {
     pool.query(queries.checkIfEmailExists, [email], (error, results) =>  {
         if(results.rows.length){
             res.send("Email Already Exists");
-        }
-        pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
-            if(error) throw error;
-            res.status(201).send("Public User Created Successfully!");
+        } else {
+          pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
+              if(error) throw error;
+              res.status(201).send("Public User Created Successfully!");
+          }
         }); 
     })
 }
 
 module.exports = {
-    getPublicUsers,
-    getPublicUserById,
-    addPublicUser
+  getPublicUsers,
+  getPublicUserById,
+  addPublicUser,
 };

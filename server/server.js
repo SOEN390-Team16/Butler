@@ -11,13 +11,13 @@ const port = 3000
 app.use(express.json())
 app.use(cors())
 
-app.get("/", (req,res) => {
-    res.send("Hello World");
-})
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
 
-app.use('/api/v1/co', CondoOwnerRoutes);
-app.use('/api/v1/cr', CondoRenterRoutes);
-app.use('/api/v1/cmc', CMCRoutes);
-app.use('/api/v1/pu', PublicUserRoutes);
+app.use("/api/v1/co", CondoOwnerRoutes);
+app.use("/api/v1/cr", CondoRenterRoutes);
+app.use("/api/v1/cmc", CMCRoutes);
+app.use("/api/v1/pu", PublicUserRoutes);
 
 app.listen(port, () => console.log(`app listening on ${port}`));
