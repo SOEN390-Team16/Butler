@@ -1,5 +1,7 @@
 const pool = require('../../db');
-const queries = require('../PublicUser/queries')
+const queries = require('../PublicUser/queries');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const login = (req, res) => {
   console.log("Logging in: ");
