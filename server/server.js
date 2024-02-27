@@ -6,15 +6,14 @@ const PublicUserRoutes = require('./src/PublicUser/routes')
 const PropertyProfileRoutes = require('./src/Property/routes')
 const cors = require('cors');
 const { pool } = require("./db");
+const tokenRouter = require('./src/auth/token');
+
 const app = express()
 const port = 3000
 
 app.use(express.json())
-app.use(cors())
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+app.use(cors())
 
 app.use("/api/v1/co", CondoOwnerRoutes);
 app.use("/api/v1/cr", CondoRenterRoutes);
