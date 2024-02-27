@@ -1,9 +1,10 @@
-const getCMCs = "SELECT * FROM condo_management_company";
-const getCMCById = "SELECT * FROM condo_management_company WHERE id = $1";
-const checkIfEmailExists = "SELECT * FROM condo_management_company cc WHERE cc.email = $1";
-const addCMC = "INSERT INTO condo_management_company (id, email, userName) VALUES ($1, $2, $3)";
-const removeCMC = "DELETE FROM condo_management_company WHERE id = $1 ";
-const updateCMC = "UPDATE condo_management_company SET name = $1 WHERE id = $2";
+const getCMCs = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, " +
+    "cmc.companyID FROM public_user pu, condo_management_company cmc WHERE pu.userID = cmc.companyID";
+const getCMCById = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture," + 
+"cmc.companyID FROM public_user pu JOIN condo_management_company cmc ON pu.userid = cmc.userid WHERE cmc.companyID = $1" 
+const checkIfEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1";
+const addCMC = "INSERT INTO condo_management_company(userID) VALUES ((SELECT userID FROM public_user pu WHERE pu.email = $1));";
+const removeCMC = "DELETE FROM condo_management_company cmc WHERE companyID = $1"
 
 module.exports = {
     getCMCs,

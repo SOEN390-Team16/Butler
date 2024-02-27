@@ -12,53 +12,106 @@ const getCMCs = (req, res) => {
 }
 
 const getCMCById = (req, res) => {
-    const id = parseInt(req.params.id)
-    pool.query(queries.getCMCById, [id], (error, results) => {
-        if(error) throw error;
+    console.log('get cmc\'s by id')
+    const companyID = parseInt(req.params.companyID)
+    pool.query(queries.getCMCById, [companyID], (error, results) => {
+        if (error) {
+            console.error('Error finding cmc user:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
         res.status(200).json(results.rows);
     });
 }
 
 const addCMC = (req,res) => {
-    console.log("adding user")
-    const {first_name, last_name, email, password, role} = req.body;
-    pool.query(queries.checkIfEmailExists, [email], (error, results) => {
-        console.log(results.rows.length)
-        if(results.rows.length){
-            res.send("Email Already Exists");
+    console.log('add a cmc user')
+    const {email} = req.body;
+    pool.query(queries.checkIfEmailExists, [email], (error, results) =>  {
+        if (error) {
+            console.error('Error checking email existence:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        pool.query(queries.addCMC, [first_name, last_name, email, password, role], (error, result) => {
-            if(error) throw error;
-            res.status(201).send("CMC User Created Successfully!");
-            
+
+        if (!results.rows.length) {
+            res.status(400).json({ error: 'Email Doesn\'t Exists' });
+        }
+        pool.query(queries.addCMC, [email], (error, result) => {
+            if (error) {
+                console.error('Error adding cmc user:', error);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+            res.status(201).send("cmc user Created Successfully!");
         }); 
     })
 }
 
 const updateCMC = (req, res) => {
-    const id = parseInt(req.params.id);
-    const {name, email, age, dob} = req.body;
-    pool.query(queries.getCMCById, [id], (error, results) => {
-        const noUserFound = !results.rows.length;
-        if(noUserFound){
-            res.send("CMC user does not exist.")
-        }
-        pool.query(queries.updateCMC, [name, id], (error, results) => {
+    console.log("updating cmc user");
+    const companyID = req.params.companyID;
+    const { first_name, last_name, email, password, profile_picture } = req.body;
 
-        })
-    })
+    if (!first_name && !last_name && !email && !password && profile_picture === undefined) {
+        return res.status(400).json({ error: 'At least one field is required for updating' });
+    }
+
+    const setClauses = [];
+    const values = [];
+
+    if (first_name) {
+        setClauses.push('first_name = $' + (values.length + 1));
+        values.push(first_name);
+    }
+    if (last_name) {
+        setClauses.push('last_name = $' + (values.length + 1));
+        values.push(last_name);
+    }
+    if (email) {
+        setClauses.push('email = $' + (values.length + 1));
+        values.push(email);
+    }
+    if (password) {
+        setClauses.push('password = $' + (values.length + 1));
+        values.push(password);
+    }
+    if (profile_picture !== undefined) {
+        setClauses.push('profile_picture = $' + (values.length + 1));
+        values.push(profile_picture);
+    }
+
+    const setClause = setClauses.join(', ');
+
+    const query = `UPDATE public_user SET ${setClauses} WHERE userid = (SELECT userid FROM condo_management_company WHERE companyID = $${values.length + 1})`;
+
+    pool.query(query, [...values, companyID], (error, result) => {
+        if (error) {
+            console.error('Error updating cmc user:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'cmc user not found' });
+        }
+
+        res.status(200).json({ message: 'cmc user updated successfully' });
+    });
 }
 
 const removeCMC = (req, res) => {
-    const id = parseInt(req.params.id)
-    pool.query(queries.getCMCById, [id], (error,results) =>{
-        const noUserFound = !results.rows.length;
-        if(noUserFound){
-            res.send("CMC user does not exist.")
+    const companyID = parseInt(req.params.companyID)
+    pool.query(queries.getCMCById, [companyID], (error,result) =>{
+        if(error){
+            console.error('Error finding cmc user:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        pool.query(queries.removeCMC, [id], (error, results) => {
-            if(error) throw error;
-            res.status(200).send("CMC user removed successfully.")
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'cmc user not found' });
+        }
+        pool.query(queries.removeCMC, [companyID], (error, results) => {
+            if(error){
+                console.error('Error removing cmc user:', error);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+            res.status(200).send("cmc user removed successfully.")
         })
     }) 
 }

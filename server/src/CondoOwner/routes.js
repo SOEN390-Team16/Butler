@@ -4,9 +4,9 @@ const authenticateToken = require('../auth/tokenValidator')
 const router = Router();
 
 router.get('/',authenticateToken, controller.getCondoOwners);
-router.get('/:id',authenticateToken,controller.getCondoOwnerById);
+router.get('/:condoOID',authenticateToken,controller.getCondoOwnerById);
 router.post('/',authenticateToken, controller.addCondoOwner);
-router.patch('/:id',authenticateToken, controller.updateCondoOwner);
-router.delete('/:id',authenticateToken, controller.removeCondoOwner);
+router.patch('/:condoOID',authenticateToken, controller.updateCondoOwner);
+router.delete('/:condoOID',authenticateToken, controller.removeCondoOwner);
 
 module.exports = router;
