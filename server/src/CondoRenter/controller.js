@@ -2,7 +2,7 @@ const pool = require('../../db');
 const queries = require('./queries')
 
 const getCondoRenters = (req, res) => {
-    console.log('get all students')
+    console.log('get all Condo Renters')
     pool.query(queries.getCondoRenters, (error, results) => {
         if(error) throw error;
         res.status(200).json(results.rows);
@@ -18,18 +18,22 @@ const getCondoRenterById = (req, res) => {
 }
 
 const addCondoRenter = (req,res) => {
-    const {name, email, age, dob} = req.body;
+    const {email} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) => {
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addCondoRenter, [name, email, age, dob0], (error, result) => {
+        pool.query(queries.addCondoRenter, [email], (error, result) => {
             if(error) throw error;
-            res.status(201).send("Student Created Successfully!");
-            
-        }); 
+            res.status(201).send("Condo Renter Created Successfully!");
+        });
+        pool.query(queries.updateRole, [email], (error, result) => {
+            if(error) throw error;
+            res.status(201).send("User Role Updated Successfully!");
+        });
     })
 }
+
 
 module.exports = {
     getCondoRenters,

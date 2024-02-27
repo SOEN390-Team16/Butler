@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
 import FadeIn from "react-fade-in";
+
 const CreateAccount = (props) => {
   const [userAccount, setIsUserAccount] = useState(true);
 

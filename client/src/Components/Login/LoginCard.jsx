@@ -82,7 +82,6 @@ const LoginCard = () => {
               </div>
             </div>
           </div>
-
           <ContinueButton onClick={handleClick} name={"Sign In"} />
         </div>
       </div>
