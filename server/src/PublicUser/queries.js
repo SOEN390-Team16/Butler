@@ -1,4 +1,4 @@
-const getPublicUsers = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.role, pu.profile_picture FROM public_user pu";
+const getPublicUsers = "SELECT * FROM public_user ";
 const getPublicUserById = "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.role, pu.profile_picture " +
                             "FROM public_user pu WHERE pu.userID = $1";
 const checkIfEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1";

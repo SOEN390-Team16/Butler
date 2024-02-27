@@ -3,7 +3,6 @@ const queries = require('./queries')
 
 const getCondoRenters = (req, res) => {
     console.log('get all Condo Renters')
-    console.log('get all Condo Renters')
     pool.query(queries.getCondoRenters, (error, results) => {
         if (error) {
             console.error('Error finding condo renters:', error);
@@ -14,11 +13,15 @@ const getCondoRenters = (req, res) => {
 }
 
 const getCondoRenterById = (req, res) => {
+    console.log('get condo renter by id')
     const renterid = parseInt(req.params.renterid)
     pool.query(queries.getCondoRenterById, [renterid], (error, results) => {
         if (error) {
             console.error('Error finding condo renter:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'Condo Renter Not Found' });
         }
         res.status(200).json(results.rows);
     });
@@ -33,16 +36,36 @@ const addCondoRenter = (req,res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
 
-        if (!results.rows.length) {
+        if (results.rows.length === 0) {
             res.status(400).json({ error: 'Email Doesn\'t Exists' });
         }
-        pool.query(queries.addCondoRenter, [email], (error, result) => {
-            if (error) {
-                console.error('Error adding condo renter:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(201).send("ondo Renter Created Successfully!");
-        }); 
+        else{
+            pool.query(queries.checkIfUserAlreadyExists, [email], (error, results) =>{
+                if(error){
+                    console.log('Error checking if condo renter already exists')
+                }
+                const isPublicUser = results.rows[0]['?column?'];
+                if(isPublicUser){
+                    res.status(400).json({ error: 'User already exists' });  
+                }
+                else{
+                    pool.query(queries.addCondoRenter, [email], (error, result) => {
+                        if (error) {
+                            console.error('Error adding condo renter:', error);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        res.status(201).send("Condo Renter Created Successfully!");
+                    }); 
+                    pool.query(queries.updateParent, (error, result) => {
+                        if (error) {
+                            console.error('Error updating parent table:', error);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        console.log("Parent Table Updated Successfully!");
+                    });
+                }
+            })
+        }
     })
 }
 
@@ -79,23 +102,32 @@ const updateCondoRenter = (req, res) => {
     }
 
     const setClause = setClauses.join(', ');
-    console.log(setClause);
-    console.log(values);
 
     const query = `UPDATE public_user SET ${setClauses} WHERE userid = (SELECT userid FROM renter WHERE renterid = $${values.length + 1})`;
 
-    pool.query(query, [...values, renterid], (error, result) => {
+    pool.query(queries.getCondoRenterById, [renterid], (error, results) => {
         if (error) {
-            console.error('Error updating condo renter:', error);
+            console.error('Error finding condo renter:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'condo renter not found' });
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'Ccondo renter Not Found' });
         }
-
-        res.status(200).json({ message: 'condo renter updated successfully' });
-    });
+        else{
+            pool.query(query, [...values, renterid], (error, result) => {
+                if (error) {
+                    console.error('Error updating condo renter:', error);
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                
+                if (result.rowCount === 0) {
+                    return res.status(404).json({ error: 'condo renter not found' });
+                }
+        
+                res.status(200).json({ message: 'condo renter updated successfully' });
+            });
+        }
+    })
 }
 
 const removeCondoRenter = (req, res) => {

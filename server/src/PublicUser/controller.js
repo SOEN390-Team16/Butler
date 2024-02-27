@@ -4,12 +4,14 @@ const {getCondoOwners} = require("../CondoOwner/controller");
 
 const getPublicUsers = (req, res) => {
     console.log('get all Public Users')
-    console.log('get all Public Users')
     pool.query(queries.getPublicUsers, (error, results) => {
-        if(error) throw error;
-        console.log('before')
-        console.log(results.rows);
-        console.log('after')
+        if (error) {
+            console.error('Error finding public users:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'Public Users not found' });
+        }
         res.status(200).json(results.rows);
     });
 }
@@ -23,10 +25,11 @@ const getPublicUserById = (req, res) => {
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({ error: 'Public User not found' });
         }
-
-        res.status(200).json(results.rows);
+        else{
+            res.status(200).json(results.rows);
+        }
     });
 }
 
@@ -34,16 +37,21 @@ const addPublicUser = (req,res) => {
     console.log('add a Public User')
     const {first_name, last_name, email, password, profile_picture} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) =>  {
-        if(results.rows.length>0){
-            res.send("Email Already Exists");
+        if(error){
+            console.error('Error finding email:', error);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
-        pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
-            if(error) throw error;
-            res.status(201).send("Public User Created Successfully!");
-        }); 
+        if(results.rows.length != 0){
+            res.status(404).send("Email Already Exists");
+        }
+        else{
+            pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
+                if(error) throw error;
+                res.status(201).send("Public User Created Successfully!");
+            });   
+        } 
     })
-}
+};
 
 
 const updatePublicUser = (req, res) => {
@@ -80,17 +88,28 @@ const updatePublicUser = (req, res) => {
 
     const query = `UPDATE public_user SET ${setClauses.join(', ')} WHERE userid = $${values.length + 1}`;
 
-    pool.query(query, [...values, userid], (error, result) => {
+    pool.query(queries.getPublicUserById, [userid], (error, results) => {
         if (error) {
             console.error('Error updating user:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'User not found' });
+        if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'Public User not found' });
         }
-
-        res.status(200).json({ message: 'User updated successfully' });
+        else{
+            pool.query(query, [...values, userid], (error, result) => {
+                if (error) {
+                    console.error('Error updating public user:', error);
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+        
+                if (result.rowCount === 0) {
+                    return res.status(404).json({ error: 'Public User not found' });
+                }
+        
+                res.status(200).json({ message: 'Public User updated successfully' });
+            });
+        }
     });
 };
 
@@ -120,4 +139,4 @@ module.exports = {
     addPublicUser,
     removePublicUser,
     updatePublicUser
-};
+}

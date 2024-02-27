@@ -1,8 +1,6 @@
 const pool = require('../../db');
 const queries = require('./queries')
 
-
-
 const getCondoOwners = (req, res) => {
     console.log('get all condo owners')
     pool.query(queries.getCondoOwners, (error, results) => {
@@ -10,17 +8,23 @@ const getCondoOwners = (req, res) => {
             console.error('Error finding condo owners:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'Condo Owner Not Found' });
+        }
         res.status(200).json(results.rows);
     });
 }
 
 const getCondoOwnerById = (req, res) => {
     console.log('get condo owner by id')
-    const condoOID = parseInt(req.params.condoOID)
-    pool.query(queries.getCondoOwnerById, [condoOID], (error, results) => {
+    const ownerid = parseInt(req.params.ownerid)
+    pool.query(queries.getCondoOwnerById, [ownerid], (error, results) => {
         if (error) {
             console.error('Error finding condo owner:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
+        }
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'Condo Owner Not Found' });
         }
         res.status(200).json(results.rows);
     });
@@ -34,23 +38,42 @@ const addCondoOwner = (req,res) => {
             console.error('Error checking email existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-
         if (!results.rows.length) {
             res.status(400).json({ error: 'Email Doesn\'t Exists' });
         }
-        pool.query(queries.addCondoOwner, [email], (error, result) => {
-            if (error) {
-                console.error('Error adding condo owner:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(201).send("Condo Owner Created Successfully!");
-        }); 
+        else{
+            pool.query(queries.checkIfUserAlreadyExists, [email], (error, results) =>{
+                if(error){
+                    console.log('Error checking if user already exists')
+                }
+                const isPublicUser = results.rows[0]['?column?'];
+                if(isPublicUser){
+                    res.status(400).json({ error: 'User already exists' });  
+                }
+                else{
+                    pool.query(queries.addCondoOwner, [email], (error, result) => {
+                        if (error) {
+                            console.error('Error adding condo owner:', error);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        res.status(201).send("Condo Owner Created Successfully!");
+                    }); 
+                    pool.query(queries.updateParent, (error, result) => {
+                        if (error) {
+                            console.error('Error updating parent table:', error);
+                            return res.status(500).json({ error: 'Internal Server Error' });
+                        }
+                        console.log("Parent Table Updated Successfully!");
+                    });
+                }
+            })
+        }
     })
 }
 
 const updateCondoOwner = (req, res) => {
     console.log("updating condo owner");
-    const condoOID = req.params.condoOID;
+    const ownerid = req.params.ownerid;
     const { first_name, last_name, email, password, profile_picture } = req.body;
 
     if (!first_name && !last_name && !email && !password  && profile_picture === undefined) {
@@ -83,25 +106,36 @@ const updateCondoOwner = (req, res) => {
 
     const setClause = setClauses.join(', ');
 
-    const query = `UPDATE public_user SET ${setClauses} WHERE userid = (SELECT userid FROM condo_owner WHERE condoOID = $${values.length + 1})`;
+    const query = `UPDATE public_user SET ${setClauses} WHERE userid = (SELECT userid FROM condo_owner WHERE ownerid = $${values.length + 1})`;
 
-    pool.query(query, [...values, condoOID], (error, result) => {
+    pool.query(queries.getCondoOwnerById, [ownerid], (error, results) => {
         if (error) {
-            console.error('Error updating condo owner:', error);
+            console.error('Error finding condo owner:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'condo owner not found' });
+        if (results.rows.length === 0) {
+            return res.status(404).json({ error: 'Ccondo owner Not Found' });
         }
-
-        res.status(200).json({ message: 'condo owner updated successfully' });
-    });
+        else{
+            pool.query(query, [...values, ownerid], (error, result) => {
+                if (error) {
+                    console.error('Error updating condo owner:', error);
+                    return res.status(500).json({ error: 'Internal Server Error' });
+                }
+                
+                if (result.rowCount === 0) {
+                    return res.status(404).json({ error: 'condo owner not found' });
+                }
+        
+                res.status(200).json({ message: 'condo owner updated successfully' });
+            });
+        }
+    })
 }
 
 const removeCondoOwner = (req, res) => {
-    const condoOID = parseInt(req.params.condoOID)
-    pool.query(queries.getCondoOwnerById, [condoOID], (error,result) =>{
+    const ownerid = parseInt(req.params.ownerid)
+    pool.query(queries.getCondoOwnerById, [ownerid], (error,result) =>{
         if(error){
             console.error('Error finding condo owner:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -109,7 +143,7 @@ const removeCondoOwner = (req, res) => {
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'condo owner not found' });
         }
-        pool.query(queries.removeCondoOwner, [condoOID], (error, results) => {
+        pool.query(queries.removeCondoOwner, [ownerid], (error, results) => {
             if(error){
                 console.error('Error removing condo owner:', error);
                 return res.status(500).json({ error: 'Internal Server Error' });
