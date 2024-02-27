@@ -29,8 +29,8 @@ const addPublicUser = (req,res) => {
           pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
               if(error) throw error;
               res.status(201).send("Public User Created Successfully!");
-          }
-        }); 
+          })
+        }
     })
 }
 
