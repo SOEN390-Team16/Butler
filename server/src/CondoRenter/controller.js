@@ -3,6 +3,7 @@ const queries = require('./queries')
 
 const getCondoRenters = (req, res) => {
     console.log('get all Condo Renters')
+    console.log('get all Condo Renters')
     pool.query(queries.getCondoRenters, (error, results) => {
         if (error) {
             console.error('Error finding condo renters:', error);
@@ -116,6 +117,7 @@ const removeCondoRenter = (req, res) => {
         })
     }) 
 }
+
 
 module.exports = {
     getCondoRenters,

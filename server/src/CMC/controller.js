@@ -4,7 +4,7 @@ const queries = require('./queries')
 
 
 const getCMCs = (req, res) => {
-    console.log('get all cmc users')
+    console.log('get all Condo Management Companies')
     pool.query(queries.getCMCs, (error, results) => {
         if(error) throw error;
         res.status(200).json(results.rows);
@@ -24,23 +24,15 @@ const getCMCById = (req, res) => {
 }
 
 const addCMC = (req,res) => {
-    console.log('add a cmc user')
-    const {email} = req.body;
-    pool.query(queries.checkIfEmailExists, [email], (error, results) =>  {
-        if (error) {
-            console.error('Error checking email existence:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
+    const {company_name, email, password} = req.body;
+    pool.query(queries.checkIfEmailExists, [email], (error, results) => {
+        if(results.rows.length){
+            res.send("Email Already Exists");
         }
-
-        if (!results.rows.length) {
-            res.status(400).json({ error: 'Email Doesn\'t Exists' });
-        }
-        pool.query(queries.addCMC, [email], (error, result) => {
-            if (error) {
-                console.error('Error adding cmc user:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(201).send("cmc user Created Successfully!");
+        pool.query(queries.addCMC, [company_name, email, password], (error, result) => {
+            if(error) throw error;
+            res.status(201).send("Condo Management Company Created Successfully!");
+            
         }); 
     })
 }

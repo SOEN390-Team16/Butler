@@ -3,6 +3,8 @@ const CondoOwnerRoutes = require('./src/CondoOwner/routes')
 const CondoRenterRoutes = require('./src/CondoRenter/routes')
 const CMCRoutes = require('./src/CMC/routes')
 const PublicUserRoutes = require('./src/PublicUser/routes')
+const cors = require('cors');
+const { pool } = require("./db");
 const tokenRouter = require('./src/auth/token');
 
 const app = express()

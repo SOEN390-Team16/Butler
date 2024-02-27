@@ -1,7 +1,9 @@
 const pool = require('../../db');
 const queries = require('./queries')
+const {getCondoOwners} = require("../CondoOwner/controller");
 
 const getPublicUsers = (req, res) => {
+    console.log('get all Public Users')
     console.log('get all Public Users')
     pool.query(queries.getPublicUsers, (error, results) => {
         if(error) throw error;
@@ -35,6 +37,7 @@ const addPublicUser = (req,res) => {
         if(results.rows.length>0){
             res.send("Email Already Exists");
         }
+        pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
         pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
             if(error) throw error;
             res.status(201).send("Public User Created Successfully!");
