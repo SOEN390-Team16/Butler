@@ -18,9 +18,8 @@ const getCMCById = (req, res) => {
 }
 
 const addCMC = (req,res) => {
-    console.log("Adding Public User");
+    console.log("Adding Condo Management Company");
     const {
-      companyid,
       company_name,
       email,
       password
@@ -36,10 +35,9 @@ const addCMC = (req,res) => {
             res.send("Email Already Exists");
         }
         else{
-            pool.query(queries.addCMC, [companyid, company_name, email, password], (error, result) => {
+            pool.query(queries.addCMC, [company_name, email, password], (error, result) => {
                 if(error) return res.json(error);
                 res.status(201).send("Condo Management Company Created Successfully!");
-                
             }); 
         }   
     })

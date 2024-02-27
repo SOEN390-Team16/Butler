@@ -21,12 +21,12 @@ const getPublicUserById = (req, res) => {
 
 const addPublicUser = (req,res) => {
     console.log('add a Public User')
-    const {username, email,password, token, profilepicture} = req.body;
+    const {first_name, last_name, email, password, profile_picture} = req.body;
     pool.query(queries.checkIfEmailExists, [email], (error, results) =>  {
         if(results.rows.length){
             res.send("Email Already Exists");
         }
-        pool.query(queries.addPublicUser, [username, password, token, profilepicture], (error, result) => {
+        pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
             if(error) throw error;
             res.status(201).send("Public User Created Successfully!");
         }); 
