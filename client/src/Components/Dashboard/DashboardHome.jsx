@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import "./DashboardHome.css";
+import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
 import { LuConstruction } from "react-icons/lu";
 
@@ -64,8 +64,8 @@ const DashBoardHome = () => {
         </div>
       </SideDrawer>
       {/* Your main content goes here */}
-      <div className="container">
-        <div className="construction__sign">
+      <div className="container flex flex-col items-center">
+        <div className="flex flex-col justify-center items-center">
           <LuConstruction size={60} />
           <h1>Site in construction {dots}</h1>
         </div>

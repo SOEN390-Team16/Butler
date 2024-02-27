@@ -5,41 +5,9 @@ import { Link } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
 import FadeIn from "react-fade-in";
-import axios from "axios";
 
-const CreateAccount = () => {
+const CreateAccount = (props) => {
   const [userAccount, setIsUserAccount] = useState(true);
-  const [userInfo, setUserInfo] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    console.log(userInfo);
-  };
-  const userData = {
-    first_name: userInfo.first_name,
-    last_name: userInfo.last_name,
-    email: userInfo.email,
-    password: userInfo.password,
-    profile_picture: "not a real picture"
-  }
-  console.log(userData);
-  const handleSignup = () => {
-    axios
-      .post("http://localhost:3000/api/v1/pu/addPublicUser", userData)
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("Success");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   // Create account holds the information records for when a client signs up.
   // 1. when a client signs up , there will be an axios post method to see whether the email/password combo already exists
@@ -72,25 +40,25 @@ const CreateAccount = () => {
         <>
           <FadeIn>
             <div className="signup__entry">
-              <p>First name</p>
+              <p>Username</p>
               <div className="input__holder">
                 <input
-                  type="text"
+                  type="email"
                   className=""
-                  name="first_name"
-                  onChange={handleChange}
+                  name="username"
+                  onChange={props.onChange}
                   required
                 />
               </div>
             </div>
             <div className="signup__entry">
-              <p>Last name</p>
+              <p>Name</p>
               <div className="input__holder">
                 <input
                   type="text"
                   className=""
-                  onChange={handleChange}
-                  name="last_name"
+                  onChange={props.onChange}
+                  name="name"
                   required
                 />
               </div>
@@ -101,7 +69,7 @@ const CreateAccount = () => {
                 <input
                   type="email"
                   className=""
-                  onChange={handleChange}
+                  onChange={props.onChange}
                   name="email"
                   required
                 />
@@ -113,14 +81,14 @@ const CreateAccount = () => {
                 <input
                   type="password"
                   className=""
-                  onChange={handleChange}
+                  onChange={props.onChange}
                   name="password"
                   required
                 />
               </div>
             </div>
           </FadeIn>
-          <ContinueButton onClick={handleSignup} name={"Create Account"} />
+          <ContinueButton onClick={props.onClick} name={"Create Account"} />
         </>
       ) : (
         <FadeIn>

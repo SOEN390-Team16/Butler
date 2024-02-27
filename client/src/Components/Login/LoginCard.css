@@ -4,7 +4,6 @@
     align-self: center;
     justify-content: center;
     border-radius: 10px; /* Adjust the border-radius value as needed for a sleek look */
-
 }
 .login__content{
     width:90%;
@@ -17,52 +16,38 @@
     font-weight: 700;
     margin: 10% 0;
     text-align: center;
+}
 
-}
-.login__card p {
-    text-align: center;
-    color: #000;
-    font-family: Raleway;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 150%; /* 24px */
-    margin:5%;
-    
-}
 .credentials__section {
     display: flex;
     flex-direction: column;
     justify-content: center;
     width:100%;
-  
-  }
+}
 
-  .credentials__section input{
+.credentials__section input{
     padding:20px;
     /* width: 100% */
     border-color: lightgrey;
     border-radius: 10px;
-  }
- .google__button button{
+}
+.google__button button{
     cursor:grab;
     width:100%;
+    padding:10px;
     border-radius: 5px;
     border: 1px solid #DCDCDC;
     background: #F0F1F5;
- }
+}
 
- .google__button button p{
+.google__button button p{
     color: #000;
     font-family: Raleway;
-    font-size: 14px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 600;
     margin:5px;
-    
- }
- 
-
+}
 .continue__button button{
     width:100%;
     font-family: 'inter';
@@ -133,19 +118,16 @@
 }
 
 .signup__redirect a{
-    color:#000
+    color:#000;
+    text-decoration: underline;
 }
 
-.redirect__container{
-    margin-bottom:7%;
-}
 
 @media (Max-width:768px){
 
     .login__card{
         background-color: white;
         width:70%;
-        height: 55%;
         margin-bottom: 20%;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle box shadow for depth */        
     }
