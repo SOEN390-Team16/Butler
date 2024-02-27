@@ -3,7 +3,7 @@ const queries = require('./queries')
 const {getCondoOwners} = require("../CondoOwner/controller");
 
 const getPublicUsers = (req, res) => {
-    console.log('get all Public Users')
+    console.log("Get All Public Users");
     pool.query(queries.getPublicUsers, (error, results) => {
         if (error) {
             console.error('Error finding public users:', error);
@@ -16,7 +16,7 @@ const getPublicUsers = (req, res) => {
             res.status(200).json(results.rows);
         }
     });
-}
+  };
 
 const getPublicUserById = (req, res) => {
     console.log('get a specific Public User')
@@ -52,6 +52,8 @@ const addPublicUser = (req,res) => {
                 res.status(201).send("Public User Created Successfully!");
             });   
         } 
+
+
     })
 };
 
@@ -142,3 +144,4 @@ module.exports = {
     removePublicUser,
     updatePublicUser
 }
+

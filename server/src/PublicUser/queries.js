@@ -12,3 +12,4 @@ module.exports = {
     addPublicUser,
     removePublicUser
 }
+
