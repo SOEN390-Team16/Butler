@@ -1,11 +1,13 @@
-const getCMCs = "SELECT * FROM CondoCompany";
-const getCMCById = "SELECT * FROM CondoCompany WHERE id = $1";
-const checkIfCMCEmailExists = "SELECT * FROM condo_management_company cmc WHERE cmc.email = $1";
-const addCMC = "INSERT INTO CondoCompany(name, email, age,  dob) VALUES ($1, $2, $3, $4)"
+const getCMCs = "SELECT companyID, company_name, email, password FROM  condo_management_company;";
+const getCMCById = "SELECT companyID, company_name, email, password FROM condo_management_company WHERE companyID = $1;"; 
+const checkIfEmailExists = "SELECT * FROM condo_management_company cmc WHERE cmc.email = $1;";
+const addCMC = "INSERT INTO condo_management_company(company_name, email, password) VALUES ($1, $2, $3);";
+const removeCMC = "DELETE FROM condo_management_company WHERE companyID = $1;";
 
 module.exports = {
     getCMCs,
     getCMCById,
-    checkIfCMCEmailExists,
-    addCMC
-}
+    checkIfEmailExists,
+    addCMC,
+    removeCMC
+};
