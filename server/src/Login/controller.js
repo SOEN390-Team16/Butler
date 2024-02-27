@@ -1,6 +1,6 @@
 const pool = require('../../db');
-const queries = require('../PublicUser/queries');
-const bcrypt = require('bcrypt');
+const queriesPU = require('../PublicUser/queries');
+const queriesCMC = require('../CMC/queries');
 const jwt = require('jsonwebtoken');
 
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -11,29 +11,48 @@ const login = (req, res) => {
 
   const loginUser = async () => {
     try {
-      const result = await pool.query(queries.checkIfEmailExists, [email]);
+      const resultPU = await pool.query(queriesPU.checkIfPUEmailExists, [email]);
+      const resultCMC = await pool.query(queriesCMC.checkIfCMCEmailExists, [email]);
 
-      if (result.rows.length === 0) {
-        return { success: false, message: 'Invalid email or password' };
+      if (resultPU.rows.length === 0 && resultCMC.rows.length == 0) {
+          return { success: false, message: 'Invalid email' };
       }
 
-      const user = result.rows[0];
-      if (password !== user.password) {
-        return { success: false, message: 'Invalid email or password' };
+      if (resultPU.rows.length != 0) {
+        const user = resultPU.rows[0];
+        if (password !== user.password) {
+          return { success: false, message: 'Invalid password' };
+        }
+
+        const tokenPayload = {
+          userId: user.userid,
+          firstName: user.first_name,
+          lastName: user.last_name,
+          role: user.role
+        };
+        console.log(tokenPayload);
+
+        const token = jwt.sign(tokenPayload, jwtSecretKey, { expiresIn: '1h' });
+        return { success: true, token };
       }
 
-      const tokenPayload = {
-        userId: user.userid,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        role: user.role
-      };
+      if (resultCMC.rows.length != 0) {
+        const cmc = resultCMC.rows[0];
+        if (password !== cmc.password) {
+          return { success: false, message: 'Invalid password' };
+        }
 
-      const token = jwt.sign(tokenPayload, jwtSecretKey, { expiresIn: '1h' });
-      console.log(token);
+        const tokenPayload = {
+          cmcId: cmc.companyid,
+          cmcName: cmc.company_name,
+          email: cmc.email,
+          role: cmc.role
+        };
+        console.log(tokenPayload);
 
-      return { success: true, token };
-
+        const token = jwt.sign(tokenPayload, jwtSecretKey, { expiresIn: '1h' });
+        return { success: true, token };
+      }
     } catch (error) {
       console.error('Error during login:', error);
       return { success: false, message: 'Internal Server Error' };
