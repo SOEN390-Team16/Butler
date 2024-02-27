@@ -12,7 +12,9 @@ const getPublicUsers = (req, res) => {
         if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Public Users not found' });
         }
-        res.status(200).json(results.rows);
+        else{
+            res.status(200).json(results.rows);
+        }
     });
 }
 

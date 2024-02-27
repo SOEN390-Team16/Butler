@@ -8,7 +8,12 @@ const getCondoRenters = (req, res) => {
             console.error('Error finding condo renters:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        res.status(200).json(results.rows);
+        if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'condo renters not found' });
+        }
+        else{
+            res.status(200).json(results.rows);
+        }
     });
 }
 

@@ -11,7 +11,9 @@ const getCondoOwners = (req, res) => {
         if (results.rows.length === 0) {
             return res.status(404).json({ error: 'Condo Owner Not Found' });
         }
-        res.status(200).json(results.rows);
+        else{
+            res.status(200).json(results.rows);
+        }
     });
 }
 
