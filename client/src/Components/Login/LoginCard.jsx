@@ -7,9 +7,7 @@ import axios from "axios";
 import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
 const LoginCard = () => {
-
   const navigation = useNavigate();
-
 
   // Basic object that will temporarily hold the users information that will be requested to the DB
   const [userInfo, setUserInfo] = useState({
@@ -30,7 +28,7 @@ const LoginCard = () => {
           console.log("Logged in successfully");
           let userData = jwtDecode(res.data.token);
           console.log("User data:", userData);
-          // navigation("/DashboardHome");
+          navigation("/DashboardHome");
         } else {
           console.log("Incorrect email or password");
           setIncorrectInfo(true);
