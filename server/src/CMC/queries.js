@@ -1,4 +1,3 @@
-
 const getCMCs = "SELECT companyID, company_name, email, password FROM  condo_management_company;";
 const getCMCById = "SELECT companyID, company_name, email, password FROM condo_management_company WHERE companyID = $1;"; 
 const checkIfEmailExists = "SELECT * FROM condo_management_company cmc WHERE cmc.email = $1;";
@@ -11,4 +10,4 @@ module.exports = {
     checkIfEmailExists,
     addCMC,
     removeCMC
-}
+};
