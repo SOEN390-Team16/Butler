@@ -34,7 +34,7 @@ const getCondoRenterById = (req, res) => {
 const addCondoRenter = (req, res) => {
   console.log("add a condo renter");
   const { email } = req.body;
-  pool.query(queries.checkIfEmailExists, [email], (error, results) => {
+  pool.query(queries.checkIfCREmailExists, [email], (error, results) => {
     if (error) {
       console.error("Error checking email existence:", error);
       return res.status(500).json({ error: "Internal Server Error" });

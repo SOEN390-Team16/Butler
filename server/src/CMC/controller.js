@@ -41,7 +41,7 @@ const addCMC = (req,res) => {
       email,
       password
     } = req.body;
-    pool.query(queries.checkIfEmailExists, [email], (error, results) => {
+    pool.query(queries.checkIfCMCEmailExists, [email], (error, results) => {
         if (error) {
             console.error("Error checking if email exists:", error);
             return res

@@ -4,7 +4,7 @@ const getCondoOwners =
 const getCondoOwnerById =
   "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, pu.role," +
   "co.ownerid FROM public_user pu JOIN condo_owner co ON pu.userid = co.userid WHERE co.ownerid = $1;";
-const checkIfEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1;";
+const checkIfCOEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1;";
 const checkIfUserAlreadyExists =
   "SELECT pu.role = 'condo_owner' FROM public_user pu WHERE pu.email = $1;";
 const addCondoOwner =
@@ -18,7 +18,7 @@ const removeCondoOwner = "DELETE FROM condo_owner WHERE ownerid = $1;";
 module.exports = {
   getCondoOwners,
   getCondoOwnerById,
-  checkIfEmailExists,
+  checkIfCOEmailExists,
   addCondoOwner,
   removeCondoOwner,
   updateParentToOwner,
