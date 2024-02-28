@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import axios from "axios";
 
 import "./LoginCard.css";
@@ -18,6 +20,20 @@ const LoginCard = () => {
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
+
+    // This is where the user will be logged in and redirected to their profile
+    axios
+      .post("/api/login", userInfo)
+      .then((res) => {
+        if (res.status !== 200) {
+          console.log("Issue logging in");
+        } else {
+          console.log("Successfully logged in");
+        }
+      })
+      .catch((err) => {
+        console.log("Error logging in:", err.response.data.message);
+      });
 
     // This is where the user will be logged in and redirected to their profile
     axios
@@ -56,7 +72,43 @@ const LoginCard = () => {
 
           <p> Or sign in with email</p>
 
-          <div>
+          <div className="flex flex-col gap-6 justify-center text-center">
+            <Link
+              to="/googleSignin"
+              className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
+            >
+              <FcGoogle size={25} />
+              <p className="text font-semibold">Sign in With Google</p>
+            </Link>
+
+            <p> Or sign in with email</p>
+
+            <div>
+              <div className="credentials__section c1">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="credentials__section c2">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="row">
+                <div className="col-lg-6 col-sm-3 signup__redirect">
+                  <Link to="/SignUp">New user, sign up!</Link>
+                </div>
+                <div className="col-lg-6 col-sm-3 forgot__password">
+                  <Link to="/">Forgot Password?</Link>
+                </div>
+              </div>
+            </div>
             <div className="credentials__section c1">
               <input
                 type="email"
