@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
 import axios from "axios";
@@ -15,7 +15,7 @@ const CreateAccount = (props) => {
   });
 
   const handleChange = (e) => {
-    setUserInfo((prev) => ({...prev, [e.target.name]: e.target.value}));
+    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(userInfo);
   };
   const userData = {
@@ -23,8 +23,8 @@ const CreateAccount = (props) => {
     last_name: userInfo.last_name,
     email: userInfo.email,
     password: userInfo.password,
-    profile_picture: "not a real picture"
-  }
+    profile_picture: "not a real picture",
+  };
   console.log(userData);
   const handleSignup = () => {
     axios
@@ -116,10 +116,10 @@ const CreateAccount = (props) => {
               />
             </div>
           </div>
-          <ContinueButton onClick={handleSignup} name={"Create Account"}/>
+          <ContinueButton onClick={handleSignup} name={"Create Account"} />
         </>
       ) : (
-        <CompanySignUp/>
+        <CompanySignUp />
       )}
       <div className="redirect">
         <p>Already have an account ?</p>
