@@ -4,7 +4,7 @@ import {IoMdAddCircleOutline} from "react-icons/io";
 
 export default function AddButton(props) {
   return (
-    <div className="bg-[#34A853] px-8 py-4 rounded-md shadow-md">
+    <div className="bg-[#34A853] hover:bg-green-600 px-8 py-4 rounded-md shadow-md">
       <Link className="flex flex-row items-center gap-2.5 text-white font-semibold"
             onClick={props.onClick}
             to={props.to}
