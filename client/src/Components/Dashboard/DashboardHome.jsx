@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 import {RxHamburgerMenu} from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -10,6 +10,9 @@ import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import {GoArrowUpRight} from "react-icons/go";
+import Modal from "../Modals/Modal.jsx";
+import ModalToggler from "../Modals/ModalToggler.jsx";
+import ModalContent from "../Modals/ModalContent.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -68,7 +71,19 @@ const DashBoardHome = () => {
               <div className="flex items-center gap-4">
                 {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>See more</Link>
-                <AddButton>Add Property</AddButton>
+                <Modal>
+                  <ModalToggler>
+                    <AddButton>Add Property</AddButton>
+                  </ModalToggler>
+                  <ModalContent title="Want to add a Property"
+                                description="Add the information associated to the property to add it to your account"
+                                onExit={() => console.log('exit')}
+                  >
+                    <ModalToggler>
+                      <AddButton>Add Property</AddButton>
+                    </ModalToggler>
+                  </ModalContent>
+                </Modal>
               </div>
             </TableCardHeader>
             {/* Body of properties card */}
