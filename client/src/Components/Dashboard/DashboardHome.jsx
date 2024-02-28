@@ -1,4 +1,4 @@
-import {useState} from "react";
+import React, {useState} from "react";
 import {RxHamburgerMenu} from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -6,6 +6,10 @@ import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import {Link} from "react-router-dom";
 import AddButton from "../Buttons/AddButton.jsx";
+import Table from "../Tables/Table.jsx";
+import TableHeader from "../Tables/TableHeader.jsx";
+import TableRow from "../Tables/TableRow.jsx";
+import {GoArrowUpRight} from "react-icons/go";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -59,13 +63,51 @@ const DashBoardHome = () => {
       <div className="container flex flex-col items-center px-4">
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
-          <TableCard>
+          <TableCard className={"gap-4"}>
             <TableCardHeader title={"My Properties 🏢"}>
               <div className="flex items-center gap-4">
+                {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>See more</Link>
                 <AddButton>Add Property</AddButton>
               </div>
             </TableCardHeader>
+            {/* Body of properties card */}
+            <div>
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Property Name</th>
+                  <th>Property Address</th>
+                  <th>Unit Count</th>
+                  <th>Parking Count</th>
+                  <th>Locker Count</th>
+                </TableHeader>
+                <TableRow>
+                  <td><GoArrowUpRight size={24}/></td>
+                  <td>Great Howls</td>
+                  <td>1231 Rue Gonebad</td>
+                  <td>293</td>
+                  <td>200</td>
+                  <td>400</td>
+                </TableRow>
+                <TableRow>
+                  <td><GoArrowUpRight size={24}/></td>
+                  <td>Property Name</td>
+                  <td>Property Address</td>
+                  <td>Unit Count</td>
+                  <td>Parking Count</td>
+                  <td>Locker Count</td>
+                </TableRow>
+                <TableRow>
+                  <td><GoArrowUpRight size={24}/></td>
+                  <td>Property Name</td>
+                  <td>Property Address</td>
+                  <td>Unit Count</td>
+                  <td>Parking Count</td>
+                  <td>Locker Count</td>
+                </TableRow>
+              </Table>
+            </div>
           </TableCard>
         </div>
       </div>
