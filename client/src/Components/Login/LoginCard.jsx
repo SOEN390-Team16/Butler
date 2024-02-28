@@ -7,7 +7,9 @@ import axios from "axios";
 import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
 const LoginCard = () => {
+
   const navigation = useNavigate();
+
 
   // Basic object that will temporarily hold the users information that will be requested to the DB
   const [userInfo, setUserInfo] = useState({
