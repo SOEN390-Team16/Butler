@@ -14,11 +14,11 @@ const getProperties = (req, res) => {
   };
 
 const getPropertyById = (req, res) => {
-    console.log('get a specific Property')
+    console.log('Get a specific property profile')
     const property_id = parseInt(req.params.property_id)
     pool.query(queries.getPropertyById, [property_id], (error, results) => {
         if (error) {
-            console.error('Error updating user:', error);
+            console.error('Error fetching property profile:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Property not found' });
@@ -113,22 +113,13 @@ const updateProperty = (req, res) => {
 };
 
 const removeProperty = (req, res) => {
-    const propertyid = parseInt(req.params.propertyid)
-    pool.query(queries.getPropertyById, [propertyid], (error,result) =>{
-        if(error){
-            console.error('Error finding property:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
+    const property_id = parseInt(req.params.property_id)
+    pool.query(queries.removeProperty, [property_id], (error, results) => {
+        if (error) {
+          console.error('Error removing property profile:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
         }
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        pool.query(queries.removeProperty, [propertyid], (error, results) => {
-            if(error){
-                console.error('Error removing user:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(200).send("user removed successfully.")
-        })
+        res.status(200).send("Property profile successfully removed.")
     })
 }
 
