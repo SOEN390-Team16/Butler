@@ -7,58 +7,58 @@ const getProperties = (req, res) => {
         if (error) {
             console.error('Error finding properties:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'Properties not found' });
-        }
-        else{
+        } else {
             res.status(200).json(results.rows);
         }
     });
   };
 
 const getPropertyById = (req, res) => {
-    console.log('get a specific Property')
-    const propertyid = parseInt(req.params.propertyid)
-    pool.query(queries.getPropertyById, [propertyid], (error, results) => {
+    console.log('Get a specific property profile')
+    const property_id = parseInt(req.params.property_id)
+    pool.query(queries.getPropertyById, [property_id], (error, results) => {
         if (error) {
-            console.error('Error updating user:', error);
+            console.error('Error fetching property profile:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (results.rowCount === 0) {
+        } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Property not found' });
-        }
-        else{
-            res.status(200).json(results.rows);
+        } else {
+            res.status(200).json(results.rows.at(0));
         }
     });
 }
 
 const addProperty = (req,res) => {
     console.log('add a Property')
-    const {companyid, propety_name, unit_count, parking_count, locker_count, adress} = req.body;
+    const {companyid, property_name, unit_count, parking_count, locker_count, address} = req.body;
+
+    /* We need to check whether the given company exists */
     pool.query(queries.checkIfCompanyExists, [companyid], (error, results) =>  {
         if(error){
             console.error('Error finding company:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
+        } else if(results.rows.length === 0){
+            return res.status(404).send("Company does not exist");
+        } else {
+            /* Create the property profile */
+            pool.query(
+              queries.addProperty,
+              [companyid, property_name, unit_count, parking_count, locker_count, address],
+              (error, result) => {
+                if(error) {
+                  throw error;
+                }
+                res.status(201).json(result.rows.at(0));
+              });
         }
-        if(results.rows.length != 0){
-            res.status(404).send("Company Already Exists");
-        }
-        else{
-            pool.query(queries.addProperty, [companyid, propety_name, unit_count, parking_count, locker_count, adress], (error, result) => {
-                if(error) throw error;
-                res.status(201).send("Property Created Successfully!");
-            });   
-        } 
     })
 };
 
 const updateProperty = (req, res) => {
-    const propertyid = req.params.propertyid;
-    const { companyid, propety_name, unit_count, parking_count, locker_count, adress } = req.body;
+    const property_id = req.params.property_id;
+    const { companyid, property_name, unit_count, parking_count, locker_count, address } = req.body;
 
-    if (!companyid && !propety_name && !unit_count && !parking_count && !locker_count && !adress === undefined) {
+    if (!companyid && !property_name && !unit_count && !parking_count && !locker_count && !address) {
         return res.status(400).json({ error: 'At least one field is required for updating' });
     }
 
@@ -69,9 +69,9 @@ const updateProperty = (req, res) => {
         setClauses.push('companyid = $' + (values.length + 1));
         values.push(companyid);
     }
-    if (propety_name) {
-        setClauses.push('propety_name = $' + (values.length + 1));
-        values.push(propety_name);
+    if (property_name) {
+        setClauses.push('property_name = $' + (values.length + 1));
+        values.push(property_name);
     }
     if (unit_count) {
         setClauses.push('unit_count = $' + (values.length + 1));
@@ -85,55 +85,42 @@ const updateProperty = (req, res) => {
         setClauses.push('locker_count = $' + (values.length + 1));
         values.push(locker_count);
     }
-    if (adress) {
-        setClauses.push('adress = $' + (values.length + 1));
-        values.push(adress);
+    if (address) {
+        setClauses.push('address = $' + (values.length + 1));
+        values.push(address);
     }
 
-    const query = `UPDATE property SET ${setClauses.join(', ')} WHERE companyid = $${values.length + 1}`;
+    const query = `UPDATE property SET ${setClauses.join(', ')} WHERE property_id = $${values.length + 1} RETURNING *`;
 
-    pool.query(queries.getPropertyById, [propertyid], (error, results) => {
+    /* Check if the property exists before applying any changes to it */
+    pool.query(queries.getPropertyById, [property_id], (error, results) => {
         if (error) {
-            console.error('Error updating user:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'Public User not found' });
+          console.error('Error updating property profile:', error);
+          return res.status(500).json({error: 'Internal Server Error'});
+        } else if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'Property profile not found' });
         } else {
-            pool.query(query, [...values, propertyid], (error, result) => {
-                if (error) {
-                    console.error('Error updating public user:', error);
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                }
-
-                if (result.rowCount === 0) {
-                    return res.status(404).json({ error: 'Public User not found' });
-                }
-
-                res.status(200).json({ message: 'Public User updated successfully' });
+          /* Update the property profile */
+            pool.query(query, [...values, property_id], (error, result) => {
+              if (error) {
+                console.error('Error updating property profile:', error);
+                return res.status(500).json({ error: 'Internal Server Error' });
+              }
+              res.status(200).json(result.rows.at(0));
             });
         }
     });
 };
 
 const removeProperty = (req, res) => {
-    const propertyid = parseInt(req.params.propertyid)
-    pool.query(queries.getPropertyById, [propertyid], (error,result) =>{
-        if(error){
-            console.error('Error finding property:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
+    const property_id = parseInt(req.params.property_id)
+    pool.query(queries.removeProperty, [property_id], (error, results) => {
+        if (error) {
+          console.error('Error removing property profile:', error);
+          return res.status(500).json({ error: 'Internal Server Error' });
         }
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        pool.query(queries.removeProperty, [propertyid], (error, results) => {
-            if(error){
-                console.error('Error removing user:', error);
-                return res.status(500).json({ error: 'Internal Server Error' });
-            }
-            res.status(200).send("user removed successfully.")
-        })
-    }) 
+        res.status(200).send("Property profile successfully removed.")
+    })
 }
 
 module.exports = {

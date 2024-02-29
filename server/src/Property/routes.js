@@ -3,9 +3,9 @@ const controller = require('./controller')
 const router = Router();
 
 router.get('/',controller.getProperties);
-router.get('/:propertyid',controller.getPropertyById);
+router.get('/:property_id',controller.getPropertyById);
 router.post('/', controller.addProperty);
-router.patch('/:propertyid', controller.updateProperty);
-router.delete('/:propertyid', controller.removeProperty);
+router.patch('/:property_id', controller.updateProperty);
+router.delete('/:property_id', controller.removeProperty);
 
 module.exports = router;
