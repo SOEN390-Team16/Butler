@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/',authenticateToken, controller.getCondoOwners);
 router.get('/:ownerid',authenticateToken,controller.getCondoOwnerById);
-router.post('/',authenticateToken, controller.addCondoOwner);
+router.post('/', controller.addCondoOwner);
 router.patch('/:ownerid',authenticateToken, controller.updateCondoOwner);
 router.delete('/:ownerid',authenticateToken, controller.removeCondoOwner);
 
