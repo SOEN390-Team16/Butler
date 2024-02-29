@@ -13,10 +13,8 @@ const loginUserPU = async (email, password) => {
   }
 
   const user = resultPU.rows[0];
-  
   const passwordMatch = await bcrypt.compare(password, user.password);
-  console.log(passwordMatch)
-   if (!passwordMatch) {
+  if (!passwordMatch) {
     return null;
   }
 
