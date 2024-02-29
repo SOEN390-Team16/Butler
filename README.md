@@ -44,7 +44,7 @@ The Condo Management Application is built using the MERN (MongoDB, Express.js, R
 | Wadeh Hamati	| 40216893 | wade3hamati |
 | Walid Achlaf	| 40210355 | walidoow |
 | Charles Eimer	| 26747310 | eimcharles |
-| Houssam Righi	| 40155074 | |
+| Houssam Righi	| 40155074 | horisofine |
 | Ceyhun Topcu	| 40159200 | ceyhuntopcu |
 | Monika Moanes	| 40188452 | MonikaaMoanes |
 | Mohammed Rahman | 	40203098 | Afifr2001 |
