@@ -23,29 +23,34 @@ const getPropertyById = (req, res) => {
         } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Property not found' });
         } else {
-            res.status(200).json(results.rows);
+            res.status(200).json(results.rows.at(0));
         }
     });
 }
 
 const addProperty = (req,res) => {
     console.log('add a Property')
-    const {companyid, propety_name, unit_count, parking_count, locker_count, adress} = req.body;
+    const {companyid, property_name, unit_count, parking_count, locker_count, address} = req.body;
+
+    /* We need to check whether the given company exists */
     pool.query(queries.checkIfCompanyExists, [companyid], (error, results) =>  {
         if(error){
             console.error('Error finding company:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if(results.rows.length != 0){
-            res.status(404).send("Company Already Exists");
-        }
-        else{
-            pool.query(queries.addProperty, [companyid, propety_name, unit_count, parking_count, locker_count, adress], (error, result) => {
-                if(error) throw error;
-                res.status(201).send("Property Created Successfully!");
-            });
+        } else if(results.rows.length === 0){
+            return res.status(404).send("Company does not exist");
         }
     })
+
+    /* Create the property */
+    pool.query(
+        queries.addProperty,
+        [companyid, property_name, unit_count, parking_count, locker_count, address],
+        (error, result) => {
+            if(error) throw error;
+            console.log(result)
+            res.status(201).json(result.rows.at(0));
+    });
 };
 
 const updateProperty = (req, res) => {
