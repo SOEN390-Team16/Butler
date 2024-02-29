@@ -37,17 +37,17 @@ const getPublicUserById = (req, res) => {
 
 const addPublicUser = (req,res) => {
     console.log('add a Public User')
-    const {first_name, last_name, email, password, profile_picture} = req.body;
+    const {first_name, last_name, email, password} = req.body;
     pool.query(queries.checkIfPUEmailExists, [email], (error, results) =>  {
         if(error){
             console.error('Error finding email:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        if(results.rows.length != 0){
+        if(results.rows.length !== 0){
             res.status(404).send("Email Already Exists");
         }
         else{
-            pool.query(queries.addPublicUser, [first_name, last_name, email, password, profile_picture], (error, result) => {
+            pool.query(queries.addPublicUser, [first_name, last_name, email, password], (error, result) => {
                 if(error) throw error;
                 res.status(201).send("Public User Created Successfully!");
             });   

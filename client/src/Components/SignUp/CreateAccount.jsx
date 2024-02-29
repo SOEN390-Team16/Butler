@@ -18,17 +18,11 @@ const CreateAccount = (props) => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(userInfo);
   };
-  const userData = {
-    first_name: userInfo.first_name,
-    last_name: userInfo.last_name,
-    email: userInfo.email,
-    password: userInfo.password,
-    profile_picture: "not a real picture",
-  };
-  console.log(userData);
+
+  console.log(userInfo);
   const handleSignup = () => {
     axios
-      .post("http://localhost:3000/api/v1/pu/addPublicUser", userData)
+      .post("http://localhost:3000/api/v1/pu/", userInfo)
       .then((res) => {
         if (res.status === 200) {
           console.log("Success");

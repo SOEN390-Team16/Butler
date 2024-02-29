@@ -7,6 +7,7 @@ const Login = require('./src/Login/routes')
 const cors = require('cors');
 const { pool } = require("./db");
 const tokenRouter = require('./src/auth/token');
+const RegistrationKeyRoutes = require('./src/RegistrationKey/routes');
 
 
 const app = express()
@@ -21,5 +22,6 @@ app.use('/api/v1/cr', CondoRenterRoutes);
 app.use('/api/v1/cmc', CMCRoutes);
 app.use('/api/v1/pu', PublicUserRoutes);
 app.use('/api/v1/login', Login);
+app.use('/api/v1/registration', RegistrationKeyRoutes);
 
 app.listen(port, () => console.log(`app listening on ${port}`));
