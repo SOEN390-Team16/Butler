@@ -1,11 +1,12 @@
 const {Router} = require('express');
 const controller = require('./controller')
+const authenticateToken = require('../auth/tokenValidator')
 const router = Router();
 
-router.get('/',controller.getCondoRenters);
-router.get('/:renterid',controller.getCondoRenterById);
+router.get('/', authenticateToken, controller.getCondoRenters);
+router.get('/:renterid', authenticateToken, controller.getCondoRenterById);
 router.post('/', controller.addCondoRenter);
-router.patch('/:renterid', controller.updateCondoRenter);
-router.delete('/:renterid', controller.removeCondoRenter);
+router.patch('/:renterid', authenticateToken, controller.updateCondoRenter);
+router.delete('/:renterid', authenticateToken, controller.removeCondoRenter);
 
 module.exports = router;
