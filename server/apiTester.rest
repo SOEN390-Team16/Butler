@@ -1,0 +1,59 @@
+###
+
+POST http://localhost:3000/api/v1/login/
+Content-Type: application/json
+
+{
+    "email": "test31@gmail.com8",
+    "password": "testing"
+}
+
+###
+POST http://localhost:3000/api/v1/token/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIyOTg2OX0.xpvLfdbm2c3nWcp7ylb0VCHnATBdJCg85z7BUcTm1YY"
+}
+###
+
+POST http://localhost:3000/api/v1/co/
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com8"
+}
+
+###
+POST http://localhost:3000/api/v1/pu/
+Content-Type: application/json
+
+{
+    "first_name": "testing",
+    "last_name": "testing",
+    "email": "test31@gmail.com8",
+    "password": "testing",
+    "profile_picture": "ay7aga"
+}
+
+###
+
+GET http://localhost:3000/api/v1/cr/9
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIyODIyMSwiZXhwIjoxNzA5MjMwMDIxfQ.iREkM7S734RXItzisiHI6wHTOtEwKpAlSDPHqgwVYzw
+
+###
+
+PATCH http://localhost:3000/api/v1/pu/30
+Content-Type: application/json
+
+{
+    "profile_picture": "ay7agaaa"
+}
+
+###
+
+GET http://localhost:3000/api/v1/cmc/2
+
+###
+
+DELETE http://localhost:3000/api/v1/pu/29
