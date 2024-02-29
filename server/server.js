@@ -5,6 +5,7 @@ const CMCRoutes = require('./src/CMC/routes')
 const PublicUserRoutes = require('./src/PublicUser/routes')
 const PropertyRoutes = require('./src/Property/routes')
 const Login = require('./src/Login/routes')
+const PropertyProfileRoutes = require('./src/Property/routes')
 const cors = require('cors');
 const { pool } = require("./db");
 const tokenRouter = require('./src/auth/token');
@@ -23,6 +24,5 @@ app.use('/api/v1/cmc', CMCRoutes);
 app.use('/api/v1/pu', PublicUserRoutes);
 app.use('/api/v1/login', Login);
 app.use('/api/v1/pp', PropertyRoutes);
-
 
 app.listen(port, () => console.log(`app listening on ${port}`));
