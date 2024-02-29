@@ -7,11 +7,7 @@ const getProperties = (req, res) => {
         if (error) {
             console.error('Error finding properties:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (results.rowCount === 0) {
-            return res.status(404).json({ error: 'Properties not found' });
-        }
-        else{
+        } else {
             res.status(200).json(results.rows);
         }
     });
@@ -19,16 +15,14 @@ const getProperties = (req, res) => {
 
 const getPropertyById = (req, res) => {
     console.log('get a specific Property')
-    const propertyid = parseInt(req.params.propertyid)
-    pool.query(queries.getPropertyById, [propertyid], (error, results) => {
+    const property_id = parseInt(req.params.property_id)
+    pool.query(queries.getPropertyById, [property_id], (error, results) => {
         if (error) {
             console.error('Error updating user:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        }
-        if (results.rowCount === 0) {
+        } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Property not found' });
-        }
-        else{
+        } else {
             res.status(200).json(results.rows);
         }
     });
@@ -49,8 +43,8 @@ const addProperty = (req,res) => {
             pool.query(queries.addProperty, [companyid, propety_name, unit_count, parking_count, locker_count, adress], (error, result) => {
                 if(error) throw error;
                 res.status(201).send("Property Created Successfully!");
-            });   
-        } 
+            });
+        }
     })
 };
 
@@ -133,7 +127,7 @@ const removeProperty = (req, res) => {
             }
             res.status(200).send("user removed successfully.")
         })
-    }) 
+    })
 }
 
 module.exports = {
