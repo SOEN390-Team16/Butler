@@ -5,14 +5,15 @@ import SideDrawer from "./SideDrawer";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import {Link} from "react-router-dom";
-import AddButton from "../Buttons/AddButton.jsx";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import {GoArrowUpRight} from "react-icons/go";
-import Modal from "../Modals/Modal.jsx";
 import ModalToggler from "../Modals/ModalToggler.jsx";
+import AddButton from "../Buttons/AddButton.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
+import Modal from "../Modals/Modal.jsx";
+import PropertyAddForm from "./PropertyAddForm.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -63,7 +64,7 @@ const DashBoardHome = () => {
         </div>
       </SideDrawer>
       {/* Your main content goes here */}
-      <div className="container flex flex-col items-center px-4">
+      <div className="container flex flex-col items-center px-24">
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
           <TableCard className={"gap-4"}>
@@ -71,6 +72,8 @@ const DashBoardHome = () => {
               <div className="flex items-center gap-4">
                 {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>See more</Link>
+
+                {/* This is the modal that display once a button is interacted with */}
                 <Modal>
                   <ModalToggler>
                     <AddButton>Add Property</AddButton>
@@ -79,9 +82,7 @@ const DashBoardHome = () => {
                                 description="Add the information associated to the property to add it to your account"
                                 onExit={() => console.log('exit')}
                   >
-                    <ModalToggler>
-                      <AddButton>Add Property</AddButton>
-                    </ModalToggler>
+                    <PropertyAddForm/>
                   </ModalContent>
                 </Modal>
               </div>
