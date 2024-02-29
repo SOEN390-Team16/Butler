@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 router.post('/refresh', async (req, res) => {
-    console.log("Refreshing Token")
+    console.log("Refreshing Token...")
     const refreshToken = req.body.refreshToken;
     const email = (jwt.decode(refreshToken)).email;
     const username = req.body.username

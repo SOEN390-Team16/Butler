@@ -11,7 +11,7 @@ const updateParentToRenter =
   "UPDATE public_user SET role = 'renter' FROM renter WHERE renter.userid = public_user.userid;";
 const removeCondoRenter = "DELETE FROM renter WHERE renterid = $1;";
 const checkIfUserAlreadyExists =
-  "SELECT pu.role = 'renter' FROM public_user pu WHERE pu.email = $1;";
+  "SELECT pu.role = 'renter' OR pu.role = 'condo_owner' FROM public_user pu WHERE pu.email = $1;";
 const updateParentToPublicUser =
   "UPDATE public_user SET role = 'public_user' WHERE userid = (SELECT userid FROM renter WHERE renter.renterid = $1)";
 

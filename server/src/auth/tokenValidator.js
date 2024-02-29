@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const pool = require('../../db');
 
 async function authenticateToken(req, res, next) {
-  console.log("here");
+  console.log("Validating Token...");
   const authHeader = req.headers && req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!authHeader) {
