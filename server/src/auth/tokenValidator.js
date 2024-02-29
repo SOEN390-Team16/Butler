@@ -1,21 +1,33 @@
 const jwt = require('jsonwebtoken');
 const pool = require('../../db');
 
-async function authenticateToken(user, req, res, next) {
-  const authHeader = req.headers['authorization'];
+async function authenticateToken(req, res, next) {
+  console.log("here");
+  const authHeader = req.headers && req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+  if (!authHeader) {
+    return res.status(401).send('Unauthorized');
+  }
 
   if (token == null) {
-    return res.sendStatus(401);
+    return res.status(401).send('Unauthorized');
   }
 
   try {
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    req.email = decodedToken.email.toLowerCase();
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.email = decodedToken.email;
+    req.role = decodedToken.role;
 
-    // Query the PostgreSQL database to find a user with the specified email
-    const result = await pool.query('SELECT * FROM $1 WHERE email = $2', [user,req.email]);
+    let user = req.role;
+
+    if (user === 'renter' || user === 'condo_owner' || user === 'public_user') {
+      user = 'public_user';
+    } else {
+      user = 'condo_management_company';
+    }
     
+    const result = await pool.query(`SELECT * FROM ${user} WHERE email = $1`, [req.email]);
+
     if (result.rows.length === 0) {
       return res.status(403).send('Forbidden (Invalid token)');
     }
@@ -23,9 +35,9 @@ async function authenticateToken(user, req, res, next) {
     // Attach the user information to the request object
     req.user = result.rows[0];
 
-    // Continue to the next middleware or route handler
     next();
   } catch (err) {
+    console.log(err)
     return res.status(403).send('Forbidden (Invalid token)');
   }
 }

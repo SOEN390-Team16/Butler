@@ -1,53 +1,63 @@
-###
-
+### LOGIN
 POST http://localhost:3000/api/v1/login/
 Content-Type: application/json
 
 {
-    "email": "test31@gmail.com8",
-    "password": "testing"
+    "email": "test12@company.com",
+    "password": "1234"
 }
 
-###
+### REFRESH
 POST http://localhost:3000/api/v1/token/refresh
 Content-Type: application/json
 
 {
-    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIyOTg2OX0.xpvLfdbm2c3nWcp7ylb0VCHnATBdJCg85z7BUcTm1YY"
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM1LCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzRAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIzNDM2OX0.s8xnR-CDToAo4irBUJHZnqclDMuwoXmMoTNUlsE7jSo"
 }
-###
 
+### CR or CO
 POST http://localhost:3000/api/v1/co/
 Content-Type: application/json
 
 {
-    "email": "test@gmail.com8"
+    "email": "test30@gmail.com8"
 }
 
-###
+### NEW PU
 POST http://localhost:3000/api/v1/pu/
 Content-Type: application/json
 
 {
     "first_name": "testing",
     "last_name": "testing",
-    "email": "test31@gmail.com8",
-    "password": "testing",
+    "email": "test38@gmail.com8",
+    "password": "1234",
     "profile_picture": "ay7aga"
+}
+
+### NEW CMC
+POST http://localhost:3000/api/v1/cmc/
+Content-Type: application/json
+
+{
+    "company_name": "Test Company 12",
+    "email": "test12@company.com",
+    "password": "1234"
 }
 
 ###
 
-GET http://localhost:3000/api/v1/cr/9
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIyODIyMSwiZXhwIjoxNzA5MjMwMDIxfQ.iREkM7S734RXItzisiHI6wHTOtEwKpAlSDPHqgwVYzw
+GET http://localhost:3000/api/v1/cmc/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjM1LCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzRAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIzNDM2OSwiZXhwIjoxNzA5MjM2MTY5fQ.yz2vC-SMA_EFhrDQZw2EjtRJ97SloT7U-4BNq8sURlo
 
 ###
 
-PATCH http://localhost:3000/api/v1/pu/30
+PATCH http://localhost:3000/api/v1/co/20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIzMjI1NywiZXhwIjoxNzA5MjM0MDU3fQ.-zzdhHq_PdHbkfNSNElWgndepYLNcGlcmdPM1cKT7Fc
 Content-Type: application/json
 
 {
-    "profile_picture": "ay7agaaa"
+    "password": "a7aaa"
 }
 
 ###
@@ -56,4 +66,5 @@ GET http://localhost:3000/api/v1/cmc/2
 
 ###
 
-DELETE http://localhost:3000/api/v1/pu/29
+DELETE http://localhost:3000/api/v1/cmc/13
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMxLCJmaXJzdE5hbWUiOiJ0ZXN0aW5nIiwibGFzdE5hbWUiOiJ0ZXN0aW5nIiwiZW1haWwiOiJ0ZXN0MzFAZ21haWwuY29tOCIsInJvbGUiOiJwdWJsaWNfdXNlciIsImlhdCI6MTcwOTIzMjI1NywiZXhwIjoxNzA5MjM0MDU3fQ.-zzdhHq_PdHbkfNSNElWgndepYLNcGlcmdPM1cKT7Fc

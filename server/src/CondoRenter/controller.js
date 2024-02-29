@@ -1,5 +1,6 @@
 const pool = require("../../db");
 const queries = require("./queries");
+const bcrypt = require('bcrypt');
 
 const getCondoRenters = (req, res) => {
   console.log("get all Condo Renters");
@@ -75,7 +76,7 @@ const addCondoRenter = (req, res) => {
   });
 };
 
-const updateCondoRenter = (req, res) => {
+const updateCondoRenter = async (req, res) => {
   const renterid = req.params.renterid;
   const { first_name, last_name, email, password, profile_picture } = req.body;
 
@@ -108,7 +109,7 @@ const updateCondoRenter = (req, res) => {
   }
   if (password) {
     setClauses.push("password = $" + (values.length + 1));
-    values.push(password);
+    values.push(await bcrypt.hash(password, 5));
   }
   if (profile_picture !== undefined) {
     setClauses.push("profile_picture = $" + (values.length + 1));
