@@ -15,11 +15,11 @@ hr{
 }
 
 h1{
-    font-family: Raleway;
+    font-family: Raleway, serif;
     font-size: 32px;
     font-weight: 700;
     line-height: 48px;
-    letter-spacing: 0em;
+    letter-spacing: 0;
     
 
 }
