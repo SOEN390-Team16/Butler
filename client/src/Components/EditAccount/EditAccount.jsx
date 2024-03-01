@@ -194,7 +194,7 @@ const EditAccount = (props) => {
                         </>
                       ) : (
                         <>
-                          <input
+                          {/* <input
                             type="text"
                             value={newProfile.first_name}
                             onChange={handleFirstNameChange}
