@@ -18,16 +18,19 @@ const EditAccount = (props) => {
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const currentPlan = userDataArray.length > 1 ? userDataArray[4][1] : "";
 
+  const profilePicture = userData ? userData.profile_picture : "";
+
   const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
-    profilePicture: { image },
-    username: "Username",
-    firstName: firstName,
-    lastName: lastName,
+    // username: "Username",
+    first_name: firstName,
+    last_name: lastName,
     email: userEmail,
-    phone: "+1 514 123 4567",
-    status: currentPlan,
+    // phone: "+1 514 123 4567",
+    // status: currentPlan,
+    password: null,
+    profile_picture: { image },
   });
 
   // Function to update email in userData and localStorage
@@ -46,7 +49,7 @@ const EditAccount = (props) => {
   // Function to update first name in userData and localStorage
   const handleFirstNameChange = (e) => {
     const newFirstName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, firstName: newFirstName }));
+    setNewProfile((prev) => ({ ...prev, first_name: newFirstName }));
 
     // Update first name in userData
     if (userData) {
@@ -59,7 +62,7 @@ const EditAccount = (props) => {
   // Function to update last name in userData and localStorage
   const handleLastNameChange = (e) => {
     const newLastName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, lastName: newLastName }));
+    setNewProfile((prev) => ({ ...prev, last_name: newLastName }));
 
     // Update last name in userData
     if (userData) {
@@ -81,7 +84,7 @@ const EditAccount = (props) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
-        setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+        setNewProfile((prev) => ({ ...prev, profile_picture: reader.result }));
       };
       reader.readAsDataURL(file);
     }
@@ -103,12 +106,13 @@ const EditAccount = (props) => {
 
     if (image) {
       // Update the newProfile state with the selected image
-      setNewProfile((prev) => ({ ...prev, profilePicture: { image } }));
+      setNewProfile((prev) => ({ ...prev, profile_picture: { image } }));
     }
 
     axios
       .patch(`http://localhost:3000/api/v1/pu/${userID}`, newProfile, config)
-      .then(() => {
+      .then((res) => {
+        console.log("res: ", res);
         console.log("User data updated successfully");
       })
       .catch((error) => {
@@ -163,11 +167,11 @@ const EditAccount = (props) => {
                 <div className="col-lg-8 col-sm-12">
                   <div className="row justify-content-center">
                     <div className="col-lg-5 col-sm-2 headers">
-                      <p>Username: </p>
+                      {/* <p>Username: </p> */}
                       <p>First name: </p>
                       <p>Last name: </p>
                       <p>Email: </p>
-                      <p>Phone Number: </p>
+                      {/* <p>Phone Number: </p> */}
                       <p>Current Plan: </p>
                     </div>
                     <div
@@ -177,31 +181,31 @@ const EditAccount = (props) => {
                     >
                       {!editProfile ? (
                         <>
-                          <p>{newProfile.username}</p>
-                          <p>{newProfile.firstName}</p>
-                          <p>{newProfile.lastName}</p>
+                          {/* <p>{newProfile.username}</p> */}
+                          <p>{newProfile.first_name}</p>
+                          <p>{newProfile.last_name}</p>
                           <p>{newProfile.email}</p>
-                          <p>{newProfile.phone} </p>
-                          <p>{newProfile.status}</p>
+                          {/* <p>{newProfile.phone} </p> */}
+                          <p>{currentPlan}</p>
                         </>
                       ) : (
                         <>
-                          <input
+                          {/* <input
                             type="text"
                             value={newProfile.username}
                             style={{ margin: "0" }}
                             onChange={handleProfileChange}
                             name="username"
-                          />
+                          /> */}
                           <input
                             type="text"
-                            value={newProfile.firstName}
+                            value={newProfile.first_name}
                             onChange={handleFirstNameChange}
                             name="firstName"
                           />
                           <input
                             type="text"
-                            value={newProfile.lastName}
+                            value={newProfile.last_name}
                             onChange={handleLastNameChange}
                             name="lastName"
                           />
@@ -211,13 +215,13 @@ const EditAccount = (props) => {
                             onChange={handleEmailChange}
                             name="email"
                           />
-                          <input
+                          {/* <input
                             type="text"
                             value={newProfile.phone}
                             onChange={handleProfileChange}
                             name="phone"
-                          />
-                          <p>{newProfile.status}</p>
+                          /> */}
+                          <p>{currentPlan}</p>
                         </>
                       )}
                     </div>
