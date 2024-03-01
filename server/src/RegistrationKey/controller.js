@@ -5,7 +5,20 @@ const {getCondoOwners} = require("../CondoOwner/controller");
 // This generates two random alphanumeric strings of length 10 and concatenates them to create a key of length 20
 function generateRandomKey() {
     return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-}
+};
+
+const getRegistrationKeys = (req, res) => {
+    console.log('Get Registration Keys');
+    pool.query(queries.getRegistrationKeys, (error, results) => {
+        if (error) {
+            console.error('Error finding registration keys', error);
+            return res.status(500).json({error: 'Internal Server Error'});
+        }
+        else{
+            res.status(200).json(results.rows);
+        }
+    });
+};
 
 const generateAndAssignNewRegistrationKey = (req, res) => {
     console.log('Generating Unique Registration Key');
@@ -38,7 +51,26 @@ const generateAndAssignNewRegistrationKey = (req, res) => {
     })
 };
 
+const revokeRegistrationKeyByUserEmail = (req, res) => {
+    console.log('Revoking Registration Key');
+    const email = req.body;
+    pool.query(queries.revokeRegistrationKeyByUserEmail, [email], (error,result) => {
+        if (error) {
+            console.error('Error revoking registration key by email', error);
+            return res.status(500).json({error: 'Internal Server Error'});
+        }
+        pool.query(queries.updatePublicUserRole, [email, 'public_user'], (error,result) => {
+            if (error) {
+                console.error('Error updating role after revoking registration key by email', error);
+                return res.status(500).json({error: 'Internal Server Error'});
+            }
+            res.status(200).send('Registration Key Revoked and User Role Updated')
+        })
+    })
+};
 
 module.exports = {
+    getRegistrationKeys,
     generateAndAssignNewRegistrationKey,
+    revokeRegistrationKeyByUserEmail
 }

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import './CompanySignUp.css';
+const jwt = require('jsonwebtoken');
 
 
 const CompanySignUp = props => {

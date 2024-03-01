@@ -17,6 +17,8 @@ const LoginCard = () => {
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
 
+
+
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
