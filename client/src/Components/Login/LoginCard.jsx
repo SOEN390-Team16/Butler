@@ -28,6 +28,8 @@ const LoginCard = () => {
           console.log("Logged in successfully");
           let userData = jwtDecode(res.data.token);
           console.log("User data:", userData);
+          localStorage.setItem("userData", JSON.stringify(userData)); // Save userData to localStorage
+          localStorage.setItem("token", res.data.token);
           navigation("/DashboardHome");
         } else {
           console.log("Incorrect email or password");

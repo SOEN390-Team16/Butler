@@ -28,7 +28,7 @@ const CreateAccount = (props) => {
   console.log(userData);
   const handleSignup = () => {
     axios
-      .post("http://localhost:3000/api/v1/pu/addPublicUser", userData)
+      .post("http://localhost:3000/api/v1/pu/", userData)
       .then((res) => {
         if (res.status === 200) {
           console.log("Success");
