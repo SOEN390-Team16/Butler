@@ -6,7 +6,7 @@ const getCondoOwnerById =
   "co.ownerid FROM public_user pu JOIN condo_owner co ON pu.userid = co.userid WHERE co.ownerid = $1;";
 const checkIfCOEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1;";
 const checkIfUserAlreadyExists =
-  "SELECT pu.role = 'condo_owner' FROM public_user pu WHERE pu.email = $1;";
+  "SELECT pu.role = 'condo_owner' OR pu.role = 'renter' FROM public_user pu WHERE pu.email = $1;";
 const addCondoOwner =
   "INSERT INTO condo_owner(userID) VALUES ((SELECT userID FROM public_user pu WHERE pu.email = $1));";
 const updateParentToOwner =
