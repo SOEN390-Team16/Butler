@@ -23,7 +23,7 @@ const CreateAccount = (props) => {
     last_name: userInfo.last_name,
     email: userInfo.email,
     password: userInfo.password,
-    profile_picture: "not a real picture",
+    profile_picture: "",
   };
   console.log(userData);
   const handleSignup = () => {
@@ -67,7 +67,7 @@ const CreateAccount = (props) => {
         </div>
       </div>
       {userAccount ? (
-        <>
+        <div className="flex flex-col py-8">
           <div className="signup__entry">
             <p>First name</p>
             <div className="input__holder">
@@ -117,13 +117,13 @@ const CreateAccount = (props) => {
             </div>
           </div>
           <ContinueButton onClick={handleSignup} name={"Create Account"} />
-        </>
+        </div>
       ) : (
         <CompanySignUp />
       )}
-      <div className="redirect">
+      <div className="flex flex-col justify-center items-center">
         <p>Already have an account ?</p>
-        <Link to="/">
+        <Link to={""} className="underline">
           <p>Sign in</p>
         </Link>
       </div>
