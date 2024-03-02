@@ -1,41 +1,47 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import { Link } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const CreateAccount = (props) => {
+  const navigation = useNavigate();
+
   const [userAccount, setIsUserAccount] = useState(true);
   const [userInfo, setUserInfo] = useState({
     first_name: "",
     last_name: "",
     email: "",
     password: "",
+    profile_picture: "",
   });
 
   const handleChange = (e) => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(userInfo);
   };
-  const userData = {
-    first_name: userInfo.first_name,
-    last_name: userInfo.last_name,
-    email: userInfo.email,
-    password: userInfo.password,
-    profile_picture: "",
-  };
-  console.log(userData);
-  const handleSignup = () => {
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    console.log(userInfo);
     axios
-      .post("http://localhost:3000/api/v1/pu/", userData)
+      .post("http://localhost:3000/api/v1/pu/", userInfo)
       .then((res) => {
-        if (res.status === 200) {
-          console.log("Success");
+        console.log("res.data", res.data);
+        if (res.data) {
+          console.log("Account created successfully");
+          let userData = res.data;
+          console.log("User data:", userData);
+          navigation("/DashboardHome");
+        } else {
+          console.log("Incorrect email or password");
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log("Error logging in:", err);
       });
   };
 

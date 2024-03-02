@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import "./CompanySignUp.css";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CompanySignUp = (props) => {
+  const navigation = useNavigate();
+
   const [companyInfo, setCompanyInfo] = useState({
-    companyName: "",
+    company_name: "",
     email: "",
     password: "",
   });
@@ -14,7 +18,25 @@ const CompanySignUp = (props) => {
   // Onclick function that will take care of all the login API calls
   const handleClick = async (e) => {
     e.preventDefault();
+    // This is where the user will be logged in and redirected to their profile
     console.log(companyInfo);
+    axios
+      .post("http://localhost:3000/api/v1/cmc/", companyInfo) // Added 'http://' protocol
+      .then((res) => {
+        console.log("res", res);
+        if (res) {
+          console.log("Company account created successfully");
+          let userData = res.data;
+          console.log("User data:", userData);
+          //   navigation("/DashboardHome");
+        } else {
+          console.log("Incorrect email or password");
+          wrongInformation(true);
+        }
+      })
+      .catch((err) => {
+        console.log("Error logging in:", err);
+      });
   };
   // Function that stores the users information into the object for querying as theyre typing
   const handleChange = (e) => {
@@ -30,7 +52,7 @@ const CompanySignUp = (props) => {
           <input
             type="email"
             className=""
-            name="companyName"
+            name="company_name"
             onChange={handleChange}
             required
           />
