@@ -1,6 +1,7 @@
 const { error } = require("console");
 const pool = require("../../db");
 const queries = require("./queries");
+const bcrypt = require('bcrypt');
 
 const getCMCs = (req, res) => {
   console.log("get all Condo Management Companies");
@@ -35,7 +36,7 @@ const getCMCById = (req, res) => {
 const addCMC = (req, res) => {
   console.log("Adding Condo Management Company");
   const { company_name, email, password } = req.body;
-  pool.query(queries.checkIfCMCEmailExists, [email], (error, results) => {
+  pool.query(queries.checkIfCMCEmailExists, [email], async (error, results) => {
     if (error) {
       console.error("Error checking if email exists:", error);
       return res
@@ -45,21 +46,28 @@ const addCMC = (req, res) => {
     if (results.rows.length) {
       res.send("Email Already Exists");
     } else {
-      pool.query(
-        queries.addCMC,
-        [company_name, email, password],
-        (error, result) => {
-          if (error) return res.json(error);
-          res
-            .status(201)
-            .send("Condo Management Company Created Successfully!");
-        }
-      );
+      try{
+        const hashedPassword = await bcrypt.hash(password, 5);
+        pool.query(
+          queries.addCMC,
+          [company_name, email, hashedPassword],
+          (error, result) => {
+            if (error) return res.json(error);
+            res
+              .status(201)
+              .send("Condo Management Company Created Successfully!");
+          }
+        );
+      }
+      catch(hashError){
+        console.error('Error hashing password:', hashError);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
     }
   });
 };
 
-const updateCMC = (req, res) => {
+const updateCMC = async (req, res) => {
   console.log("updating cmc user");
   const companyID = req.params.companyID;
   const { company_name, email, password } = req.body;
@@ -83,7 +91,7 @@ const updateCMC = (req, res) => {
   }
   if (password) {
     setClauses.push("password = $" + (values.length + 1));
-    values.push(password);
+    values.push(await bcrypt.hash(password, 5));
   }
 
   const setClause = setClauses.join(", ");
