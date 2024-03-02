@@ -23,12 +23,9 @@ const EditAccount = (props) => {
   const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
-    // username: "Username",
     first_name: firstName,
     last_name: lastName,
     email: userEmail,
-    // phone: "+1 514 123 4567",
-    // status: currentPlan,
     password: null,
     profile_picture: { image },
   });
@@ -167,11 +164,9 @@ const EditAccount = (props) => {
                 <div className="col-lg-8 col-sm-12">
                   <div className="row justify-content-center">
                     <div className="col-lg-5 col-sm-2 headers">
-                      {/* <p>Username: </p> */}
                       <p>First name: </p>
                       <p>Last name: </p>
                       <p>Email: </p>
-                      {/* <p>Phone Number: </p> */}
                       <p>Current Plan: </p>
                     </div>
                     <div
@@ -181,22 +176,13 @@ const EditAccount = (props) => {
                     >
                       {!editProfile ? (
                         <>
-                          {/* <p>{newProfile.username}</p> */}
                           <p>{newProfile.first_name}</p>
                           <p>{newProfile.last_name}</p>
                           <p>{newProfile.email}</p>
-                          {/* <p>{newProfile.phone} </p> */}
                           <p>{currentPlan}</p>
                         </>
                       ) : (
                         <>
-                          {/* <input
-                            type="text"
-                            value={newProfile.username}
-                            style={{ margin: "0" }}
-                            onChange={handleProfileChange}
-                            name="username"
-                          /> */}
                           <input
                             type="text"
                             value={newProfile.first_name}
@@ -215,12 +201,6 @@ const EditAccount = (props) => {
                             onChange={handleEmailChange}
                             name="email"
                           />
-                          {/* <input
-                            type="text"
-                            value={newProfile.phone}
-                            onChange={handleProfileChange}
-                            name="phone"
-                          /> */}
                           <p>{currentPlan}</p>
                         </>
                       )}
