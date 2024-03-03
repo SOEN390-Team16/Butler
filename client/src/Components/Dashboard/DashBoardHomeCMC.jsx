@@ -38,19 +38,21 @@ const DashBoardHomeCMC = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
 
-  const userData = JSON.parse(localStorage.getItem('userData'));
-  const token = localStorage.getItem('token')
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchProperties = () => {
       axios
         .get("http://hortzcloud.com:3000/api/v1/pp", {
           headers: {
-            'authorization': `Bearer ${token}`,
-          }
+            authorization: `Bearer ${token}`,
+          },
         })
         .then((res) => {
-          setProperties(res.data.filter(property => property.companyid === userData.cmcId));
+          setProperties(
+            res.data.filter((property) => property.companyid === userData.cmcId)
+          );
         })
         .catch((err) => {
           console.error("Error fetching properties:", err);
@@ -69,10 +71,10 @@ const DashBoardHomeCMC = () => {
   };
 
   const options = [
-    {key: 1, option: "Label 1"},
-    {key: 2, option: "Label 2"},
-    {key: 3, option: "Label 3"},
-    {key: 4, option: "Label 4"},
+    { key: 1, option: "Label 1" },
+    { key: 2, option: "Label 2" },
+    { key: 3, option: "Label 3" },
+    { key: 4, option: "Label 4" },
   ];
 
   const dummyUser = {
@@ -84,7 +86,7 @@ const DashBoardHomeCMC = () => {
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
       <button className="patty__button" onClick={toggleDrawer}>
-        <RxHamburgerMenu size={40}/>
+        <RxHamburgerMenu size={40} />
       </button>
 
       {/* The Side drawer is whats being opened for main navigation */}
@@ -126,7 +128,7 @@ const DashBoardHomeCMC = () => {
                     title="Want to add a Property?"
                     description="Add the information associated to the property to add it to your account"
                   >
-                    <PropertyAddForm onAddProperty={addPropertyToState}/>
+                    <PropertyAddForm onAddProperty={addPropertyToState} />
                   </ModalContent>
                 </Modal>
               </div>
@@ -146,7 +148,7 @@ const DashBoardHomeCMC = () => {
                   {properties.map((property, index) => (
                     <TableRow key={index}>
                       <td>
-                        <GoArrowUpRight size={24}/>
+                        <GoArrowUpRight size={24} />
                       </td>
                       <td>{property.property_name}</td>
                       <td>{property.address}</td>
@@ -155,7 +157,8 @@ const DashBoardHomeCMC = () => {
                       <td>{property.locker_count}</td>
                     </TableRow>
                   ))}
-                </Table>) : (
+                </Table>
+              ) : (
                 <div className={"text-black text-base font-medium font-inter"}>
                   <h3>Click on the add property button to start!</h3>
                 </div>
@@ -166,7 +169,7 @@ const DashBoardHomeCMC = () => {
         {/* second table */}
         <div
           className="flex flex-col justify-center items-center w-full"
-          style={{paddingTop: 48, paddingBottom: 0}}
+          style={{ paddingTop: 48, paddingBottom: 0 }}
         >
           {/* Properties card goes here */}
           <TableCard className={"gap-4"}>
@@ -187,7 +190,7 @@ const DashBoardHomeCMC = () => {
                     description="Add the information associated to the unit. We will generate the Registration Key for you!"
                     onExit={() => console.log("exit")}
                   >
-                    <GenerateKeyForm/>
+                    <GenerateKeyForm />
                   </ModalContent>
                 </Modal>
               </div>
@@ -205,7 +208,7 @@ const DashBoardHomeCMC = () => {
                 </TableHeader>
                 <TableRow>
                   <td>
-                    <GoPerson size={24}/>
+                    <GoPerson size={24} />
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -215,7 +218,7 @@ const DashBoardHomeCMC = () => {
                 </TableRow>
                 <TableRow>
                   <td>
-                    <GoPerson size={24}/>
+                    <GoPerson size={24} />
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -225,7 +228,7 @@ const DashBoardHomeCMC = () => {
                 </TableRow>
                 <TableRow>
                   <td>
-                    <GoPerson size={24}/>
+                    <GoPerson size={24} />
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -241,7 +244,7 @@ const DashBoardHomeCMC = () => {
         {/* third & fourth tables */}
         <div
           className="flex flex-col justify-center items-center w-full"
-          style={{paddingTop: 48, paddingBottom: 64}}
+          style={{ paddingTop: 48, paddingBottom: 64 }}
         >
           {/* Properties card goes here */}
           <TableCard className={"gap-8"}>
@@ -267,7 +270,7 @@ const DashBoardHomeCMC = () => {
             </div>
             <div className="flex flex-row items-center gap-8">
               <div className="relative">
-                <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-[24px] text-gray-600"/>
+                <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-[24px] text-gray-600" />
                 <input
                   type="text"
                   placeholder="Email Address..."
@@ -290,7 +293,7 @@ const DashBoardHomeCMC = () => {
                   </TableHeader>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -302,7 +305,7 @@ const DashBoardHomeCMC = () => {
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -314,7 +317,7 @@ const DashBoardHomeCMC = () => {
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -338,7 +341,7 @@ const DashBoardHomeCMC = () => {
                   </TableHeader>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -354,14 +357,14 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm/>
+                          <UserRegistrationForm />
                         </ModalContent>
                       </Modal>
                     </td>
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -377,14 +380,14 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm/>
+                          <UserRegistrationForm />
                         </ModalContent>
                       </Modal>
                     </td>
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24}/>
+                      <GoPerson size={24} />
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -400,7 +403,7 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm/>
+                          <UserRegistrationForm />
                         </ModalContent>
                       </Modal>
                     </td>
