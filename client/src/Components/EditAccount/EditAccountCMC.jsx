@@ -1,33 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { FaImagePortrait } from "react-icons/fa6";
-import { MdOutlineFileUpload } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import "./EditAccount.css";
 
-const EditAccount = (props) => {
+const EditAccountCMC = (props) => {
   // Retrieve userData from localStorage
   const userData = JSON.parse(localStorage.getItem("userData"));
   // Convert userData object to array of entries
   const userDataArray = userData ? Object.entries(userData) : [];
   // Get user name from userDataArray by index, or fallback to an empty string
-  const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
-  const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
-  const userEmail = userDataArray.length > 1 ? userDataArray[3][1] : "";
-  const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
-  const currentPlan = userDataArray.length > 1 ? userDataArray[4][1] : "";
+  const cmcName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
+  const userEmail = userDataArray.length > 1 ? userDataArray[2][1] : "";
+  const companyID = userDataArray.length > 1 ? userDataArray[0][1] : "";
+  const currentPlan = userDataArray.length > 1 ? userDataArray[3][1] : "";
 
-  const profilePicture = userData ? userData.profile_picture : "";
-
-  const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
-    first_name: firstName,
-    last_name: lastName,
+    company_name: cmcName,
     email: userEmail,
     password: null,
-    profile_picture: { image },
   });
 
   // Function to update email in userData and localStorage
@@ -43,27 +35,13 @@ const EditAccount = (props) => {
     handleProfileChange(e);
   };
 
-  // Function to update first name in userData and localStorage
-  const handleFirstNameChange = (e) => {
-    const newFirstName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, first_name: newFirstName }));
+  // Function to update company name in userData and localStorage
+  const handleNameChange = (e) => {
+    const newName = e.target.value;
+    setNewProfile((prev) => ({ ...prev, company_name: newName }));
 
-    // Update first name in userData
     if (userData) {
-      const updatedUserData = { ...userData, firstName: newFirstName };
-      localStorage.setItem("userData", JSON.stringify(updatedUserData));
-    }
-    handleProfileChange(e);
-  };
-
-  // Function to update last name in userData and localStorage
-  const handleLastNameChange = (e) => {
-    const newLastName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, last_name: newLastName }));
-
-    // Update last name in userData
-    if (userData) {
-      const updatedUserData = { ...userData, lastName: newLastName };
+      const updatedUserData = { ...userData, cmcName: newName };
       localStorage.setItem("userData", JSON.stringify(updatedUserData));
     }
     handleProfileChange(e);
@@ -72,19 +50,6 @@ const EditAccount = (props) => {
   const handleProfileChange = async (e) => {
     setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(newProfile);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-        setNewProfile((prev) => ({ ...prev, profile_picture: reader.result }));
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   // const token = sessionStorage.getItem("token");
@@ -101,13 +66,12 @@ const EditAccount = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (image) {
-      // Update the newProfile state with the selected image
-      setNewProfile((prev) => ({ ...prev, profile_picture: { image } }));
-    }
-
     axios
-      .patch(`http://localhost:3000/api/v1/pu/${userID}`, newProfile, config)
+      .patch(
+        `http://localhost:3000/api/v1/cmc/${companyID}`,
+        newProfile,
+        config
+      )
       .then((res) => {
         console.log("res: ", res);
         console.log("User data updated successfully");
@@ -123,7 +87,7 @@ const EditAccount = (props) => {
   return (
     <div className="edit__account__home">
       <div>
-        <Link to="/DashBoardHome">
+        <Link to="/DashBoardHomeCMC">
           <MdKeyboardDoubleArrowLeft size={40} />
         </Link>
       </div>
@@ -132,40 +96,13 @@ const EditAccount = (props) => {
           <div className="container">
             <form onSubmit={handleSubmit}>
               <div className="col-lg-12 user__title">
-                <p>User Page</p>
+                <p>CMC Page</p>
               </div>
               <div className="row justify-content-center">
-                <div className="col-lg-4 col-sm-12 profile__img">
-                  {image && (
-                    <img
-                      src={image}
-                      alt="Uploaded"
-                      style={{ maxWidth: "100%", objectFit: "cover" }}
-                    />
-                  )}
-                  {!image && (
-                    <>
-                      <label htmlFor="imageInput">
-                        <FaImagePortrait size={90} />
-                        <p>
-                          Upload Image <MdOutlineFileUpload size={25} />
-                        </p>
-                      </label>
-                      <input
-                        type="file"
-                        id="imageInput"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        style={{ display: "none" }}
-                      />
-                    </>
-                  )}
-                </div>
                 <div className="col-lg-8 col-sm-12">
                   <div className="row justify-content-center">
                     <div className="col-lg-5 col-sm-2 headers">
-                      <p>First name: </p>
-                      <p>Last name: </p>
+                      <p>Name: </p>
                       <p>Email: </p>
                       <p>Current Plan: </p>
                     </div>
@@ -176,8 +113,7 @@ const EditAccount = (props) => {
                     >
                       {!editProfile ? (
                         <>
-                          <p>{newProfile.first_name}</p>
-                          <p>{newProfile.last_name}</p>
+                          <p>{newProfile.company_name}</p>
                           <p>{newProfile.email}</p>
                           <p>{currentPlan}</p>
                         </>
@@ -185,15 +121,9 @@ const EditAccount = (props) => {
                         <>
                           <input
                             type="text"
-                            value={newProfile.first_name}
-                            onChange={handleFirstNameChange}
-                            name="firstName"
-                          />
-                          <input
-                            type="text"
-                            value={newProfile.last_name}
-                            onChange={handleLastNameChange}
-                            name="lastName"
+                            value={newProfile.company_name}
+                            onChange={handleNameChange}
+                            name="name"
                           />
                           <input
                             type="email"
@@ -232,4 +162,4 @@ const EditAccount = (props) => {
     </div>
   );
 };
-export default EditAccount;
+export default EditAccountCMC;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
-import SideDrawer from "./SideDrawer";
+import SideDrawerCMC from "./SideDrawerCMC";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ import PropertyAddForm from "./PropertyAddForm.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
-const DashBoardHome = () => {
+const DashBoardHomeCMC = () => {
   // toggles the drawer between being open and closed
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
@@ -45,7 +45,7 @@ const DashBoardHome = () => {
       </button>
 
       {/* The Side drawer is whats being opened for main navigation */}
-      <SideDrawer
+      <SideDrawerCMC
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
         firstName={dummyUser.fName}
@@ -61,13 +61,13 @@ const DashBoardHome = () => {
               );
             })}
         </div>
-      </SideDrawer>
+      </SideDrawerCMC>
       {/* Your main content goes here */}
       <div className="container flex flex-col items-center px-24">
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
           <TableCard className={"gap-4"}>
-            <TableCardHeader title={"My Units 🏢"}>
+            <TableCardHeader title={"My Properties 🏢"}>
               <div className="flex items-center gap-4">
                 {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>
@@ -139,4 +139,4 @@ const DashBoardHome = () => {
   );
 };
 
-export default DashBoardHome;
+export default DashBoardHomeCMC;

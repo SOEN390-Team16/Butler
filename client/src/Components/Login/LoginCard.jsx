@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import localStorage from "local-storage";
+// import localStorage from "local-storage";
 import axios from "axios";
 
 import "./LoginCard.css";
@@ -31,7 +31,11 @@ const LoginCard = () => {
           console.log("User data:", userData);
           localStorage.setItem("userData", JSON.stringify(userData)); // Save userData to localStorage
           localStorage.setItem("token", res.data.token);
-          navigation("/DashboardHome");
+          if (userData.role === "cmc") {
+            navigation("/DashboardHomeCMC");
+          } else {
+            navigation("/DashboardHome");
+          }
         } else {
           console.log("Incorrect email or password");
           setIncorrectInfo(true);

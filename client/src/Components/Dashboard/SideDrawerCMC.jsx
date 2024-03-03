@@ -12,14 +12,13 @@ const SideDrawer = (props) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   // Get cmcName from userData, or fallback to an empty string if userData is not available
-  // const cmcName = userData ? userData.cmcName : "";
+  const cmcName = userData ? userData.cmcName : "";
 
   // Convert userData object to array of entries
-  const userDataArray = userData ? Object.entries(userData) : [];
+  // const userDataArray = userData ? Object.entries(userData) : [];
 
   // Get user name from userDataArray by index, or fallback to an empty string
-  const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
-  const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
+  // const name = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
 
   // Function to handle logout
   const handleLogout = () => {
@@ -34,7 +33,7 @@ const SideDrawer = (props) => {
         <FaArrowLeft style={{ color: "black" }} />
       </div>
       <div className="company__tag">
-        <Link to="/DashboardHome">
+        <Link to="/DashboardHomeCMC">
           <h1>Butler.</h1>
         </Link>
         <div className="profile__info">
@@ -49,17 +48,14 @@ const SideDrawer = (props) => {
             <p>
               Welcome back <MdWavingHand />
             </p>
-            <p className="user__name">
-              {/* {props.firstName + " " + props.lastName} */}
-              {firstName + " " + lastName}
-            </p>
+            <p className="user__name">{cmcName}</p>
           </div>
         </div>
       </div>
       <ul className="">{props.children}</ul>
       <div className="drawer__buttons">
         <div className="edit__profile">
-          <Link to="/DashboardHome/editUser">
+          <Link to="/DashboardHome/editUserCMC">
             {" "}
             <button>Edit Profile</button>
           </Link>
