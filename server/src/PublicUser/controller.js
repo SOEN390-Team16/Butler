@@ -18,6 +18,7 @@ const getPublicUsers = (req, res) => {
     });
   };
 
+    console.log('get all Public Users')
 const getPublicUserById = (req, res) => {
     console.log('get a specific Public User')
     const userid = parseInt(req.params.userid)
@@ -148,4 +149,3 @@ module.exports = {
     removePublicUser,
     updatePublicUser
 }
-
