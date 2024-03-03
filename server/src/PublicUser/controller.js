@@ -1,6 +1,6 @@
 const pool = require('../../db');
 const queries = require('./queries')
-const {getCondoOwners} = require("../CondoOwner/controller");
+const bcrypt = require('bcrypt')
 
 const getPublicUsers = (req, res) => {
     console.log("Get All Public Users");
@@ -18,6 +18,7 @@ const getPublicUsers = (req, res) => {
     });
   };
 
+    console.log('get all Public Users')
 const getPublicUserById = (req, res) => {
     console.log('get a specific Public User')
     const userid = parseInt(req.params.userid)
@@ -37,8 +38,8 @@ const getPublicUserById = (req, res) => {
 
 const addPublicUser = (req,res) => {
     console.log('add a Public User')
-    const {first_name, last_name, email, password} = req.body;
-    pool.query(queries.checkIfPUEmailExists, [email], (error, results) =>  {
+    const {first_name, last_name, email, password, profile_picture} = req.body;
+    pool.query(queries.checkIfPUEmailExists, [email], async (error, results) =>  {
         if(error){
             console.error('Error finding email:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -47,10 +48,16 @@ const addPublicUser = (req,res) => {
             res.status(404).send("Email Already Exists");
         }
         else{
-            pool.query(queries.addPublicUser, [first_name, last_name, email, password], (error, result) => {
-                if(error) throw error;
-                res.status(201).send("Public User Created Successfully!");
-            });   
+            try{
+                const hashedPassword =  await bcrypt.hash(password, 5);
+                pool.query(queries.addPublicUser, [first_name, last_name, email, hashedPassword, profile_picture], (error, result) => {
+                    if(error) throw error;
+                    res.status(201).send("Public User Created Successfully!");
+                });
+            }catch(hashError){
+                console.error('Error hashing password:', hashError);
+                res.status(500).json({ error: 'Internal Server Error' });
+            }
         } 
 
 
@@ -58,11 +65,11 @@ const addPublicUser = (req,res) => {
 };
 
 
-const updatePublicUser = (req, res) => {
+const updatePublicUser = async (req, res) => {
     const userid = req.params.userid;
     const { first_name, last_name, email, password, profile_picture } = req.body;
 
-    if (!first_name && !last_name && !email && !password && !role && profile_picture === undefined) {
+    if (!first_name && !last_name && !email && !password && profile_picture === undefined) {
         return res.status(400).json({ error: 'At least one field is required for updating' });
     }
 
@@ -83,7 +90,7 @@ const updatePublicUser = (req, res) => {
     }
     if (password) {
         setClauses.push('password = $' + (values.length + 1));
-        values.push(password);
+        values.push( await bcrypt.hash(password, 5));
     }
     if (profile_picture !== undefined) {
         setClauses.push('profile_picture = $' + (values.length + 1));
