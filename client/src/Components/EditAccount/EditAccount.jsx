@@ -19,8 +19,12 @@ const EditAccount = (props) => {
   const currentPlan = userDataArray.length > 1 ? userDataArray[4][1] : "";
 
   const profilePicture = userData ? userData.profile_picture : "";
+ // State to track whether the user is currently editing the profile image
+const [isEditingImage, setIsEditingImage] = useState(false);
 
-  const [image, setImage] = useState(null);
+// State to store the selected image file
+const [image, setImage] = useState(null);
+
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
     first_name: firstName,
@@ -73,6 +77,11 @@ const EditAccount = (props) => {
     setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(newProfile);
   };
+  
+  // Function to set isEditingImage to true
+const handleImageEdit = () => {
+  setIsEditingImage(true);
+};
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -136,19 +145,23 @@ const EditAccount = (props) => {
               </div>
               <div className="row justify-content-center">
                 <div className="col-lg-4 col-sm-12 profile__img">
-                  {image && (
-                    <img
-                      src={image}
-                      alt="Uploaded"
-                      style={{ maxWidth: "100%", objectFit: "cover" }}
-                    />
-                  )}
-                  {!image && (
-                    <>
-                      <label htmlFor="imageInput">
-                        <FaImagePortrait size={90} />
-                        <p>
-                          Upload Image <MdOutlineFileUpload size={25} />
+                {image && (
+                   <>
+                 <img
+                 src={image}
+                 alt="Uploaded"
+                 style={{ maxWidth: "100%", objectFit: "cover" }}
+                  />
+             
+                 </>
+                )}
+              
+                    
+                      </div> 
+                <label htmlFor="imageInput" className="edit-image-button">
+                       
+                      <p>
+                          Edit Image <MdOutlineFileUpload size={25} />
                         </p>
                       </label>
                       <input
@@ -156,11 +169,9 @@ const EditAccount = (props) => {
                         id="imageInput"
                         accept="image/*"
                         onChange={handleImageChange}
+                      
                         style={{ display: "none" }}
                       />
-                    </>
-                  )}
-                </div>
                 <div className="col-lg-8 col-sm-12">
                   <div className="row justify-content-center">
                     <div className="col-lg-5 col-sm-2 headers">
@@ -233,3 +244,4 @@ const EditAccount = (props) => {
   );
 };
 export default EditAccount;
+
