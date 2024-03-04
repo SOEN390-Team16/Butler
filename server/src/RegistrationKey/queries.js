@@ -5,9 +5,12 @@ const generateRegistrationKey =
     "($1, (SELECT userID FROM public_user pu WHERE pu.email= $2), $3);"
 const getRegistrationKeyByEmail =
     "SELECT rk.registration_key FROM registration_key rk WHERE userID= (SELECT userID FROM public_user pu WHERE pu.email= $1);"
+const checkIfPublicUserExists =
+    "SELECT * FROM public_user WHERE email=$1;"
 
 module.exports = {
     checkIfRegistrationKeyAlreadyExists,
     generateRegistrationKey,
-    getRegistrationKeyByEmail
+    getRegistrationKeyByEmail,
+    checkIfPublicUserExists
 };

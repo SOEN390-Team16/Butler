@@ -20,12 +20,23 @@ const generateRegistrationKey = (req, res) => {
             res.status(404).send('Registration Key Already Exists');
         }
         else {
-            pool.query(queries.generateRegistrationKey, [registration_key, email, role], (error, result) => {
+            pool.query(queries.checkIfPublicUserExists, [email], (error, results) => {
                 if (error) {
-                    console.error('Error assigning new registration key', error);
+                    console.error('Error checking if public user exists', error);
                     return res.status(500).json({error: 'Internal Server Error'});
                 }
-                res.status(201).send('new registration key assigned to user');
+                if (results.rowCount === 0) {
+                    res.status(404).json({error: 'Public User not found'});
+                }
+                else{
+                    pool.query(queries.generateRegistrationKey, [registration_key, email, role], (error, result) => {
+                        if (error) {
+                            console.error('Error assigning new registration key', error);
+                            return res.status(500).json({error: 'Internal Server Error'});
+                        }
+                        res.status(201).send('new registration key assigned to user');
+                    })
+                }
             })
         }
     })
