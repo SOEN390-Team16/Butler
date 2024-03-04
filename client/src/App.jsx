@@ -7,6 +7,8 @@ import DashboardHome from "./Components/Dashboard/DashboardHome";
 import DashboardHomeCMC from "./Components/Dashboard/DashBoardHomeCMC";
 import EditAccount from "./Components/EditAccount/EditAccount";
 import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </>
   );
 }
