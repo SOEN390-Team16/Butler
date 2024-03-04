@@ -18,13 +18,12 @@ const getPublicUsers = (req, res) => {
     });
   };
 
-    console.log('get all Public Users')
 const getPublicUserById = (req, res) => {
     console.log('get a specific Public User')
     const userid = parseInt(req.params.userid)
     pool.query(queries.getPublicUserById, [userid], (error, results) => {
         if (error) {
-            console.error('Error updating user:', error);
+            console.error('Error getting user:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
         if (results.rowCount === 0) {
@@ -44,7 +43,7 @@ const addPublicUser = (req,res) => {
             console.error('Error finding email:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         }
-        if(results.rows.length != 0){
+        if(results.rows.length !== 0){
             res.status(404).send("Email Already Exists");
         }
         else{
@@ -53,12 +52,14 @@ const addPublicUser = (req,res) => {
                 pool.query(queries.addPublicUser, [first_name, last_name, email, hashedPassword, profile_picture], (error, result) => {
                     if(error) throw error;
                     res.status(201).send("Public User Created Successfully!");
-                }); 
+                });
             }catch(hashError){
                 console.error('Error hashing password:', hashError);
                 res.status(500).json({ error: 'Internal Server Error' });
             }
         } 
+
+
     })
 };
 
@@ -67,7 +68,7 @@ const updatePublicUser = async (req, res) => {
     const userid = req.params.userid;
     const { first_name, last_name, email, password, profile_picture } = req.body;
 
-    if (!first_name && !last_name && !email && !password && profile_picture === undefined) {
+    if (!first_name && !last_name && !email && !password && !role && profile_picture === undefined) {
         return res.status(400).json({ error: 'At least one field is required for updating' });
     }
 
@@ -88,7 +89,7 @@ const updatePublicUser = async (req, res) => {
     }
     if (password) {
         setClauses.push('password = $' + (values.length + 1));
-        values.push( await bcrypt.hash(password, 5));
+        values.push(password);
     }
     if (profile_picture !== undefined) {
         setClauses.push('profile_picture = $' + (values.length + 1));
@@ -149,3 +150,4 @@ module.exports = {
     removePublicUser,
     updatePublicUser
 }
+
