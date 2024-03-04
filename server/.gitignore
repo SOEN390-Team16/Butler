@@ -12,9 +12,9 @@ dist
 dist-ssr
 *.local
 .env
-test_coverage
+jest_test_coverage
 
-test_coverage
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
