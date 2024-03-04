@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-// import localStorage from "local-storage";
 import axios from "axios";
 
 import "./LoginCard.css";
