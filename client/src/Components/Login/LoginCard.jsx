@@ -2,7 +2,6 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-// import localStorage from "local-storage";
 import axios from "axios";
 
 import "./LoginCard.css";
@@ -17,6 +16,8 @@ const LoginCard = () => {
   });
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
+
+
 
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {

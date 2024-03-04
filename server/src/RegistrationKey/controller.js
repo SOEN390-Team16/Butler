@@ -59,7 +59,46 @@ const getRegistrationKeyByEmail = (req, res) => {
     });
 }
 
+const revokeRegistrationKeyByEmailAndCondoId = (req, res) =>
+{
+    console.log('Revoking Registration Key By Email and CondoID');
+    const {email, condoID} = req.body;
+    pool.query(queries.checkIfUserHasActiveRegistrationKey, [email, condoID], (error, result) =>
+    {
+        if (error)
+        {
+            console.error('Error finding user:', error);
+            return res.status(500).json({error: 'Internal Server Error'});
+        }
+        if (result.rows.length === 0)
+        {
+            return res.status(404).json({error: 'User not found'});
+        }
+        else if (result.rowCount === 1)
+        {
+            pool.query(queries.updateRoleBeforeRevoking, [email], (error, result) =>
+            {
+                if (error)
+                {
+                    console.error('Error updating user role before revoking:', error);
+                    return res.status(500).json({error: 'Internal Server Error'});
+                }
+            })
+        }
+        pool.query(queries.revokeRegistrationKey, [email, condoID], (error, result) =>
+        {
+            if (error)
+            {
+                console.error('Error revoking registration key:', error);
+                return res.status(500).json({error: 'Internal Server Error'});
+            }
+            res.status(200).send("Key Revoked Successfully");
+        })
+    })
+}
+
 module.exports = {
     generateRegistrationKey,
-    getRegistrationKeyByEmail
+    getRegistrationKeyByEmail,
+    revokeRegistrationKeyByEmailAndCondoId
 }

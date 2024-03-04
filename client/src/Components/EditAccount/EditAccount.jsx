@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { FaImagePortrait } from "react-icons/fa6";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { uploadImage } from "../../utils/cloudinary";
 import "./EditAccount.css";
 
 const EditAccount = (props) => {
@@ -76,7 +77,6 @@ const EditAccount = (props) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -85,6 +85,8 @@ const EditAccount = (props) => {
       };
       reader.readAsDataURL(file);
     }
+
+    console.log("Image: ", file);
   };
 
   // const token = sessionStorage.getItem("token");
@@ -100,20 +102,29 @@ const EditAccount = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (image) {
-      // Update the newProfile state with the selected image
-      setNewProfile((prev) => ({ ...prev, profile_picture: { image } }));
-    }
-
-    axios
-      .patch(`http://localhost:3000/api/v1/pu/${userID}`, newProfile, config)
+    console.log(newProfile);
+    // Upload image to cloudinary
+    uploadImage(newProfile.profile_picture)
       .then((res) => {
-        console.log("res: ", res);
-        console.log("User data updated successfully");
+        console.log("image url: ", res);
+        setNewProfile((prev) => ({ ...prev, profile_picture: res }));
+        // Update the user data in the database
+        axios
+          .patch(
+            `http://localhost:3000/api/v1/pu/${userID}`,
+            newProfile,
+            config
+          )
+          .then((res) => {
+            console.log("res: ", res);
+            console.log("User data updated successfully");
+          })
+          .catch((error) => {
+            console.error("Error updating user data:", error);
+          });
       })
       .catch((error) => {
-        console.error("Error updating user data:", error);
+        console.error("Error uploading image:", error);
       });
 
     console.log("Form submitted", newProfile);

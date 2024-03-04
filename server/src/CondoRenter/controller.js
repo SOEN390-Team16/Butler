@@ -41,7 +41,7 @@ const addCondoRenter = (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
 
-    if (results.rows.length === 0) {
+    if (results.rows.length < 1) {
       res.status(400).json({ error: "Email Doesn't Exists" });
     } else {
       pool.query(
@@ -51,8 +51,7 @@ const addCondoRenter = (req, res) => {
           if (error) {
             console.log("Error checking if condo renter already exists");
           }
-          const isPublicUser = results.rows[0]["?column?"];
-          if (isPublicUser) {
+          if (results.rows[0]["?column?"]) {
             res.status(400).json({ error: "User already exists" });
           } else {
             pool.query(queries.addCondoRenter, [email], (error, result) => {
