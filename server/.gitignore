@@ -25,7 +25,7 @@ test_coverage
 *.njsproj
 *.sln
 *.sw?
-
+test_coverage
 *.rest
 *.env
 

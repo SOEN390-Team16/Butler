@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/src/CMC/queries.js</title>
+    <title>Code coverage report for server/src/RegistrationKey/queries.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/CMC</a> queries.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/RegistrationKey</a> queries.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -75,30 +75,69 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const getCMCs = "SELECT companyID, company_name, email, password FROM  condo_management_company;";
-const getCMCById = "SELECT companyID, company_name, email, password FROM condo_management_company WHERE companyID = $1;"; 
-const checkIfCMCEmailExists = "SELECT * FROM condo_management_company cmc WHERE cmc.email = $1;";
-const addCMC = "INSERT INTO condo_management_company(company_name, email, password) VALUES ($1, $2, $3);";
-const removeCMC = "DELETE FROM condo_management_company WHERE companyID = $1;";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const checkIfRegistrationKeyAlreadyExists =
+    "SELECT rk.registration_key FROM registration_key rk WHERE rk.registration_key= $1;"
+const generateRegistrationKey =
+    "INSERT INTO registration_key(registration_key, userid, role) VALUES " +
+    "($1, (SELECT userID FROM public_user pu WHERE pu.email= $2), $3);"
+const getRegistrationKeyByEmail =
+    "SELECT rk.registration_key FROM registration_key rk WHERE userID= (SELECT userID FROM public_user pu WHERE pu.email= $1);"
+const checkIfPublicUserExists =
+    "SELECT * FROM public_user WHERE email=$1;"
+const checkIfUserHasActiveRegistrationKey =
+    "SELECT * FROM active_registration_key WHERE userID= (SELECT userID FROM public_user WHERE email=$1) AND condoID = $2; "
+const revokeRegistrationKey =
+    "DELETE FROM registration_key rk WHERE rk.userID = (SELECT userID FROM public_user WHERE email=$1) " +
+    "AND rk.registration_key IN (SELECT registration_key FROM active_registration_key WHERE condoID= $2);"
+const updateRoleBeforeRevoking =
+    "UPDATE public_user SET role='public_user' WHERE userID= (SELECT pu.userID FROM public_user pu WHERE pu.email=$1);"
 &nbsp;
 module.exports = {
-    getCMCs,
-    getCMCById,
-    checkIfCMCEmailExists,
-    addCMC,
-    removeCMC
+    checkIfRegistrationKeyAlreadyExists,
+    generateRegistrationKey,
+    getRegistrationKeyByEmail,
+    checkIfPublicUserExists,
+    checkIfUserHasActiveRegistrationKey,
+    revokeRegistrationKey,
+    updateRoleBeforeRevoking
 };</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -106,7 +145,7 @@ module.exports = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-03-04T08:09:51.643Z
+                at 2024-03-04T07:54:42.495Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

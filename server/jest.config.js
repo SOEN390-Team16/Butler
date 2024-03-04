@@ -12,11 +12,8 @@ const config = {
   // bail: 0,
 
   // The directory where Jest should store its cached dependency information
-<<<<<<< HEAD
+
   // cacheDirectory: "/tmp/jest_rs",
-=======
-  // cacheDirectory: "C:\\Users\\ceyhu\\AppData\\Local\\Temp\\jest",
->>>>>>> f31cdc4ad574d7fea744a784b4ee5c2c8ec5dc50
 
   // Automatically clear mock calls, instances, contexts and results before every test
   clearMocks: true,
@@ -25,7 +22,7 @@ const config = {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-<<<<<<< HEAD
+
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
@@ -34,17 +31,7 @@ const config = {
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
   //   "/node_modules/"
-=======
-  collectCoverageFrom: ['src/**/*.js'],
 
-
-  // The directory where Jest should output its coverage files
-  coverageDirectory: "test_coverage",
-
-  // An array of regexp pattern strings used to skip coverage collection
-  // coveragePathIgnorePatterns: [
-  //   "\\\\node_modules\\\\"
->>>>>>> f31cdc4ad574d7fea744a784b4ee5c2c8ec5dc50
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
@@ -177,11 +164,9 @@ const config = {
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [
-<<<<<<< HEAD
+
   //   "/node_modules/"
-=======
-  //   "\\\\node_modules\\\\"
->>>>>>> f31cdc4ad574d7fea744a784b4ee5c2c8ec5dc50
+
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
@@ -198,13 +183,10 @@ const config = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
-<<<<<<< HEAD
+
   //   "/node_modules/",
   //   "\\.pnp\\.[^\\/]+$"
-=======
-  //   "\\\\node_modules\\\\",
-  //   "\\.pnp\\.[^\\\\]+$"
->>>>>>> f31cdc4ad574d7fea744a784b4ee5c2c8ec5dc50
+
   // ],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
