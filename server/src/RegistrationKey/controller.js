@@ -10,7 +10,6 @@ function generateRandomKey() {
 const generateRegistrationKey = (req, res) => {
     console.log('Generating Unique Registration Key');
     const {email, role} = req.body;
-    console.log(req.body);
     const registration_key = generateRandomKey();
     pool.query(queries.checkIfRegistrationKeyAlreadyExists, [registration_key], (error, results) => {
         if (error) {
@@ -35,7 +34,6 @@ const generateRegistrationKey = (req, res) => {
 const getRegistrationKeyByEmail = (req, res) => {
     console.log('Getting Registration Key By Email');
     const email = req.params.email;
-    console.log(req.params.email);
     pool.query(queries.getRegistrationKeyByEmail, [email], (error, results) => {
         if (error) {
             console.error('Error getting registration key:', error);

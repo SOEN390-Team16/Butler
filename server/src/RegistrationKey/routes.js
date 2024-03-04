@@ -3,7 +3,7 @@ const controller = require("./controller");
 const authenticateToken = require('../auth/tokenValidator')
 const router = Router();
 
-router.post('/', controller.generateRegistrationKey);
-router.get('/:email', controller.getRegistrationKeyByEmail);
+router.post('/', authenticateToken, controller.generateRegistrationKey);
+router.get('/:email', authenticateToken, controller.getRegistrationKeyByEmail);
 
 module.exports = router;
