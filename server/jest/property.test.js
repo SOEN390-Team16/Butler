@@ -281,4 +281,68 @@ describe('Property functionality', () => {
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ error: 'Property not found' });
     });
+    
+    it('should return 400 if at least one field is required for updating', async () => {
+        const req = {
+            params: { property_id: 1 },
+            body: {}
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+    
+        await updateProperty(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({ error: 'At least one field is required for updating' });
+    });
+    
+    it('should handle internal server error while updating a property', async () => {
+        // Mocking pool.query to simulate an error while updating
+        pool.query.mockImplementationOnce((query, values, callback) => {
+            callback(new Error('Internal Server Error'));
+        });
+    
+        const req = {
+            params: { property_id: 1 },
+            body: {
+                property_name: 'Updated Property',
+                unit_count: 20,
+                parking_count: 10,
+                locker_count: 6,
+                address: '456 Oak St'
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+    
+        await updateProperty(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    });
+    
+    it('should handle internal server error while removing a property', async () => {
+        // Mocking pool.query to simulate an error while removing
+        pool.query.mockImplementationOnce((query, values, callback) => {
+            callback(new Error('Internal Server Error'));
+        });
+    
+        const req = {
+            params: { property_id: 1 }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn(),
+        };
+    
+        await removeProperty(req, res);
+    
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    });
+    
 });
