@@ -10,7 +10,7 @@ const getCondoOwners = (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
     if (results.rows.length === 0) {
-      return res.status(404).json({ error: "Condo Owner Not Found" });
+      return res.status(404).json({ error: "Condo Owners Not Found" });
     } else {
       res.status(200).json(results.rows);
     }
