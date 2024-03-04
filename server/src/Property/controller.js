@@ -31,12 +31,12 @@ const getPropertyById = (req, res) => {
             // Handle error if fetching property fails
             console.error('Error fetching property profile:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        } else if (results.rowCount === 0) {
+        } else if (results.rows.length === 0) { // Changed rowCount to rows.length
             // Return 404 error if property is not found
             return res.status(404).json({ error: 'Property not found' });
         } else {
             // Send the retrieved property as a response
-            res.status(200).json(results.rows.at(0));
+            res.status(200).json(results.rows[0]); // Changed .at(0) to [0]
         }
     });
 };
@@ -128,7 +128,7 @@ const updateProperty = (req, res) => {
             // Handle error if fetching property fails
             console.error('Error updating property profile:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-        } else if (results.rowCount === 0) {
+        } else if (results.rows.length === 0) {
             // Return 404 error if property profile is not found
             return res.status(404).json({ error: 'Property profile not found' });
         } else {
@@ -149,16 +149,16 @@ const updateProperty = (req, res) => {
 // Remove a property
 const removeProperty = (req, res) => {
     const property_id = parseInt(req.params.property_id);
+
+    // Check if the property exists before attempting to remove it
     pool.query(queries.getPropertyById, [property_id], (error, results) => {
         if (error) {
             // Handle error if checking property existence fails
             console.error('Error checking property existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
-
-        } else if (results.rowCount === 0) {
+        } else if (results.rows.length === 0) {
             // Return 404 error if property is not found
             return res.status(404).json({ error: 'Property not found' });
-
         } else {
             // Remove the property profile from the database
             pool.query(queries.removeProperty, [property_id], (error, results) => {
@@ -173,6 +173,7 @@ const removeProperty = (req, res) => {
         }
     });
 };
+
 
 module.exports = {
     getProperties,
