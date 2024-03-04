@@ -371,7 +371,7 @@ describe("Endpoint for Remove CMC", () => {
 
     // Mock the second query to simulate successful removal
     pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rowCount: 1 });
+      callback(null, { rowCount: 0, rows: [] });
     });
 
     await removeCMC(req, res);
@@ -400,7 +400,7 @@ describe("Endpoint for Remove CMC", () => {
     expect(res.json).toHaveBeenCalledWith({ error: "cmc user not found" });
   });
 
-  it("should return 500 if there is an internal server error", async () => {
+  it("should return 500 if there is an internal server error while finding the CMC", async () => {
     const req = {
       params: { companyID: "1" },
     };
@@ -411,9 +411,34 @@ describe("Endpoint for Remove CMC", () => {
 
     const mockError = new Error("Internal Server Error");
 
-    // Mock the first query to simulate an error
+    // Mock the first query to simulate an error while finding the CMC
     pool.query.mockImplementationOnce((query, values, callback) => {
       callback(mockError, null);
+    });
+
+    await removeCMC(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ error: "Internal Server Error" });
+  });
+
+  it("should return 500 if there is an internal server error while removing the CMC", async () => {
+    const req = {
+      params: { companyID: "1" },
+    };
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    // Mock the first query to simulate finding the CMC
+    pool.query.mockImplementationOnce((query, values, callback) => {
+      callback(null, { rows: [{ companyID: 1 }] });
+    });
+
+    // Mock the second query to simulate an error while removing the CMC
+    pool.query.mockImplementationOnce((query, values, callback) => {
+      callback(new Error("Internal Server Error"), null);
     });
 
     await removeCMC(req, res);

@@ -1,11 +1,14 @@
 import AddButton from "../Buttons/AddButton.jsx";
 import Input from "../Forms/Input.jsx";
-import {useFormik} from "formik";
+import { useFormik } from "formik";
 import Label from "../Forms/Label.jsx";
-import {useModal} from "../Modals/Modal.jsx";
-import {number, object, string} from 'yup';
+import { useModal } from "../Modals/Modal.jsx";
+import { number, object, string } from 'yup';
+import axios from "axios";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
-export default function PropertyAddForm() {
+export default function PropertyAddForm(props) {
   const {toggle} = useModal();
 
   let propertySchema = object({
@@ -42,8 +45,32 @@ export default function PropertyAddForm() {
   }
 
   const handleSubmit = (values) => {
-    toggle()
-    alert(JSON.stringify(values, null, 2));
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const token = localStorage.getItem('token')
+    const property = {
+      companyid: userData.cmcId,
+      property_name: values.propertyName,
+      address: values.propertyAddress,
+      unit_count: values.numberOfCondoUnits,
+      parking_count: values.numberOfParkingUnits,
+      locker_count: values.numberOfLockers
+    }
+
+    axios
+      .post("http://localhost:3000/api/v1/pp", property, {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then(() => {
+        toast.success('Property Successfully Added!');
+        props.onAddProperty(property)
+        toggle()
+      })
+      .catch((reason) => {
+        toast.error(`Something went wrong: ${reason.message}`)
+        throw reason
+      })
   }
 
   return (<>
@@ -76,4 +103,8 @@ export default function PropertyAddForm() {
     </form>
     <AddButton onClick={formik.submitForm}>Add Property</AddButton>
   </>)
+}
+
+PropertyAddForm.propTypes = {
+  onAddProperty: PropTypes.func.isRequired,
 }
