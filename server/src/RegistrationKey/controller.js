@@ -7,11 +7,11 @@ function generateRandomKey() {
     return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
 }
 
-const generateAndAssignNewRegistrationKey = (req, res) => {
+const generateRegistrationKey = (req, res) => {
     console.log('Generating Unique Registration Key');
-    const {condoID, email, role} = req.body;
+    const {email, role} = req.body;
+    console.log(req.body);
     const registration_key = generateRandomKey();
-
     pool.query(queries.checkIfRegistrationKeyAlreadyExists, [registration_key], (error, results) => {
         if (error) {
             console.error('Error checking if registration key already exists', error);
@@ -21,24 +21,36 @@ const generateAndAssignNewRegistrationKey = (req, res) => {
             res.status(404).send('Registration Key Already Exists');
         }
         else {
-            pool.query(queries.assignNewRegistrationKey, [registration_key, condoID, email], (error, result) => {
+            pool.query(queries.generateRegistrationKey, [registration_key, email, role], (error, result) => {
                 if (error) {
                     console.error('Error assigning new registration key', error);
                     return res.status(500).json({error: 'Internal Server Error'});
                 }
-                pool.query(queries.updatePublicUserRole, [role, email], (error, result) => {
-                    if (error) {
-                        console.error('Error updating user role', error);
-                        return res.status(500).json({error: 'Internal Server Error'});
-                    }
-                })
-                res.status(201).send('new registration key assigned and user role updated');
+                res.status(201).send('new registration key assigned to user');
             })
         }
     })
 };
 
+const getRegistrationKeyByEmail = (req, res) => {
+    console.log('Getting Registration Key By Email');
+    const email = req.params.email;
+    console.log(req.params.email);
+    pool.query(queries.getRegistrationKeyByEmail, [email], (error, results) => {
+        if (error) {
+            console.error('Error getting registration key:', error);
+            return res.status(500).json({ error: 'Internal Sever Error'});
+        }
+        if (results.rowCount === 0) {
+            return res.status(404).json({ error: 'Registration Key Not Found' });
+        }
+        else {
+            res.status(200).json(results.rows);
+        }
+    });
+}
 
 module.exports = {
-    generateAndAssignNewRegistrationKey,
+    generateRegistrationKey,
+    getRegistrationKeyByEmail
 }
