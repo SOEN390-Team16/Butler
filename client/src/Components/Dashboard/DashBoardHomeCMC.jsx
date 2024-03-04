@@ -43,8 +43,11 @@ const DashBoardHomeCMC = () => {
     };
 
     fetchProperties();
-  }, [token]); // Dependency array to re-fetch if the token changes
+  }, [token]);
 
+  const addPropertyToState = (newProperty) => {
+    setProperties((prevProperties) => [...prevProperties, newProperty]);
+  };
 
   const toggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);
@@ -88,7 +91,7 @@ const DashBoardHomeCMC = () => {
         </div>
       </SideDrawerCMC>
       {/* Your main content goes here */}
-      <div className="container flex flex-col items-center px-24">
+      <div className="container flex flex-col items-center px-24 pb-16">
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
           <TableCard className={"gap-4"}>
@@ -108,7 +111,7 @@ const DashBoardHomeCMC = () => {
                     title="Want to add a Property"
                     description="Add the information associated to the property to add it to your account"
                   >
-                    <PropertyAddForm />
+                    <PropertyAddForm onAddProperty={addPropertyToState} />
                   </ModalContent>
                 </Modal>
               </div>
