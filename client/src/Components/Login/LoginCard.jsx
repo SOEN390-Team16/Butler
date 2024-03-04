@@ -24,7 +24,7 @@ const LoginCard = () => {
     e.preventDefault();
     // This is where the user will be logged in and redirected to their profile
     axios
-      .post("http://localhost:3000/api/v1/login/", userInfo) // Added 'http://' protocol
+      .post("http://hortzcloud.com:3000/api/v1/login/", userInfo) // Added 'http://' protocol
       .then((res) => {
         if (res.data.token) {
           console.log("Logged in successfully");

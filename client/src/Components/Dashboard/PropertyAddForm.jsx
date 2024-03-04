@@ -57,7 +57,7 @@ export default function PropertyAddForm(props) {
     }
 
     axios
-      .post("http://localhost:3000/api/v1/pp", property, {
+      .post("http://hortzcloud.com:3000/api/v1/pp", property, {
         headers: {
           'authorization': `Bearer ${token}`,
         }

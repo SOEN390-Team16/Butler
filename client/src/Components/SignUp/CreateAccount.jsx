@@ -28,7 +28,7 @@ const CreateAccount = (props) => {
     e.preventDefault();
     console.log(userInfo);
     axios
-      .post("http://localhost:3000/api/v1/pu/", userInfo)
+      .post("http://hortzcloud.com:3000/api/v1/pu/", userInfo)
       .then((res) => {
         console.log("res.data", res.data);
         if (res.data) {

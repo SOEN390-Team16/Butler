@@ -33,6 +33,7 @@
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>0/46</span>
+                <span class='fraction'>0/46</span>
             </div>
         
             
@@ -282,6 +283,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -394,6 +397,7 @@ const getPublicUserById = <span class="cstat-no" title="statement not covered" >
 <span class="cstat-no" title="statement not covered" >    pool.query(queries.getPublicUserById, [userid], <span class="fstat-no" title="function not covered" >(e</span>rror, results) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >        if (error) {</span>
 <span class="cstat-no" title="statement not covered" >            console.error('Error getting user:', error);</span>
+<span class="cstat-no" title="statement not covered" >            console.error('Error getting user:', error);</span>
 <span class="cstat-no" title="statement not covered" >            return res.status(500).json({ error: 'Internal Server Error' });</span>
         }
 <span class="cstat-no" title="statement not covered" >        if (results.rowCount === 0) {</span>
@@ -414,6 +418,7 @@ const addPublicUser = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >            return res.status(500).json({ error: 'Internal Server Error' });</span>
         }
 <span class="cstat-no" title="statement not covered" >        if(results.rows.length !== 0){</span>
+<span class="cstat-no" title="statement not covered" >        if(results.rows.length !== 0){</span>
 <span class="cstat-no" title="statement not covered" >            res.status(404).send("Email Already Exists");</span>
         }
         else{
@@ -423,11 +428,14 @@ const addPublicUser = <span class="cstat-no" title="statement not covered" ><spa
 <span class="cstat-no" title="statement not covered" >                    if(error) <span class="cstat-no" title="statement not covered" >throw error;</span></span>
 <span class="cstat-no" title="statement not covered" >                    res.status(201).send("Public User Created Successfully!");</span>
                 });
+                });
             }catch(hashError){
 <span class="cstat-no" title="statement not covered" >                console.error('Error hashing password:', hashError);</span>
 <span class="cstat-no" title="statement not covered" >                res.status(500).json({ error: 'Internal Server Error' });</span>
             }
         } 
+&nbsp;
+&nbsp;
 &nbsp;
 &nbsp;
     })
@@ -438,6 +446,7 @@ const updatePublicUser = <span class="cstat-no" title="statement not covered" ><
     const userid = <span class="cstat-no" title="statement not covered" >req.params.userid;</span>
     const { first_name, last_name, email, password, profile_picture } = <span class="cstat-no" title="statement not covered" >req.body;</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >    if (!first_name &amp;&amp; !last_name &amp;&amp; !email &amp;&amp; !password &amp;&amp; !role &amp;&amp; profile_picture === undefined) {</span>
 <span class="cstat-no" title="statement not covered" >    if (!first_name &amp;&amp; !last_name &amp;&amp; !email &amp;&amp; !password &amp;&amp; !role &amp;&amp; profile_picture === undefined) {</span>
 <span class="cstat-no" title="statement not covered" >        return res.status(400).json({ error: 'At least one field is required for updating' });</span>
     }
@@ -459,6 +468,7 @@ const updatePublicUser = <span class="cstat-no" title="statement not covered" ><
     }
 <span class="cstat-no" title="statement not covered" >    if (password) {</span>
 <span class="cstat-no" title="statement not covered" >        setClauses.push('password = $' + (values.length + 1));</span>
+<span class="cstat-no" title="statement not covered" >        values.push(password);</span>
 <span class="cstat-no" title="statement not covered" >        values.push(password);</span>
     }
 <span class="cstat-no" title="statement not covered" >    if (profile_picture !== undefined) {</span>

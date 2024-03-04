@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for server/src/CondoOwner/queries.js</title>
+    <title>Code coverage report for server/src/RegistrationKey/queries.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/CondoOwner</a> queries.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">server/src/RegistrationKey</a> queries.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -88,27 +88,24 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -116,35 +113,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const getCondoOwners =
-  "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, pu.role, " +
-  "co.ownerid FROM public_user pu, condo_owner co WHERE pu.userID = co.userID;";
-const getCondoOwnerById =
-  "SELECT pu.first_name, pu.last_name, pu.email, pu.password, pu.profile_picture, pu.role," +
-  "co.ownerid FROM public_user pu JOIN condo_owner co ON pu.userid = co.userid WHERE co.ownerid = $1;";
-const checkIfCOEmailExists = "SELECT * FROM public_user pu WHERE pu.email = $1;";
-const checkIfUserAlreadyExists =
-  "SELECT pu.role = 'condo_owner' OR pu.role = 'renter' FROM public_user pu WHERE pu.email = $1;";
-const addCondoOwner =
-  "INSERT INTO condo_owner(userID) VALUES ((SELECT userID FROM public_user pu WHERE pu.email = $1));";
-const updateParentToOwner =
-  "UPDATE public_user SET role = 'condo_owner' FROM condo_owner WHERE condo_owner.userid = public_user.userid;";
-const updateParentToPublicUser =
-  "UPDATE public_user SET role = 'public_user' WHERE userid = (SELECT userid FROM condo_owner WHERE condo_owner.ownerid = $1)";
-const removeCondoOwner = "DELETE FROM condo_owner WHERE ownerid = $1;";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const checkIfRegistrationKeyAlreadyExists =
+    "SELECT rk.registration_key FROM registration_key rk WHERE rk.registration_key= $1;"
+const generateRegistrationKey =
+    "INSERT INTO registration_key(registration_key, userid, role) VALUES " +
+    "($1, (SELECT userID FROM public_user pu WHERE pu.email= $2), $3);"
+const getRegistrationKeyByEmail =
+    "SELECT rk.registration_key FROM registration_key rk WHERE userID= (SELECT userID FROM public_user pu WHERE pu.email= $1);"
+const checkIfPublicUserExists =
+    "SELECT * FROM public_user WHERE email=$1;"
+const checkIfUserHasActiveRegistrationKey =
+    "SELECT * FROM active_registration_key WHERE userID= (SELECT userID FROM public_user WHERE email=$1) AND condoID = $2; "
+const revokeRegistrationKey =
+    "DELETE FROM registration_key rk WHERE rk.userID = (SELECT userID FROM public_user WHERE email=$1) " +
+    "AND rk.registration_key IN (SELECT registration_key FROM active_registration_key WHERE condoID= $2);"
+const updateRoleBeforeRevoking =
+    "UPDATE public_user SET role='public_user' WHERE userID= (SELECT pu.userID FROM public_user pu WHERE pu.email=$1);"
 &nbsp;
 module.exports = {
-  getCondoOwners,
-  getCondoOwnerById,
-  checkIfCOEmailExists,
-  addCondoOwner,
-  removeCondoOwner,
-  updateParentToOwner,
-  checkIfUserAlreadyExists,
-  updateParentToPublicUser,
-};
-&nbsp;</pre></td></tr></table></pre>
+    checkIfRegistrationKeyAlreadyExists,
+    generateRegistrationKey,
+    getRegistrationKeyByEmail,
+    checkIfPublicUserExists,
+    checkIfUserHasActiveRegistrationKey,
+    revokeRegistrationKey,
+    updateRoleBeforeRevoking
+};</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
