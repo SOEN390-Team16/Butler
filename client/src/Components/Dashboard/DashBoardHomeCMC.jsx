@@ -27,7 +27,7 @@ import axios from "axios";
 // It will host the side drawer, profile information, condo information all that
 const DashBoardHomeCMC = () => {
   // test table
-  const [selectedHeading, setSelectedHeading] = useState("heading1");
+  const [selectedHeading, setSelectedHeading] = useState("allUsers");
 
   const handleHeadingClick = (heading) => {
     setSelectedHeading(heading);
@@ -123,7 +123,7 @@ const DashBoardHomeCMC = () => {
                     <AddButton>Add Property</AddButton>
                   </ModalToggler>
                   <ModalContent
-                    title="Want to add a Property"
+                    title="Want to add a Property?"
                     description="Add the information associated to the property to add it to your account"
                   >
                     <PropertyAddForm onAddProperty={addPropertyToState}/>
