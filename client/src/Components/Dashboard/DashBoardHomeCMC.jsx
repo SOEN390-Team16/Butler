@@ -69,10 +69,10 @@ const DashBoardHomeCMC = () => {
   };
 
   const options = [
-    { key: 1, option: "Label 1" },
-    { key: 2, option: "Label 2" },
-    { key: 3, option: "Label 3" },
-    { key: 4, option: "Label 4" },
+    {key: 1, option: "Label 1"},
+    {key: 2, option: "Label 2"},
+    {key: 3, option: "Label 3"},
+    {key: 4, option: "Label 4"},
   ];
 
   const dummyUser = {
@@ -84,7 +84,7 @@ const DashBoardHomeCMC = () => {
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
       <button className="patty__button" onClick={toggleDrawer}>
-        <RxHamburgerMenu size={40} />
+        <RxHamburgerMenu size={40}/>
       </button>
 
       {/* The Side drawer is whats being opened for main navigation */}
@@ -126,7 +126,7 @@ const DashBoardHomeCMC = () => {
                     title="Want to add a Property"
                     description="Add the information associated to the property to add it to your account"
                   >
-                    <PropertyAddForm onAddProperty={addPropertyToState} />
+                    <PropertyAddForm onAddProperty={addPropertyToState}/>
                   </ModalContent>
                 </Modal>
               </div>
@@ -162,6 +162,38 @@ const DashBoardHomeCMC = () => {
               )}
             </div>
           </TableCard>
+        </div>
+        {/* second table */}
+        <div
+          className="flex flex-col justify-center items-center w-full"
+          style={{paddingTop: 48, paddingBottom: 0}}
+        >
+          {/* Properties card goes here */}
+          <TableCard className={"gap-4"}>
+            <TableCardHeader title={"My Clients"}>
+              <div className="flex items-center gap-4">
+                {/* See more button should appear when a certain threshold is exceeded */}
+                <Link className="underline" to={""}>
+                  See more
+                </Link>
+
+                {/* This is the modal that display once a button is interacted with */}
+                <Modal>
+                  <ModalToggler>
+                    <GenerateKeyButton>Generate Key</GenerateKeyButton>
+                  </ModalToggler>
+                  <ModalContent
+                    title="Want to generate a Registration Key?"
+                    description="Add the information associated to the unit. We will generate the Registration Key for you!"
+                    onExit={() => console.log("exit")}
+                  >
+                    <GenerateKeyForm/>
+                  </ModalContent>
+                </Modal>
+              </div>
+            </TableCardHeader>
+            {/* Body of properties card */}
+            <div>
               <Table>
                 <TableHeader>
                   <th></th>
@@ -173,7 +205,7 @@ const DashBoardHomeCMC = () => {
                 </TableHeader>
                 <TableRow>
                   <td>
-                    <GoPerson size={24} />
+                    <GoPerson size={24}/>
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -183,7 +215,7 @@ const DashBoardHomeCMC = () => {
                 </TableRow>
                 <TableRow>
                   <td>
-                    <GoPerson size={24} />
+                    <GoPerson size={24}/>
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -193,7 +225,7 @@ const DashBoardHomeCMC = () => {
                 </TableRow>
                 <TableRow>
                   <td>
-                    <GoPerson size={24} />
+                    <GoPerson size={24}/>
                   </td>
                   <td>Client Name</td>
                   <td>Unit Address</td>
@@ -209,7 +241,7 @@ const DashBoardHomeCMC = () => {
         {/* third & fourth tables */}
         <div
           className="flex flex-col justify-center items-center w-full"
-          style={{ paddingTop: 48, paddingBottom: 64 }}
+          style={{paddingTop: 48, paddingBottom: 64}}
         >
           {/* Properties card goes here */}
           <TableCard className={"gap-8"}>
@@ -235,7 +267,7 @@ const DashBoardHomeCMC = () => {
             </div>
             <div className="flex flex-row items-center gap-8">
               <div className="relative">
-                <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-[24px] text-gray-600" />
+                <IoSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-[24px] text-gray-600"/>
                 <input
                   type="text"
                   placeholder="Email Address..."
@@ -258,7 +290,7 @@ const DashBoardHomeCMC = () => {
                   </TableHeader>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -270,7 +302,7 @@ const DashBoardHomeCMC = () => {
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -282,7 +314,7 @@ const DashBoardHomeCMC = () => {
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -306,7 +338,7 @@ const DashBoardHomeCMC = () => {
                   </TableHeader>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -322,14 +354,14 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm />
+                          <UserRegistrationForm/>
                         </ModalContent>
                       </Modal>
                     </td>
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -345,14 +377,14 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm />
+                          <UserRegistrationForm/>
                         </ModalContent>
                       </Modal>
                     </td>
                   </TableRow>
                   <TableRow>
                     <td>
-                      <GoPerson size={24} />
+                      <GoPerson size={24}/>
                     </td>
                     <td>Client Name</td>
                     <td>Email Address</td>
@@ -368,7 +400,7 @@ const DashBoardHomeCMC = () => {
                           description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
                           onExit={() => console.log("exit")}
                         >
-                          <UserRegistrationForm />
+                          <UserRegistrationForm/>
                         </ModalContent>
                       </Modal>
                     </td>
