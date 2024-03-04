@@ -1,63 +1,76 @@
-.dashboard__home{
-    background-color: #eee;
-    min-height:1000px;
-    
+.dashboard__home {
+  background-color: #eee;
+  min-height: 1000px;
 }
 
-.sidedrawer__open{
-    background-image: url('../../pictures/dashboardHero.jpg');
-    /* background-position: center; */
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding:8% 4%
+.sidedrawer__open {
+  background-image: url("../../pictures/dashboardHero.jpg");
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 8% 4%;
 }
 
-.sidedrawer__open .customIcon{
-    background: transparent !important;
+.sidedrawer__open .customIcon {
+  background: transparent !important;
 }
 
-
-.patty__button{
-    background-color: #B1C6D3;
-    margin-top:50px;
-    color:white;
-    border-radius:0px 10px 10px 0px;
-    border:none;
+.patty__button {
+  background-color: #b1c6d3;
+  margin-top: 50px;
+  color: white;
+  border-radius: 0px 10px 10px 0px;
+  border: none;
 }
 
-.link__option{
-    padding:2% 0;
-    margin: 5% 4%;
-    border: 1px solid #E6E6E6;
-    transition-duration: 250ms;
+.link__option {
+  padding: 2% 0;
+  margin: 5% 4%;
+  border: 1px solid #e6e6e6;
+  transition-duration: 250ms;
 }
 
-.link__option p{
-    font-family: Inter;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 16px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #5D5D5D;;
-    margin-left:5%;
+.link__option p {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #5d5d5d;
+  margin-left: 5%;
 }
 
-.link__holder{
-    margin-top:10%!important;
-    transform: scale(1.01);
+.link__holder {
+  margin-top: 10% !important;
+  transform: scale(1.01);
 }
 
-.link__option:hover{
-    transform: scale(1.05);
+.link__option:hover {
+  transform: scale(1.05);
 }
 
-
-.construction__sign{
-    text-align: center;
-    margin-top:10%;
+.construction__sign {
+  text-align: center;
+  margin-top: 10%;
 }
 
-.construction__sign h1{
-    text-align: center;
+.construction__sign h1 {
+  text-align: center;
+}
+
+.selected-button {
+  /* font-size: 20px; */
+  font-weight: bold;
+  text-decoration: underline;
+  font-family: Raleway, sans-serif;
+}
+
+.button-container {
+  display: flex;
+  font-size: 24px;
+}
+
+.button-container button {
+  margin: 0 60px;
 }
