@@ -21,7 +21,7 @@ const CompanySignUp = (props) => {
     // This is where the user will be logged in and redirected to their profile
     console.log(companyInfo);
     axios
-      .post("http://localhost:3000/api/v1/cmc/", companyInfo) // Added 'http://' protocol
+      .post("http://hortzcloud.com:3000/api/v1/cmc/", companyInfo) // Added 'http://' protocol
       .then((res) => {
         console.log("res", res);
         if (res) {

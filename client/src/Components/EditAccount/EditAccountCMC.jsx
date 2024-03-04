@@ -68,7 +68,7 @@ const EditAccountCMC = (props) => {
 
     axios
       .patch(
-        `http://localhost:3000/api/v1/cmc/${companyID}`,
+        `http://hortzcloud.com:3000/api/v1/cmc/${companyID}`,
         newProfile,
         config
       )

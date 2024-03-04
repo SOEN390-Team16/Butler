@@ -44,7 +44,7 @@ const DashBoardHomeCMC = () => {
   useEffect(() => {
     const fetchProperties = () => {
       axios
-        .get("http://localhost:3000/api/v1/pp", {
+        .get("http://hortzcloud.com:3000/api/v1/pp", {
           headers: {
             'authorization': `Bearer ${token}`,
           }
