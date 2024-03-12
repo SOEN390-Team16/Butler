@@ -17,7 +17,7 @@ const getAllUnits = (req,res) => {
     });
 }
 
-const getUnitById = (req,res) => {
+const getCondoUnitById = (req,res) => {
     console.log("Getting a unit by id");
     const condoid = parseInt(req.params.condoid);
     pool.query(queries.getCondoUnitById, [condoid], (error, results) =>{
@@ -37,12 +37,12 @@ const getUnitById = (req,res) => {
 const addCondoUnit = (req,res) => {
     console.log("Adding Condo Unit ");
     const{lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number} = req.body;
-    pool.query(queries.getUnitByNumber, [condo_number], (error, resilts) => {
+    pool.query(queries.getCondoUnitByNumber, [condo_number], (error, results) => {
         if(error){
             console.error("Error finding condo unit");
             res.status(500).json({error: "Internal Server Error"});
         }
-        if(resilts.rowCount > 0){
+        if(results.rowCount > 0){
             res.status(400).json({error: "Condo Unit Already Exists"})
         }
         else{
@@ -54,8 +54,8 @@ const addCondoUnit = (req,res) => {
                         res.status(500).json({error: "Internal Server Error"});
                     }
                     else{
-                        pool.query(queries.getCondoUnitByNumber, [condo_number], (results) => {
-                            res.status(200).json(results);
+                        pool.query(queries.getCondoUnitByNumber, [condo_number], (error,results) => {
+                            res.status(200).json(results.rows);
                         });
                     };
             });
@@ -81,20 +81,20 @@ const updateCondoUnit = (req,res) => {
     const setClauses = [];
     const values = [];
   
-    if (first_name) {
-      setClauses.push("locker_id = $" + (values.length + 1));
-      values.push(first_name);
+    if (lockerid) {
+      setClauses.push("lockerid = $" + (values.length + 1));
+      values.push(lockerid);
     }
-    if (last_name) {
+    if (parkingid) {
       setClauses.push("parkingid = $" + (values.length + 1));
-      values.push(last_name);
+      values.push(parkingid);
     }
-    if (email) {
+    if (condo_fee) {
       setClauses.push("condo_fee = $" + (values.length + 1));
-      values.push(email);
+      values.push(condo_fee);
     }
   
-    const query = `UPDATE condo_unit SET ${setClauses} WHERE condoid = (${condoid})`;
+    const query = `UPDATE condo_unit SET ${setClauses.join(', ')} WHERE condoid = ${condoid}`;
   
     pool.query(queries.getCondoUnitById, [condoid], (error, results) => {
       if (error) {
@@ -102,9 +102,9 @@ const updateCondoUnit = (req,res) => {
         return res.status(500).json({ error: "Internal Server Error" });
       }
       if (results.rows.length === 0) {
-        return res.status(404).json({ error: "Ccondo Unit Not Found" });
+        return res.status(404).json({ error: "Condo Unit Not Found" });
       } else {
-        pool.query(query, (error, result) => {
+        pool.query(query, [...values],(error, result) => {
             if (error) {
             console.error("Error updating condo renter:", error);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -123,11 +123,11 @@ const updateCondoUnit = (req,res) => {
                         res.status(400).json({error: "Condo Unit Not Found"});
                     }
                     else{
+                        console.log("Condo Unit Updated Successfullly");
                         res.status(200).json(results.rows);
                     };
                 });
             }
-          res.status(200).json({ message: "condo unit updated successfully" });
         });
       }
     });
@@ -160,7 +160,7 @@ const removeCondoUnit = (req,res) => {
 
 module.exports = {
     getAllUnits,
-    getUnitById,
+    getCondoUnitById,
     addCondoUnit,
     updateCondoUnit,
     removeCondoUnit
