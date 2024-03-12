@@ -100,5 +100,6 @@ const revokeRegistrationKeyByEmailAndCondoId = (req, res) =>
 module.exports = {
     generateRegistrationKey,
     getRegistrationKeyByEmail,
-    revokeRegistrationKeyByEmailAndCondoId
+    revokeRegistrationKeyByEmailAndCondoId,
+    generateRandomKey
 }
