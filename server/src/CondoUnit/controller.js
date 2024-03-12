@@ -22,7 +22,7 @@ const getCondoUnitById = (req,res) => {
     const condoid = parseInt(req.params.condoid);
     pool.query(queries.getCondoUnitById, [condoid], (error, results) =>{
         if(error){
-            console.error("Error finding unit by id");
+            console.error("Error finding unit by id: ",error);
             res.status(500).json({error: "Internal Server Error"});
         }
         if(results.rowCount === 0){
@@ -33,13 +33,15 @@ const getCondoUnitById = (req,res) => {
         };
     });
 };
-
+ // check if property, locker, parking, and
+ // company exist before adding. Until those 
+ // other tables are created this works fine.
 const addCondoUnit = (req,res) => {
     console.log("Adding Condo Unit ");
     const{lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number} = req.body;
     pool.query(queries.getCondoUnitByNumber, [condo_number], (error, results) => {
         if(error){
-            console.error("Error finding condo unit");
+            console.error("Error finding condo unit: ", error);
             res.status(500).json({error: "Internal Server Error"});
         }
         if(results.rowCount > 0){
@@ -50,7 +52,7 @@ const addCondoUnit = (req,res) => {
                 [lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number],
                 (error) => {
                     if(error){
-                        console.error("Error creating condo unit");
+                        console.error("Error creating condo unit: ", error);
                         res.status(500).json({error: "Internal Server Error"});
                     }
                     else{
@@ -73,9 +75,7 @@ const updateCondoUnit = (req,res) => {
       !parkingid &&
       !condo_fee
     ) {
-      return res
-        .status(400)
-        .json({ error: "At least one field is required for updating" });
+      return res.status(400).json({ error: "At least one field is required for updating" });
     }
   
     const setClauses = [];
@@ -98,7 +98,7 @@ const updateCondoUnit = (req,res) => {
   
     pool.query(queries.getCondoUnitById, [condoid], (error, results) => {
       if (error) {
-        console.error("Error finding condo unit:", error);
+        console.error("Error finding condo unit: ", error);
         return res.status(500).json({ error: "Internal Server Error" });
       }
       if (results.rows.length === 0) {
@@ -116,7 +116,7 @@ const updateCondoUnit = (req,res) => {
             else{
                 pool.query(queries.getCondoUnitById, [condoid], (error, results) =>{
                     if(error){
-                        console.error("Error finding unit by id");
+                        console.error("Error finding unit by id: ", error);
                         res.status(500).json({error: "Internal Server Error"});
                     }
                     if(results.rowCount === 0){
