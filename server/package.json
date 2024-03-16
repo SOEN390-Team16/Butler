@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon server.js",
-    "lint": "eslint --output-file eslint_report.json --format json 'src/**/*.js'"
+    "lint": "eslint 'src/**/*.js'",
+    "lint:report": "eslint --output-file eslint_report.json --format json 'src/**/*.js'"
   },
   "keywords": [],
   "author": "",
