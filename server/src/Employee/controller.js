@@ -34,86 +34,58 @@ const getEmployeeByID = (req, res) => {
   });
 };
 
-const addEmployee = (req, res) => {
+const addEmployee = async (req, res) => {
   console.log("add an Employee");
-  const { first_name, last_name, email, password, job, companyid, role } =
-    req.body;
-
-  pool.query(queries.checkIfEmpEmailExists, [email], (error, results) => {
-    if (error) {
-      console.error("Error finding email:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+  const { first_name, last_name, companyid, role, property_id } = req.body;
+  try {
+    const companyExists = await pool.query(queries.checkIfCompanyExists, [
+      companyid,
+    ]);
+    if (companyExists.rows.length === 0) {
+      return res.status(404).send("Company ID does not exist");
     }
 
-    if (results.rows.length !== 0) {
-      return res.status(404).send("Email Already Exists");
+    const propertyExists = await pool.query(queries.checkIfPropertyExists, [
+      property_id,
+    ]);
+    if (propertyExists.rows.length === 0) {
+      return res.status(404).send("Property ID does not exist");
     }
 
-    pool.query(
-      queries.checkIfCompanyExists,
-      [companyid],
-      async (error, results) => {
-        if (error) {
-          console.error("Error finding company:", error);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-
-        if (results.rows.length === 0) {
-          return res.status(404).send("Company ID does not exist");
-        }
-
-        try {
-          const hashedPassword = await bcrypt.hash(password, 5);
-          pool.query(
-            queries.addEmployee,
-            [
-              first_name,
-              last_name,
-              email,
-              hashedPassword,
-              job,
-              companyid,
-              role,
-            ],
-            (error, result) => {
-              if (error) throw error;
-              const createdEmployee = {
-                first_name,
-                last_name,
-                email,
-                password,
-                job,
-                companyid,
-                role,
-              };
-              res.status(201).json({
-                message: "Employee Created Successfully!",
-                employee: createdEmployee,
-              });
-            }
-          );
-        } catch (hashError) {
-          console.error("Error hashing password:", hashError);
-          res.status(500).json({ error: "Internal Server Error" });
-        }
-      }
-    );
-  });
+    await pool.query(queries.addEmployee, [
+      first_name,
+      last_name,
+      companyid,
+      role,
+      property_id,
+    ]);
+    const createdEmployee = {
+      first_name,
+      last_name,
+      companyid,
+      role,
+      property_id,
+    };
+    return res.status(201).json({
+      message: "Employee Created Successfully!",
+      employee: createdEmployee,
+    });
+  } catch (error) {
+    console.error("Error Adding Employee:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 const updateEmployee = async (req, res) => {
   const empid = req.params.empid;
-  const { first_name, last_name, email, password, job, companyid, role } =
-    req.body;
+  const { first_name, last_name, companyid, role, property_id } = req.body;
 
   if (
     !first_name &&
     !last_name &&
-    !email &&
-    !password &&
-    !job &&
     !companyid &&
-    !role === undefined
+    !role === undefined &&
+    !property_id
   ) {
     return res
       .status(400)
@@ -131,24 +103,16 @@ const updateEmployee = async (req, res) => {
     setClauses.push("last_name = $" + (values.length + 1));
     values.push(last_name);
   }
-  if (email) {
-    setClauses.push("email = $" + (values.length + 1));
-    values.push(email);
-  }
-  if (password) {
-    setClauses.push("password = $" + (values.length + 1));
-    values.push(password);
-  }
-  if (job !== undefined) {
-    setClauses.push("job = $" + (values.length + 1));
-    values.push(job);
-  }
   if (companyid !== undefined) {
     setClauses.push("companyid = $" + (values.length + 1));
     values.push(companyid);
   }
   if (role !== undefined) {
     setClauses.push("role = $" + (values.length + 1));
+    values.push(role);
+  }
+  if (property_id !== undefined) {
+    setClauses.push("property_id = $" + (values.length + 1));
     values.push(role);
   }
 
