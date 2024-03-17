@@ -77,7 +77,19 @@ const addEmployee = (req, res) => {
             ],
             (error, result) => {
               if (error) throw error;
-              res.status(201).send("Employee Created Successfully!");
+              const createdEmployee = {
+                first_name,
+                last_name,
+                email,
+                password,
+                job,
+                companyid,
+                role,
+              };
+              res.status(201).json({
+                message: "Employee Created Successfully!",
+                employee: createdEmployee,
+              });
             }
           );
         } catch (hashError) {
@@ -161,8 +173,16 @@ const updateEmployee = async (req, res) => {
         if (result.rowCount === 0) {
           return res.status(404).json({ error: "Employee not found" });
         }
-
-        res.status(200).json({ message: "Employee updated successfully" });
+        pool.query(queries.getEmployeeByID, [empid], (error, results) => {
+          if (error) {
+            console.error("Error retrieving updated employee:", error);
+            return res.status(500).json({ error: "Internal Server Error" });
+          }
+          res.status(201).json({
+            message: "Employee Updated Successfully!",
+            employee: results.rows,
+          });
+        });
       });
     }
   });
