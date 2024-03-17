@@ -17,8 +17,6 @@ const LoginCard = () => {
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
 
-
-
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
@@ -34,6 +32,8 @@ const LoginCard = () => {
           localStorage.setItem("token", res.data.token);
           if (userData.role === "cmc") {
             navigation("/DashboardHomeCMC");
+          } else if (userData.role === "renter") {
+            navigation("/DashBoardHomeCR");
           } else {
             navigation("/DashboardHome");
           }
