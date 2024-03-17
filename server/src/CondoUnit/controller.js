@@ -35,7 +35,7 @@ const addCondoUnit = (req, res) => {
     console.log('Add a Condo Unit');
     const { condoid, lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number } = req.body;
 
-    pool.query(queries.checkIfCondoUnitExistsById, [condoid], (error, results) => {
+    pool.query(queries.checkIfCondoUnitExists, [condoid], (error, results) => {
         if (error) {
             console.error('Error checking condo unit existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -75,7 +75,7 @@ const updateCondoUnit = (req, res) => {
     const condoid = parseInt(req.params.condoid);
     const { lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number } = req.body;
 
-    pool.query(queries.checkIfCondoUnitExistsById, [condoid], (error, results) => {
+    pool.query(queries.checkIfCondoUnitExists, [condoid], (error, results) => {
         if (error) {
             console.error('Error checking condo unit existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
