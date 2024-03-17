@@ -1,6 +1,50 @@
 const pool = require('../../db');
 const queries = require('./queries');
 
+async function addDetails(property_id, companyid, parking_count, unit_count, locker_count){
+    
+    try {
+        for (let index = 0; index < unit_count; index++) {
+            await pool.query(queries.updateCondoDetails, [property_id, companyid, index]);
+        }
+
+        for (let index = 0; index < locker_count; index++) {
+            await pool.query(queries.updateLockerDetails, [property_id, companyid, index]);
+        }
+
+        for (let index = 0; index < parking_count; index++) {
+            await pool.query(queries.updateParkingDetails, [property_id, companyid, index]);
+        }
+
+        return { status: 200, message: "Property details updated." };
+    } catch (error) {
+        console.error('Error updating details:', error);
+        return { status: 500, message: "Internal Server Error" };
+    }
+}
+const checkIfPropertyNameExists = async (property_name) => {
+    const results = await pool.query(queries.checkIfPropertyNameExists, [property_name]);
+    return results.rowCount > 0;
+};
+
+const checkIfCompanyExists = async (companyid) => {
+    const results = await pool.query(queries.checkIfCompanyExists, [companyid]);
+    return results.rows.length > 0;
+};
+
+const addPropertyToDatabase = async (companyid, property_name, unit_count, parking_count, locker_count, address) => {
+    try {
+        const result = await pool.query(queries.addProperty, [companyid, property_name, unit_count, parking_count, locker_count, address]);
+        const propertyResult = await pool.query(queries.getPropertyByName, [property_name]);
+        if (propertyResult.rowCount < 1) {
+            return { error: true };
+        }
+        return { property_id: propertyResult.rows[0].property_id };
+    } catch (error) {
+        console.error('Error adding property:', error);
+        return { error: true };
+    }
+};
 // Get all properties
 const getProperties = (req, res) => {
     console.log("Get All Properties");
@@ -42,47 +86,41 @@ const getPropertyById = (req, res) => {
 };
 
 // Add a new property
-const addProperty = (req, res) => {
-    console.log('Add a Property');
-    const { companyid, property_name, unit_count, parking_count, locker_count, address } = req.body;
+const addProperty = async (req, res) => {
+    try {
+        console.log('Add a Property');
+        const { companyid, property_name, unit_count, parking_count, locker_count, address } = req.body;
 
-    // Check if property name already exists
-    pool.query(queries.checkIfPropertyNameExists, [property_name], (error, results) => {
-        if (error) {
-            // Handle error if checking property name existence fails
-            console.error('Error checking property name existence:', error);
-            return res.status(500).json({ error: 'Internal Server Error' });
-        } else if (results.rowCount > 0) {
-            // Return 400 error if property name already exists
+        // Check if property name already exists
+        const propertyNameExists = await checkIfPropertyNameExists(property_name);
+        if (propertyNameExists) {
             return res.status(400).json({ error: 'Property name already exists' });
-        } else {
-            // Check if the given company exists
-            pool.query(queries.checkIfCompanyExists, [companyid], (error, results) => {
-                if (error) {
-                    // Handle error if finding company fails
-                    console.error('Error finding company:', error);
-                    return res.status(500).json({ error: 'Internal Server Error' });
-                } else if (results.rows.length === 0) {
-                    // Return 404 error if company does not exist
-                    return res.status(404).send("Company does not exist");
-                } else {
-                    // Create the property profile in the database
-                    pool.query(
-                        queries.addProperty,
-                        [companyid, property_name, unit_count, parking_count, locker_count, address],
-                        (error, result) => {
-                            if (error) {
-                                // Handle error if adding property fails
-                                console.error('Error adding property:', error);
-                                return res.status(500).json({ error: 'Internal Server Error' });
-                            }
-                            // Send success message as a response
-                            res.status(200).json({ message: "Property profile successfully added." });
-                        });
-                }
-            });
         }
-    });
+
+        // Check if the given company exists
+        const companyExists = await checkIfCompanyExists(companyid);
+        if (!companyExists) {
+            return res.status(404).send("Company does not exist");
+        }
+
+        // Create the property profile in the database
+        const propertyResult = await addPropertyToDatabase(companyid, property_name, unit_count, parking_count, locker_count, address);
+
+        if (propertyResult.error) {
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Retrieve the property id
+        const property_id = propertyResult.property_id;
+
+        // Add property details
+        const detailsResult = await addDetails(property_id, companyid, parking_count, unit_count, locker_count);
+        
+        return res.status(detailsResult.status).json({ message: detailsResult.message });
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
 };
 
 // Update an existing property
