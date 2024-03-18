@@ -1,6 +1,7 @@
 .dashboard__home{
     background-color: #eee;
     min-height:100vh;
+    padding-bottom: 50px;
 }
 
 .sidedrawer__open {
@@ -74,3 +75,26 @@
 .button-container button {
   margin: 0 60px;
 }
+.table-space {
+  height: 50px; /* Adjust height as needed */
+  background-color: #eee; /* Same background color as .dashboard__home */
+}
+.table-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 48px; /* Add margin between the tables */
+}
+
+.small-table {
+  width: 25%;
+  background-color: #eee; /* Match background color */
+  padding: 20px; /* Add padding for spacing */
+  margin-right: 15px;
+  box-sizing: border-box;
+}
+
+.small-table:last-child {
+  margin-right: 0;
+}
+
+
