@@ -23,4 +23,4 @@ jobs:
         run: npm run build --if-present
       - name: Test
         working-directory: ./client
-        run: npm cy:run
+        run: npm run cy:run
