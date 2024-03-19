@@ -8,6 +8,7 @@ const Login = require('./src/Login/routes');
 const RegistrationRoutes = require('./src/RegistrationKey/routes');
 const CondoUnitRoutes = require('./src/CondoUnit/routes');
 const tokenRouter = require('./src/auth/refreshToken');
+const LockerParkingRoutes = require('./src/Locker-Parking/routes')
 const cors = require('cors');
 
 const app = express()
@@ -25,6 +26,7 @@ app.use('/api/v1/login', Login);
 app.use('/api/v1/reg', RegistrationRoutes);
 app.use('/api/v1/pp', PropertyRoutes);
 app.use('/api/v1/unit', CondoUnitRoutes);
+app.use('/api/v1/assign', LockerParkingRoutes);
 app.use('/api/v1/token', tokenRouter);
 
 app.listen(port, () => console.log(`app listening on ${port}`));
