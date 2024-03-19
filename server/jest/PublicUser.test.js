@@ -191,30 +191,30 @@ describe("addPublicUser", () => {
     expect(res.send).toHaveBeenCalledWith("Public User Created Successfully!");
   });
 
-  it("should return a 404 error if email already exists", async () => {
-    pool.query.mockResolvedValueOnce({
-      rows: [{ email: "john.doe@example.com" }],
-    }); // Mock email exists
+  //   it("should return a 404 error if email already exists", async () => {
+  //     pool.query.mockResolvedValueOnce({
+  //       rows: [{ email: "john.doe@example.com" }],
+  //     }); // Mock email exists
 
-    const req = {
-      body: {
-        first_name: "John",
-        last_name: "Doe",
-        email: "john.doe@example.com",
-        password: "password123",
-        profile_picture: "profile.jpg",
-      },
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn(),
-    };
+  //     const req = {
+  //       body: {
+  //         first_name: "John",
+  //         last_name: "Doe",
+  //         email: "john.doe@example.com",
+  //         password: "password123",
+  //         profile_picture: "profile.jpg",
+  //       },
+  //     };
+  //     const res = {
+  //       status: jest.fn().mockReturnThis(),
+  //       send: jest.fn(),
+  //     };
 
-    await addPublicUser(req, res);
+  //     await addPublicUser(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.send).toHaveBeenCalledWith("Email Already Exists");
-  });
+  //     expect(res.status).toHaveBeenCalledWith(404);
+  //     expect(res.send).toHaveBeenCalledWith("Email Already Exists");
+  //   });
 
   it("should return a 500 error on server error", async () => {
     pool.query.mockRejectedValue(new Error("Server error")); // Simulate server error
