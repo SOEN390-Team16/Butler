@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@material/checkbox": "^14.0.0",
+    "@rollup/rollup-win32-x64-msvc": "^4.13.0",
     "axios": "^1.6.7",
     "esbuild": "^0.20.1",
     "formik": "^2.4.5",
