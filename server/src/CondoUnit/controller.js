@@ -1,10 +1,11 @@
 const pool = require('../../db');
-const queries = require('./queries');
+const queriesCU = require('./queries');
+const queriesPP = require('../Property/queries');
 
 const getCondoUnits = (req, res) => {
     console.log("Get All Condo Units");
 
-    pool.query(queries.getCondoUnits, (error, results) => {
+    pool.query(queriesCU.getCondoUnits, (error, results) => {
         if (error) {
             console.error('Error finding condo units:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -19,7 +20,7 @@ const getCondoUnitById = (req, res) => {
 
     const condoid = parseInt(req.params.condoid);
 
-    pool.query(queries.getCondoUnitById, [condoid], (error, results) => {
+    pool.query(queriesCU.getCondoUnitById, [condoid], (error, results) => {
         if (error) {
             console.error('Error fetching condo unit profile:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -33,16 +34,16 @@ const getCondoUnitById = (req, res) => {
 
 const addCondoUnit = (req, res) => {
     console.log('Add a Condo Unit');
-    const { condoid, lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number } = req.body;
+    const { companyid, propertyid, condo_number, size, occupant_type, total_fees } = req.body;
 
-    pool.query(queries.checkIfCondoUnitExists, [condoid], (error, results) => {
+    pool.query(queriesCU.checkIfCondoUnitExists, [condoid], (error, results) => {
         if (error) {
             console.error('Error checking condo unit existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         } else if (results.rowCount > 0) {
             return res.status(400).json({ error: 'Condo unit already exists' });
         } else {
-            pool.query(queries.addCondoUnit, [condoid, lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number], (error, results) => {
+            pool.query(queriesCU.addCondoUnit, [companyid, propertyid, condo_number, size, occupant_type, total_fees], (error, results) => {
                 if (error) {
                     console.error('Error adding condo unit:', error);
                     return res.status(500).json({ error: 'Internal Server Error' });
@@ -59,7 +60,7 @@ const removeCondoUnit = (req, res) => {
 
     const condoid = parseInt(req.params.condoid);
 
-    pool.query(queries.removeCondoUnit, [condoid], (error, results) => {
+    pool.query(queriesCU.removeCondoUnit, [condoid], (error, results) => {
         if (error) {
             console.error('Error removing condo unit:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
@@ -73,16 +74,16 @@ const updateCondoUnit = (req, res) => {
     console.log('Update a Condo Unit');
 
     const condoid = parseInt(req.params.condoid);
-    const { lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number } = req.body;
+    const { companyid, propertyid, condo_number, size, occupant_type, total_fees } = req.body;
 
-    pool.query(queries.checkIfCondoUnitExists, [condoid], (error, results) => {
+    pool.query(queriesCU.checkIfCondoUnitExists, [condoid], (error, results) => {
         if (error) {
             console.error('Error checking condo unit existence:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Condo unit not found' });
         } else {
-            pool.query(queries.updateCondoUnit, [lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number, condoid], (error, results) => {
+            pool.query(queriesCU.updateCondoUnit, [companyid, propertyid, condo_number, size, occupant_type, total_fees, condoid], (error, results) => {
                 if (error) {
                     console.error('Error updating condo unit:', error);
                     return res.status(500).json({ error: 'Internal Server Error' });
@@ -99,7 +100,7 @@ const calculateCondoFee = (req, res) => {
 
     const condoid = parseInt(req.params.condoid);
 
-    pool.query(queries.getCondoUnitById, [condoid], (error, results) => {
+    pool.query(queriesCU.getCondoUnitById, [condoid], (error, results) => {
         if (error) {
             console.error('Error fetching condo unit:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
