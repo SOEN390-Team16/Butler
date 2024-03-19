@@ -1,9 +1,9 @@
 const pool = require('../../db')
 const queries = require('../assigned_locker/queries')
-const assignLockerByCondoId = (req, res) => {
+const assignLockerByUserId = (req, res) => {
   console.log('Assigning a locker')
-  const { condoid } = req.body
-  pool.query(queries.assignLockerByCondoId, [condoid], (error, results) => {
+  const { userid } = req.body
+  pool.query(queries.assignLockerByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error assigning locker: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -13,10 +13,10 @@ const assignLockerByCondoId = (req, res) => {
   })
 }
 
-const unassignLockerByCondoId = (req, res) => {
+const unassignLockerByUserId = (req, res) => {
   console.log('Unassigning a locker')
-  const condoid = parseInt(req.params.condoid)
-  pool.query(queries.unassignLockerByCondoId, [condoid], (error, results) => {
+  const userid = parseInt(req.params.userid)
+  pool.query(queries.unassignLockerByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error assigning locker: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -40,12 +40,12 @@ const getAssignedLockers = (req, res) => {
   })
 }
 
-const getAssignedLockerByCondoId = (req, res) => {
-  console.log('Getting Assigned Locker By Condoid')
-  const condoid = req.body
-  pool.query(queries.getAssignedLockerByCondoId, [condoid], (error, results) => {
+const getAssignedLockerByUserId = (req, res) => {
+  console.log('Getting Assigned Locker By Userid')
+  const userid = req.body
+  pool.query(queries.getAssignedLockerByUserId, [userid], (error, results) => {
     if (error) {
-      console.error('Error getting assigned locker by condo id: ', error)
+      console.error('Error getting assigned locker by user id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rows.length === 0) {
       res.status(404).json({ error: 'Assigned Locker Not Found' })
@@ -56,8 +56,8 @@ const getAssignedLockerByCondoId = (req, res) => {
 }
 
 module.exports = {
-  assignLockerByCondoId,
-  unassignLockerByCondoId,
-  getAssignedLockerByCondoId,
+  assignLockerByUserId,
+  unassignLockerByUserId,
+  getAssignedLockerByUserId,
   getAssignedLockers
 }
