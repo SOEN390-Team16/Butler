@@ -55,37 +55,9 @@ const getParkingSpotsByCompanyId = (req, res) => {
   })
 }
 
-const addParkingSpot = (req, res) => {
-  console.log('Adding a parking spot')
-  const { property_id, parking_number } = req.body
-  pool.query(queries.addParkingSpot, [property_id, parking_number], (error, results) => {
-    if (error) {
-      console.error('Error creating parking spot: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json({ message: 'parking spot successfully added.' })
-    }
-  })
-}
-
-const removeParkingSpotByParkingId = (req, res) => {
-  console.log('Removing a parking spot')
-  const parkingid = parseInt(req.params.parkingid)
-  pool.query(queries.removeParkingSpotByParkingId, [parkingid], (error, results) => {
-    if (error) {
-      console.error('Error removing parking spot by parking id: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      return res.status(200).json({ message: 'parking spot successfully removed.' })
-    }
-  })
-}
-
 module.exports = {
   getAllParkingSpots,
   getParkingSpotById,
   getParkingSpotsByCompanyId,
-  getParkingSpotsByPropertyId,
-  addParkingSpot,
-  removeParkingSpotByParkingId
+  getParkingSpotsByPropertyId
 }
