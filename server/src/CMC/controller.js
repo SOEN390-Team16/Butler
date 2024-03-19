@@ -1,4 +1,3 @@
-const { error } = require('console')
 const pool = require('../../db')
 const queries = require('./queries')
 const bcrypt = require('bcrypt')
@@ -93,9 +92,7 @@ const updateCMC = async (req, res) => {
     values.push(await bcrypt.hash(password, 5))
   }
 
-  const setClause = setClauses.join(', ')
-
-  const query = `UPDATE condo_management_company SET ${setClauses} WHERE companyID = $${
+  const query = `UPDATE condo_management_company SET ${setClauses.join(', ')} WHERE companyID = $${
     values.length + 1
   }`
 
