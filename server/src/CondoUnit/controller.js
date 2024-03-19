@@ -95,21 +95,22 @@ const updateCondoUnit = (req, res) => {
     });
 };
 
-const calculateCondoFee = (req, res) => {
-    console.log('Calculate Condo Fee');
+const calculateTotalCondoFee = (req, res) => {
+    console.log('Calculate Total Condo Fee');
 
     const condoid = parseInt(req.params.condoid);
+    const propertyid = parseInt(req.body.propertyid);
 
-    pool.query(queriesCU.getCondoUnitById, [condoid], (error, results) => {
+    pool.query(queriesPP.getCondoFeePerSqrft [condoid, propertyid], (error, results) => {
         if (error) {
             console.error('Error fetching condo unit:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
         } else if (results.rowCount === 0) {
             return res.status(404).json({ error: 'Condo unit not found' });
         } else {
-            const condoUnit = results.rows.at(0);
-            const condoSize = condoUnit.condo_size;
-            const feePerSquareFoot = condoUnit.condo_fee;
+            const condoInformation = results.rows.at(0);
+            const condoSize = condoInformation.size;
+            const feePerSquareFoot = condoInformation.condo_fee_per_sqrft;
 
             const totalCondoFee = condoSize * feePerSquareFoot;
             res.status(200).json({ totalCondoFee });
@@ -124,5 +125,5 @@ module.exports = {
     addCondoUnit,
     removeCondoUnit,
     updateCondoUnit,
-    calculateCondoFee
+    calculateTotalCondoFee
 }
