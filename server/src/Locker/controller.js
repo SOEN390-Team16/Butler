@@ -21,8 +21,10 @@ const getLockerById = (req, res) => {
   const lockerid = parseInt(req.params.lockerid)
   pool.query(queries.getLockerById, [lockerid], (error, results) => {
     if (error) {
-      console.error('Error finding locker by id: ', error)
+      console.error('Error getting locker by id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Locker Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -34,8 +36,10 @@ const getLockersByPropertyId = (req, res) => {
   const propertyid = parseInt(req.params.propertyid)
   pool.query(queries.getLockersByPropertyId, [propertyid], (error, results) => {
     if (error) {
-      console.error('Error finding lockers by property id: ', error)
+      console.error('Error getting lockers by property id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Lockers Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -47,45 +51,21 @@ const getLockersByCompanyId = (req, res) => {
   const companyid = parseInt(req.params.companyid)
   pool.query(queries.getLockersByCompanyId, [companyid], (error, results) => {
     if (error) {
-      console.error('Error finding lockers by company id: ', error)
+      console.error('Error getting lockers by company id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Lockers Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
   })
 }
 
-const addLocker = (req, res) => {
-  console.log('Adding a locker')
-  const { property_id, locker_number } = req.body
-  pool.query(queries.addLocker, [property_id, locker_number], (error, results) => {
-    if (error) {
-      console.error('Error creating locker: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json({ message: 'Locker successfully added.' })
-    }
-  })
-}
 
-const removeLockerByLockerId = (req, res) => {
-  console.log('Removing a locker')
-  const lockerid = parseInt(req.params.lockerid)
-  pool.query(queries.removeLockerByLockerId, [lockerid], (error, results) => {
-    if (error) {
-      console.error('Error removing locker by locker id: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      return res.status(200).json({ message: 'Locker successfully removed.' })
-    }
-  })
-}
 
 module.exports = {
   getAllLockers,
   getLockerById,
   getLockersByPropertyId,
-  getLockersByCompanyId,
-  addLocker,
-  removeLockerByLockerId
+  getLockersByCompanyId
 }
