@@ -35,7 +35,7 @@ const LoginCard = () => {
           } else if (userData.role === "renter") {
             navigation("/DashBoardHomeCR");
           } else {
-            navigation("/DashboardHome");
+            navigation("/DashBoardHomeCO");
           }
         } else {
           console.log("Incorrect email or password");
