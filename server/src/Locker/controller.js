@@ -61,8 +61,6 @@ const getLockersByCompanyId = (req, res) => {
   })
 }
 
-
-
 module.exports = {
   getAllLockers,
   getLockerById,
