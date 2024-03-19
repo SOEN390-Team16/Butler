@@ -4,8 +4,8 @@ const authenticateToken = require('../auth/tokenValidator')
 const router = Router()
 
 router.get('/', authenticateToken, controller.getAssignedParkingSpots)
-router.get('/getByC/:condoid', authenticateToken, controller.getAssignedParkingSpotByCondoId)
-router.post('/:condoid', authenticateToken, controller.assignParkingSpotByCondoId)
-router.get('/:condoid', authenticateToken, controller.unassignParkingSpotByCondoId)
+router.get('/getByU/:userid', authenticateToken, controller.getAssignedParkingSpotByUserId)
+router.post('/:userid', authenticateToken, controller.assignParkingSpotByUserId)
+router.get('/:userid', authenticateToken, controller.unassignParkingSpotByUserId)
 
 module.exports = router

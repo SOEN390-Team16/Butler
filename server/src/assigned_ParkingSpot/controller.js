@@ -1,9 +1,9 @@
 const pool = require('../../db')
 const queries = require('./queries')
-const assignParkingSpotByCondoId = (req, res) => {
+const assignParkingSpotByUserId = (req, res) => {
   console.log('Assigning a parking spot')
-  const { parkingid } = req.body
-  pool.query(queries.assignParkingSpotByCondoId, [parkingid], (error, results) => {
+  const { userid } = req.body
+  pool.query(queries.assignParkingSpotByCondoId, [userid], (error, results) => {
     if (error) {
       console.error('Error assigning parking spot: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -13,10 +13,10 @@ const assignParkingSpotByCondoId = (req, res) => {
   })
 }
 
-const unassignParkingSpotByCondoId = (req, res) => {
+const unassignParkingSpotByUserId = (req, res) => {
   console.log('Unassigning a parking spot')
-  const parkingid = parseInt(req.params.parkingid)
-  pool.query(queries.unassignParkingSpotByCondoId, [parkingid], (error, results) => {
+  const userid = parseInt(req.params.userid)
+  pool.query(queries.unassignParkingSpotByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error assigning parking spot: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -38,15 +38,15 @@ const getAssignedParkingSpots = (req, res) => {
   })
 }
 
-const getAssignedParkingSpotByCondoId = (req, res) => {
-  console.log('Getting Assigned Parking Spot By Condoid')
-  const parkingid = req.body
-  pool.query(queries.getAssignedParkingSpotByCondoId, [parkingid])
+const getAssignedParkingSpotByUserId = (req, res) => {
+  console.log('Getting Assigned Parking Spot By Userid')
+  const userid = req.body
+  pool.query(queries.getAssignedParkingSpotByUserId, [userid])
 }
 
 module.exports = {
-  assignParkingSpotByCondoId,
-  unassignParkingSpotByCondoId,
-  getAssignedParkingSpotByCondoId,
+  assignParkingSpotByUserId,
+  unassignParkingSpotByUserId,
+  getAssignedParkingSpotByUserId,
   getAssignedParkingSpots
 }

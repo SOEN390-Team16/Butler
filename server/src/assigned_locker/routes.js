@@ -4,8 +4,8 @@ const authenticateToken = require('../auth/tokenValidator')
 const router = Router()
 
 router.get('/', authenticateToken, controller.getAssignedLockers)
-router.get('/getByC/:condoid', authenticateToken, controller.getAssignedLockerByCondoId)
-router.post('/:condoid', authenticateToken, controller.assignLockerByCondoId)
-router.delete('/:condoid', authenticateToken, controller.unassignLockerByCondoId)
+router.get('/getByU/:userid', authenticateToken, controller.getAssignedLockerByUserId)
+router.post('/:userid', authenticateToken, controller.assignLockerByUserId)
+router.delete('/:userid', authenticateToken, controller.unassignLockerByUserId)
 
 module.exports = router
