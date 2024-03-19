@@ -189,6 +189,9 @@ const removeCondoUnit = (req, res) => {
 }
 
 module.exports = {
+  addCondoUnit,
+  updateCondoUnit,
+  removeCondoUnit,
   getAllUnits,
   getCondoUnitById,
   getCondoUnitsByPropertyId,
