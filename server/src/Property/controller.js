@@ -1,18 +1,17 @@
 const pool = require('../../db');
 const queries = require('./queries');
 
-async function addDetails(property_id, companyid, parking_count, unit_count, locker_count){
-    
+async function addDetails(property_id, companyid, parking_count, unit_count, locker_count){   
     try {
-        for (let index = 0; index < unit_count; index++) {
+        for (let index = 1; index <= unit_count; index++) {
             await pool.query(queries.updateCondoDetails, [property_id, companyid, index]);
         }
 
-        for (let index = 0; index < locker_count; index++) {
+        for (let index = 1; index <= locker_count; index++) {
             await pool.query(queries.updateLockerDetails, [property_id, companyid, index]);
         }
 
-        for (let index = 0; index < parking_count; index++) {
+        for (let index = 1; index <= parking_count; index++) {
             await pool.query(queries.updateParkingDetails, [property_id, companyid, index]);
         }
 
