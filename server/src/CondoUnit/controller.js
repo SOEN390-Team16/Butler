@@ -51,7 +51,7 @@ const getCondoUnitsByPropertyId = (req, res) => {
 const getCondoUnitsByCompanyId = (req, res) => {
   console.log('Getting condo units by company id')
   const companyId = parseInt(req.params.companyId)
-  pool.query(queries.getCondoUnitsByPropertyId, [companyId], (error, results) => {
+  pool.query(queries.getCondoUnitsByCompanyId, [companyId], (error, results) => {
     if (error) {
       console.error('Error finding unit by company id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -192,8 +192,5 @@ module.exports = {
   getAllUnits,
   getCondoUnitById,
   getCondoUnitsByPropertyId,
-  getCondoUnitsByCompanyId,
-  addCondoUnit,
-  updateCondoUnit,
-  removeCondoUnit
+  getCondoUnitsByCompanyId
 }
