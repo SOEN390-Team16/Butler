@@ -15,10 +15,8 @@ import ArrowButton from "../Buttons/ArrowButton";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
-import MaintenanceRequestForm from "./MaintenanceRequestForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
-import { IoSearch } from "react-icons/io5";
 import axios from 'axios';
 import { IoMdArrowForward } from "react-icons/io";
 import { FaAngleRight } from "react-icons/fa";
@@ -29,28 +27,53 @@ const DashBoardHomeCO = () => {
   const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
-
+  const [parkingSpots, setParkingSpots] = useState([]);
+  const [lockers, setLockers] = useState([]);
   const userData = JSON.parse(localStorage.getItem('userData'));
   const token = localStorage.getItem('token')
 
   useEffect(() => {
-    const fetchProperties = () => {
-      axios
-        .get("http://hortzcloud.com:3000/api/v1/pp", {
-          headers: {
-            'authorization': `Bearer ${token}`,
-          }
-        })
-        .then((res) => {
-          setProperties(res.data.filter(property => property.companyid === userData.cmcId));
-        })
-        .catch((err) => {
-          console.error("Error fetching properties:", err);
-        });
+    const fetchPropertiesLockersAndParkingSpots = () => {
+      axios.get("http://hortzcloud.com:3000/api/v1/pp", {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then((propertiesResponse) => {
+        setProperties(propertiesResponse.data.filter(property => property.companyid === userData.cmcId));
+      })
+      .catch((error) => {
+        console.error("Error fetching properties:", error);
+      });
+  
+      axios.get(`http://hortzcloud.com:3000/api/v1/l/company/${userData.cmcId}`, {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then((lockersResponse) => {
+        setLockers(lockersResponse.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching lockers:", error);
+      });
+  
+      axios.get("http://hortzcloud.com:3000/api/v1/l/parking/spots", {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then((parkingSpotsResponse) => {
+        setParkingSpots(parkingSpotsResponse.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching parking spots:", error);
+      });
     };
-
-    fetchProperties();
-  }, [token]);
+  
+    fetchPropertiesLockersAndParkingSpots();
+  }, [token, userData.cmcId]);
+  
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
@@ -154,14 +177,10 @@ const DashBoardHomeCO = () => {
   </div>
   </TableCard>
 </div>
-
-            
-          </div>
-
-          <div className="table-space"></div>
-
-          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Units 🏢"}>
+ </div>
+<div className="table-space"></div>
+<TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+            <TableCardHeader title={"My Properties 🏢"}>
               <div className="flex items-center gap-4">
                 <Link className="underline" to={""}>
                   See more
@@ -249,23 +268,17 @@ const DashBoardHomeCO = () => {
             <div>
               <Table>
                 <TableHeader>
-                  <th>Unit ID</th>
-                  <th>Parking Fee</th>
-                  <th>Unit Owner</th>
-                  <th>Unit Occupant</th>
-                </TableHeader>
-                <TableRow>
-                  <td>1</td>
-                  <td>$50/month</td>
-                  <td>Mark Willson </td>
-                  <td>John Doe</td>
-                </TableRow>
-                <TableRow>
-                  <td>2</td>
-                  <td>$50/month</td>
-                  <td> Peter Joseph</td>
-                  <td>John Doe</td>
-                </TableRow>
+        <th>Parking Spot ID</th>
+        <th>Property ID</th>
+        <th>Company ID</th>
+      </TableHeader>
+      {parkingSpots.map((spot) => (
+        <TableRow key={spot.parking_spot_id}>
+          <td>{spot.parking_spot_id}</td>
+          <td>{spot.property_id}</td>
+          <td>{spot.company_id}</td>
+        </TableRow>
+        ))}
               </Table>
             </div>
           </TableCard>
@@ -289,23 +302,17 @@ const DashBoardHomeCO = () => {
             <div>
               <Table>
                 <TableHeader>
-                  <th>Unit ID</th>
-                  <th>Locker Fee</th>
-                  <th>Unit Owner</th>
-                  <th>Unit Occupant</th>
+                  <th>Locker ID</th>
+                  <th>User ID</th>
+                
                 </TableHeader>
-                <TableRow>
-                  <td>1</td>
-                  <td>$30/month</td>
-                  <td>Jane Smith</td>
-                  <td>John Doe</td>
-                </TableRow>
-                <TableRow>
-                  <td>2</td>
-                  <td>$30/month</td>
-                  <td>Michael Johnson</td>
-                  <td></td>
-                </TableRow>
+                {lockers.map((locker) => (
+             <TableRow key={locker.locker_id}>
+            <td>{locker.locker_id}</td>
+           <td>{locker.user_id}</td>
+            </TableRow>
+                ))}
+
               </Table>
             </div>
           </TableCard>
