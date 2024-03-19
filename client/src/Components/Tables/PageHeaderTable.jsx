@@ -48,12 +48,13 @@ class PageHeaderTable extends Component {
           <div
             style={{
               fontFamily: "Inter",
-              fontSize: "32px", // Font size set to 32 pixels
+              fontSize: "30px", // Font size set to 32 pixels
               color: "black",
               textAlign: "left",
               alignSelf: "flex-start",
               lineHeight: "normal",
               height: "auto",
+              marginLeft: "140px",
             }}
           >
             {this.getDateString()}

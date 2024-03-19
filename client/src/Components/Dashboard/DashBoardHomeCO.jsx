@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -11,25 +11,51 @@ import TableRow from "../Tables/TableRow.jsx";
 import { GoArrowUpRight } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import AddButton from "../Buttons/AddButton.jsx";
+import ArrowButton from "../Buttons/ArrowButton";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import MaintenanceRequestForm from "./MaintenanceRequestForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
-import { FaChevronRight } from 'react-icons/fa'; 
+import { IoSearch } from "react-icons/io5";
+import axios from 'axios';
+import { IoMdArrowForward } from "react-icons/io";
+import { FaAngleRight } from "react-icons/fa";
+
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
 const DashBoardHomeCO = () => {
-  // toggles the drawer between being open and closed
+  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [currentDate, setCurrentDate] = useState("");
+  const [properties, setProperties] = useState([]);
 
-  
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const token = localStorage.getItem('token')
 
-  const toggleDrawer = () => {
-    setDrawerOpen(!isDrawerOpen);
+  useEffect(() => {
+    const fetchProperties = () => {
+      axios
+        .get("http://hortzcloud.com:3000/api/v1/pp", {
+          headers: {
+            'authorization': `Bearer ${token}`,
+          }
+        })
+        .then((res) => {
+          setProperties(res.data.filter(property => property.companyid === userData.cmcId));
+        })
+        .catch((err) => {
+          console.error("Error fetching properties:", err);
+        });
+    };
+
+    fetchProperties();
+  }, [token]);
+
+  const addPropertyToState = (newProperty) => {
+    setProperties((prevProperties) => [...prevProperties, newProperty]);
   };
+
   const options = [
     { key: 1, option: "Label 1" },
     { key: 2, option: "Label 2" },
@@ -42,15 +68,17 @@ const DashBoardHomeCO = () => {
     lName: "Owner",
   };
 
+  const toggleDrawer = () => {
+    setDrawerOpen(!isDrawerOpen);
+  };
+
   return (
-    
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
       <button className="patty__button" onClick={toggleDrawer}>
         <RxHamburgerMenu size={40} />
       </button>
 
-      {/* The Side drawer is whats being opened for main navigation */}
       <SideDrawer
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
@@ -68,67 +96,77 @@ const DashBoardHomeCO = () => {
             })}
         </div>
       </SideDrawer>
-      {/* Your main content goes here */}
+
       <PageHeaderTable />
       <div className="container flex flex-col items-center px-24">
         <div className="flex flex-col justify-center items-center w-full">
-        <div className="table-container">
-      {/* Payment Due table */}
-      <div className="small-table">
-        <TableCard className={"gap-4"} style={{ width: "100%" }}>
-          <TableCardHeader title={"Payment Due"} />
-          <div className="payment-due">
-            <div className="payment-amount">1800$</div>
+          <div className="table-container">
+            {/* Payment Due table */}
+            <div className="small-table">
+  <TableCard className={"gap-4"} style={{ width: "100%" }}>
+    <div className="flex justify-between items-center">
+      <div className="table-title">Payment Due</div>
+      <ArrowButton to="/payment-due"> {/* Relative path */}
+      </ArrowButton>
+    </div>
+    <div className="payment-due">
+      <div className="payment-amount">1800$</div>
+    </div>
+  </TableCard>
+</div>
+ {/* Upcoming Payments */}
+ <div className="small-table">
+ <TableCard className={"gap-4"} style={{ width: "100%" }}>
+  <div className="flex justify-between items-center">
+  <div className="table-title">Upcoming Payment</div>
+  <ArrowButton to="/Upcoming Payments"> {/* Relative path */}
+  </ArrowButton>
+  </div>
+  <div className="upcoming-payments">
+  <div className="upcoming-payments">1800$</div>
+  </div>
+  </TableCard>
+</div>
+ {/* Reservations */}
+ <div className="small-table">
+  <TableCard className={"gap-4"} style={{ width: "100%" }}>
+  <div className="flex justify-between items-center">
+  <div className="table-title">Reservations</div>
+  <ArrowButton to="/Reservations"> {/* Relative path */}
+  </ArrowButton>
+  </div>
+  <div className="reservations">
+  <div className="reservations">0</div>
+  </div>
+  </TableCard>
+</div>
+
+            {/* Total Units */}
+            <div className="small-table">
+  <TableCard className={"gap-4"} style={{ width: "100%" }}>
+  <div className="flex justify-between items-center">
+  <div className="table-title">Total Units</div>
+  <ArrowButton to="/Total-units"> {/* Relative path */}
+  </ArrowButton>
+  </div>
+  <div className="total-units">
+  <div className="total-units">300</div>
+  </div>
+  </TableCard>
+</div>
+
             
           </div>
-        </TableCard>
-      </div>
 
-      {/* Upcoming Payments */}
-      <div className="small-table">
-        <TableCard className={"gap-4"} style={{ width: "100%" }}>
-          <TableCardHeader title={"Upcoming Payments"} />
-          <div className="upcoming-payments">
-          <div className="upcoming-payments">4200$</div>
-            {/* Add content for upcoming payments here */}
-          </div>
-        </TableCard>
-      </div>
-
-      {/* Reservations */}
-      <div className="small-table">
-        <TableCard className={"gap-4"} style={{ width: "100%" }}>
-          <TableCardHeader title={"Reservations"} />
-          <div className="reservations">
-          <div className="reservations">0</div>
-            {/* Add content for reservations here */}
-          </div>
-        </TableCard>
-      </div>
-
-      {/* Total Units */}
-      <div className="small-table">
-        <TableCard className={"gap-4"} style={{ width: "100%" }}>
-          <TableCardHeader title={"Total Units"} />
-          <div className="total-units">
-          <div className="total-units">300</div>
-            {/* Add content for total units here */}
-          </div>
-        </TableCard>
-      </div>
-    </div>
-          
           <div className="table-space"></div>
-       {/* Properties card goes here */}
+
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"My Units 🏢"}>
               <div className="flex items-center gap-4">
-                {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>
                   See more
                 </Link>
 
-                {/* This is the modal that display once a button is interacted with */}
                 <Modal>
                   <ModalToggler>
                     <AddButton>Add Property</AddButton>
@@ -138,72 +176,73 @@ const DashBoardHomeCO = () => {
                     description="Add the information associated to the property to add it to your account"
                     onExit={() => console.log("exit")}
                   >
-                    <PropertyAddForm />
+                    <PropertyAddForm onAddProperty={addPropertyToState}/>
                   </ModalContent>
                 </Modal>
               </div>
             </TableCardHeader>
-            {/* Body of properties card */}
             <div>
-              <Table>
-                <TableHeader>
-                  <th></th>
-                  <th>Property Name</th>
-                  <th>Property Address</th>
-                  <th>Unit Count</th>
-                  <th>Parking Count</th>
-                  <th>Locker Count</th>
-                </TableHeader>
-                <TableRow>
-                  <td>
-                    <GoArrowUpRight size={24} />
-                  </td>
-                  <td>Great Howls</td>
-                  <td>1231 Rue Gonebad</td>
-                  <td>293</td>
-                  <td>200</td>
-                  <td>400</td>
-                </TableRow>
-                <TableRow>
-                  <td>
-                    <GoArrowUpRight size={24} />
-                  </td>
-                  <td>Property Name</td>
-                  <td>Property Address</td>
-                  <td>Unit Count</td>
-                  <td>Parking Count</td>
-                  <td>Locker Count</td>
-                </TableRow>
-                <TableRow>
-                  <td>
-                    <GoArrowUpRight size={24} />
-                  </td>
-                  <td>Property Name</td>
-                  <td>Property Address</td>
-                  <td>Unit Count</td>
-                  <td>Parking Count</td>
-                  <td>Locker Count</td>
-                </TableRow>
-              </Table>
+              {properties.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th></th>
+                    <th>Property Name</th>
+                    <th>Property Address</th>
+                    <th>Unit Count</th>
+                    <th>Parking Count</th>
+                    <th>Locker Count</th>
+                  </TableHeader>
+                  {properties.map((property, index) => (
+                    <TableRow key={index}>
+                      <td>
+                        <GoArrowUpRight size={24} />
+                      </td>
+                      <td>{property.property_name}</td>
+                      <td>{property.address}</td>
+                      <td>{property.unit_count}</td>
+                      <td>{property.parking_count}</td>
+                      <td>{property.locker_count}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <th></th>
+                    <th>Property Name</th>
+                    <th>Property Address</th>
+                    <th>Unit Count</th>
+                    <th>Parking Count</th>
+                    <th>Locker Count</th>
+                  </TableHeader>
+                  <TableRow>
+                    <td>
+                      <GoArrowUpRight size={24} />
+                    </td>
+                    <td>Property Name</td>
+                    <td>Property Address</td>
+                    <td>Unit Count</td>
+                    <td>Parking Count</td>
+                    <td>Locker Count</td>
+                  </TableRow>
+                </Table>
+              )}
             </div>
           </TableCard>
-          <div className="table-space"></div> 
 
-               {/* Parking Units table */}
-           <TableCard className={"gap-4"}style={{ marginBottom: "48px"}}>
+          <div className="table-space"></div>
+
+          <TableCard className={"gap-4"}style={{ marginBottom: "48px"}}>
             <TableCardHeader title={"Parking Units 🚗"}>
               <div className="flex items-center gap-4">
                 <Modal>
-                  <ModalToggler>
-                    <AddButton>Add Parking Unit</AddButton>
-                  </ModalToggler>
                   <ModalContent
                     title="Want to add a Parking Unit"
                     description="Add the information associated with the parking unit to add it to your account"
                     onExit={() => console.log("exit")}
                   >
                     {/* Add Parking Unit Form */}
-                     </ModalContent>
+                  </ModalContent>
                 </Modal>
               </div>
             </TableCardHeader>
@@ -215,7 +254,6 @@ const DashBoardHomeCO = () => {
                   <th>Unit Owner</th>
                   <th>Unit Occupant</th>
                 </TableHeader>
-                {/* Add rows for parking units */}
                 <TableRow>
                   <td>1</td>
                   <td>$50/month</td>
@@ -231,53 +269,50 @@ const DashBoardHomeCO = () => {
               </Table>
             </div>
           </TableCard>
-          <div className="table-space"></div> 
-          {/* Locker Units table */}
-          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-         <TableCardHeader title={"Locker Units 🔒"}>
-         <div className="flex items-center gap-4">
-         <Modal>
-        <ModalToggler>
-        <AddButton>Add Locker Unit</AddButton>
-        </ModalToggler>
-        <ModalContent
-          title="Want to add a Locker Unit"
-          description="Add the information associated with the locker unit to add it to your account"
-          onExit={() => console.log("exit")}
-        >
-          {/* Add Locker Unit Form */}
-        </ModalContent>
-      </Modal>
-    </div>
-  </TableCardHeader>
-  <div>
-    <Table>
-      <TableHeader>
-        <th>Unit ID</th>
-        <th>Locker Fee</th>
-        <th>Unit Owner</th>
-        <th>Unit Occupant</th>
-      </TableHeader>
-      {/* Add rows for locker units */}
-      <TableRow>
-        <td>1</td>
-        <td>$30/month</td>
-        <td>Jane Smith</td>
-        <td>John Doe</td>
-      </TableRow>
-      <TableRow>
-        <td>2</td>
-        <td>$30/month</td>
-        <td>Michael Johnson</td>
-        <td></td>
-      </TableRow>
-    </Table>
-  </div>
-</TableCard>
 
+          <div className="table-space"></div>
+
+          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+            <TableCardHeader title={"Locker Units 🔒"}>
+              <div className="flex items-center gap-4">
+                <Modal>
+                  <ModalContent
+                    title="Want to add a Locker Unit"
+                    description="Add the information associated with the locker unit to add it to your account"
+                    onExit={() => console.log("exit")}
+                  >
+                    {/* Add Locker Unit Form */}
+                  </ModalContent>
+                </Modal>
+              </div>
+            </TableCardHeader>
+            <div>
+              <Table>
+                <TableHeader>
+                  <th>Unit ID</th>
+                  <th>Locker Fee</th>
+                  <th>Unit Owner</th>
+                  <th>Unit Occupant</th>
+                </TableHeader>
+                <TableRow>
+                  <td>1</td>
+                  <td>$30/month</td>
+                  <td>Jane Smith</td>
+                  <td>John Doe</td>
+                </TableRow>
+                <TableRow>
+                  <td>2</td>
+                  <td>$30/month</td>
+                  <td>Michael Johnson</td>
+                  <td></td>
+                </TableRow>
+              </Table>
+            </div>
+          </TableCard>
         </div>
       </div>
     </div>
   );
 };
+
 export default DashBoardHomeCO;

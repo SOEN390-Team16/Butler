@@ -86,15 +86,19 @@
 }
 
 .small-table {
-  width: 25%;
-  background-color: #eee; /* Match background color */
-  padding: 20px; /* Add padding for spacing */
-  margin-right: 15px;
+  width: 345px; 
+  height: 125px; 
+  background-color: #eee; 
+  padding: 20px; 
   box-sizing: border-box;
+  margin-bottom: 48px; /* Add margin between the tables */
 }
+
 
 .small-table:last-child {
   margin-right: 0;
 }
+
+
 
 
