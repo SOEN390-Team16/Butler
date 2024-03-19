@@ -1,0 +1,41 @@
+name: ESLint Client Workflow
+
+on: [ pull_request ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+      checks: write
+      deployments: write
+      issues: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install Node Dependencies
+        working-directory: ./client
+        run: npm install
+      - name: Test Code Linting
+        working-directory: ./client
+        run: npm run lint
+        continue-on-error: true
+      - name: Save Code Linting Report JSON
+        working-directory: ./client
+        run: npm run lint:report
+        continue-on-error: true
+      - name: Annotate Code Linting Results
+        if: always()
+        uses: ataylorme/eslint-annotate-action@v2
+        with:
+          repo-token: '${{ secrets.GITHUB_TOKEN }}'
+          report-json: 'client/eslint_report.json'

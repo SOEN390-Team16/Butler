@@ -83,4 +83,4 @@ node_modules
 .DS_Store
 
 # ESLint report
-server/eslint_report.json
+*/eslint_report.json
