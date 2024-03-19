@@ -30,8 +30,10 @@ const getAssignedLockers = (req, res) => {
   console.log('Get All Assigned Lockers')
   pool.query(queries.getAssignedLockers, (error, results) => {
     if (error) {
-      console.error('Error finding assigned lockers: ', error)
+      console.error('Error getting assigned lockers: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Assigned Lockers Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -41,7 +43,16 @@ const getAssignedLockers = (req, res) => {
 const getAssignedLockerByCondoId = (req, res) => {
   console.log('Getting Assigned Locker By Condoid')
   const condoid = req.body
-  pool.query(queries.getAssignedLockerByCondoId, [condoid])
+  pool.query(queries.getAssignedLockerByCondoId, [condoid], (error, results) => {
+    if (error) {
+      console.error('Error getting assigned locker by condo id: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Assigned Locker Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
 }
 
 module.exports = {

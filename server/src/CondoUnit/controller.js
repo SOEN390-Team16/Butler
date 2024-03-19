@@ -87,7 +87,8 @@ const addCondoUnit = (req, res) => {
           } else {
             pool.query(queries.getCondoUnitByNumber, [condo_number], (error, results) => {
               if (error) {
-                console.error('Error getting condo unit by number: ', error)
+                console.error('Error getting condo unit by condo number: ', error)
+                res.status(500).json({ error: 'Internal Server Error' })
               } else {
                 res.status(200).json(results.rows)
               }
