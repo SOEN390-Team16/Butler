@@ -6,7 +6,7 @@ const router = Router();
 router.get('/', authenticateToken,controller.getCondoUnits);
 router.get('/:condoid', authenticateToken, controller.getCondoUnitById);
 router.post('/', authenticateToken, controller.addCondoUnit);
-router.post('/:condoid', authenticateToken, controller.calculateCondoFee);
+router.post('/:condoid', authenticateToken, controller.calculateTotalCondoFee);
 router.delete('/:condoid', authenticateToken, controller.removeCondoUnit);
 router.patch('/:condoid', authenticateToken, controller.updateCondoUnit);
 
