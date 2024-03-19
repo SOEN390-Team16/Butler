@@ -5,7 +5,7 @@ const getEmployees = (req, res) => {
   console.log('Get All Employees')
   pool.query(queries.getEmployees, (error, results) => {
     if (error) {
-      console.error('Error finding Employees: ', error)
+      // console.error('Error finding Employees: ', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -22,7 +22,7 @@ const getEmployeeByID = (req, res) => {
   const empid = parseInt(req.params.empid)
   pool.query(queries.getEmployeeByID, [empid], (error, results) => {
     if (error) {
-      console.error('Error getting employee:', error)
+      // console.error('Error getting employee:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -70,7 +70,7 @@ const addEmployee = async (req, res) => {
       employee: createdEmployee
     })
   } catch (error) {
-    console.error('Error Adding Employee:', error)
+    // console.error('Error Adding Employee:', error)
     return res.status(500).json({ error: 'Internal Server Error' })
   }
 }
@@ -121,7 +121,7 @@ const updateEmployee = async (req, res) => {
 
   pool.query(queries.getEmployeeByID, [empid], (error, results) => {
     if (error) {
-      console.error('Error updating user:', error)
+      // console.error('Error updating user:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -129,7 +129,7 @@ const updateEmployee = async (req, res) => {
     } else {
       pool.query(query, [...values, empid], (error, result) => {
         if (error) {
-          console.error('Error updating employee:', error)
+          // console.error('Error updating employee:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         }
 
@@ -138,7 +138,7 @@ const updateEmployee = async (req, res) => {
         }
         pool.query(queries.getEmployeeByID, [empid], (error, results) => {
           if (error) {
-            console.error('Error retrieving updated employee:', error)
+            // console.error('Error retrieving updated employee:', error)
             return res.status(500).json({ error: 'Internal Server Error' })
           }
           res.status(201).json({
@@ -155,7 +155,7 @@ const removeEmployee = (req, res) => {
   const empid = parseInt(req.params.empid)
   pool.query(queries.getEmployeeByID, [empid], (error, result) => {
     if (error) {
-      console.error('Error finding user:', error)
+      // console.error('Error finding user:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (result.rows.length === 0) {
@@ -163,7 +163,7 @@ const removeEmployee = (req, res) => {
     }
     pool.query(queries.removeEmployee, [empid], (error, results) => {
       if (error) {
-        console.error('Error removing user:', error)
+        // console.error('Error removing user:', error)
         return res.status(500).json({ error: 'Internal Server Error' })
       }
       res.status(200).send('Employee removed successfully.')
