@@ -3,7 +3,7 @@ const queries = require('./queries')
 const assignParkingSpotByUserId = (req, res) => {
   console.log('Assigning a parking spot')
   const { userid } = req.body
-  pool.query(queries.assignParkingSpotByCondoId, [userid], (error, results) => {
+  pool.query(queries.assignParkingSpotByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error assigning parking spot: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -30,8 +30,10 @@ const getAssignedParkingSpots = (req, res) => {
   console.log('Get All Assigned Parking Spots')
   pool.query(queries.getAssignedParkingSpots, (error, results) => {
     if (error) {
-      console.error('Error finding assigned parking spots: ', error)
+      console.error('Error getting assigned parking spots: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Assigned Parking Spots Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -41,8 +43,18 @@ const getAssignedParkingSpots = (req, res) => {
 const getAssignedParkingSpotByUserId = (req, res) => {
   console.log('Getting Assigned Parking Spot By Userid')
   const userid = req.body
-  pool.query(queries.getAssignedParkingSpotByUserId, [userid])
+  pool.query(queries.getAssignedParkingSpotByUserId, [userid], (error, results) => {
+  if (error) {
+    console.error('Error getting assigned parking spot by user id: ', error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  } else if (results.rows.length === 0) {
+    res.status(404).json({ error: 'Assigned Parking Spot Not Found' })
+  } else {
+    res.status(200).json(results.rows)
+  }
+})
 }
+
 
 module.exports = {
   assignParkingSpotByUserId,
