@@ -7,8 +7,6 @@ router.post('/refresh', async (req, res) => {
   console.log('Refreshing Token...')
   const refreshToken = req.body.refreshToken
   const email = (jwt.decode(refreshToken)).email
-  const username = req.body.username
-  const user = { name: username }
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err) => {
     if (err) {
       return res.status(500).json({ error: 'internal Error Refreshing Token' })

@@ -1,6 +1,5 @@
 const pool = require('../../db')
 const queries = require('./queries')
-const { getCondoOwners } = require('../CondoOwner/controller')
 
 // This generates two random alphanumeric strings of length 10 and concatenates them to create a key of length 20
 function generateRandomKey () {

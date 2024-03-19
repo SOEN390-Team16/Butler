@@ -62,7 +62,7 @@ const updatePublicUser = async (req, res) => {
   const userid = req.params.userid
   const { first_name, last_name, email, password, profile_picture } = req.body
 
-  if (!first_name && !last_name && !email && !password && !role && profile_picture === undefined) {
+  if (!first_name && !last_name && !email && !password && profile_picture === undefined) {
     return res.status(400).json({ error: 'At least one field is required for updating' })
   }
 
