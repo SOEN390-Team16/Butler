@@ -99,9 +99,8 @@ const calculateTotalCondoFee = (req, res) => {
     console.log('Calculate Total Condo Fee');
 
     const condoid = parseInt(req.params.condoid);
-    const propertyid = parseInt(req.body.propertyid);
 
-    pool.query(queriesPP.getCondoFeePerSqrft [condoid, propertyid], (error, results) => {
+    pool.query(queriesPP.getCondoFeePerSqrft [condoid], (error, results) => {
         if (error) {
             console.error('Error fetching condo unit:', error);
             return res.status(500).json({ error: 'Internal Server Error' });
