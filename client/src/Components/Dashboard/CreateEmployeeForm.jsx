@@ -54,7 +54,7 @@ export default function CreateEmployeeForm({propertyList}) {
       }
     }).then(res => {
       
-      toast.success('Employees added successfully!');
+      toast.success('Employee added successfully!');
       console.log(res.data)
     }).catch(err => {
       console.log(err)

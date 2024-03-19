@@ -19,7 +19,7 @@ import DeleteButton from "../Buttons/DeleteButton.jsx";
 import EditButton from "../Buttons/EditButton.jsx";
 import { toast } from "react-toastify";
 import ConfirmButton from '../Buttons/ConfirmButton.jsx'
-import {useModal} from "../Modals/Modal.jsx"
+
 
 
 export default function EmployeeSection() {

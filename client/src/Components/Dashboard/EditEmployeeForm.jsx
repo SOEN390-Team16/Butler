@@ -6,6 +6,7 @@ import { useModal } from "../Modals/Modal.jsx";
 import { number, object, string } from "yup";
 import EditButton from "../Buttons/AddButton.jsx";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function EditEmployeeForm({employee, propertyList}) {
   const userData = JSON.parse(localStorage.getItem('userData'));
@@ -27,7 +28,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
       employeeid: employee.employeeid,
       first_name: employee.first_name,
       last_name: employee.last_name,
-      companyid: employee.property_id,
+      companyid: employee.companyid,
       role: employee.role,
       property_id: employee.property_id,
     },
@@ -72,6 +73,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
         'authorization': `Bearer ${token}`,
       }
     }).then(res => {
+      toast.success('Employee edited successfully!');
       console.log(res.data)
     }).catch(err => {
       console.log(err)
@@ -79,7 +81,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
     console.log(values)
 
     toggle();
-    alert(JSON.stringify(values, null, 2));
+    // alert(JSON.stringify(values, null, 2));
   };
 
 
@@ -89,7 +91,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
       
           <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="first_name">First Name:</Label>
-          {/* {errorMessage("firstName")} */}
+          {errorMessage("first_name")}
           <Input
             onChange={formik.handleChange}
             id="first_name"
@@ -100,7 +102,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
         </div>
           <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="last_name">Last Name:</Label>
-          {/* {errorMessage("lastName")} */}
+          {errorMessage("last_name")}
           <Input
             onChange={formik.handleChange}
             id="last_name"
@@ -112,7 +114,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
   
           <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="property">Property assigned:</Label>
-          {/* {errorMessage("role")} */}
+          {errorMessage("property_id")}
           <select
             id="property"
             onChange={formik.handleChange}
@@ -141,7 +143,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="role">Role:</Label>
-          {/* {errorMessage("role")} */}
+          {errorMessage("role")}
           <Input
             onChange={formik.handleChange}
             id="role"
