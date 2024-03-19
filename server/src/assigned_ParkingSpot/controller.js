@@ -42,13 +42,13 @@ const getAssignedParkingSpotByUserId = (req, res) => {
   console.log('Getting Assigned Parking Spot By Userid')
   const userid = parseInt(req.params.userid)
   pool.query(queries.getAssignedParkingSpotByUserId, [userid], (error, results) => {
-  if (error) {
-    console.error('Error getting assigned parking spot by user id: ', error)
-    res.status(500).json({ error: 'Internal Server Error' })
-  } else {
-    res.status(200).json(results.rows)
-  }
-})
+    if (error) {
+      console.error('Error getting assigned parking spot by user id: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
 }
 
 module.exports = {

@@ -45,7 +45,7 @@ const getAssignedLockerByUserId = (req, res) => {
     if (error) {
       console.error('Error getting assigned locker by user id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
-    }  else {
+    } else {
       res.status(200).json(results.rows)
     }
   })
