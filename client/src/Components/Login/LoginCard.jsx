@@ -33,9 +33,9 @@ const LoginCard = () => {
           if (userData.role === "cmc") {
             navigation("/DashboardHomeCMC");
           } else if (userData.role === "renter") {
-            navigation("/DashBoardHomeCR");
-          } else {
             navigation("/DashBoardHomeCO");
+          } else {
+            navigation("/DashBoardHomeCR");
           }
         } else {
           console.log("Incorrect email or password");

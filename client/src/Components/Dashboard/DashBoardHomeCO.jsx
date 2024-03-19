@@ -19,7 +19,7 @@ import MaintenanceRequestForm from "./MaintenanceRequestForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
 import { IoSearch } from "react-icons/io5";
-import axios from 'axios';
+import axios from "axios";
 import { IoMdArrowForward } from "react-icons/io";
 import { FaAngleRight } from "react-icons/fa";
 
@@ -30,19 +30,21 @@ const DashBoardHomeCO = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
 
-  const userData = JSON.parse(localStorage.getItem('userData'));
-  const token = localStorage.getItem('token')
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchProperties = () => {
       axios
         .get("http://hortzcloud.com:3000/api/v1/pp", {
           headers: {
-            'authorization': `Bearer ${token}`,
-          }
+            authorization: `Bearer ${token}`,
+          },
         })
         .then((res) => {
-          setProperties(res.data.filter(property => property.companyid === userData.cmcId));
+          setProperties(
+            res.data.filter((property) => property.companyid === userData.cmcId)
+          );
         })
         .catch((err) => {
           console.error("Error fetching properties:", err);
@@ -103,59 +105,65 @@ const DashBoardHomeCO = () => {
           <div className="table-container">
             {/* Payment Due table */}
             <div className="small-table">
-  <TableCard className={"gap-4"} style={{ width: "100%" }}>
-    <div className="flex justify-between items-center">
-      <div className="table-title">Payment Due</div>
-      <ArrowButton to="/payment-due"> {/* Relative path */}
-      </ArrowButton>
-    </div>
-    <div className="payment-due">
-      <div className="payment-amount">1800$</div>
-    </div>
-  </TableCard>
-</div>
- {/* Upcoming Payments */}
- <div className="small-table">
- <TableCard className={"gap-4"} style={{ width: "100%" }}>
-  <div className="flex justify-between items-center">
-  <div className="table-title">Upcoming Payment</div>
-  <ArrowButton to="/Upcoming Payments"> {/* Relative path */}
-  </ArrowButton>
-  </div>
-  <div className="upcoming-payments">
-  <div className="upcoming-payments">1800$</div>
-  </div>
-  </TableCard>
-</div>
- {/* Reservations */}
- <div className="small-table">
-  <TableCard className={"gap-4"} style={{ width: "100%" }}>
-  <div className="flex justify-between items-center">
-  <div className="table-title">Reservations</div>
-  <ArrowButton to="/Reservations"> {/* Relative path */}
-  </ArrowButton>
-  </div>
-  <div className="reservations">
-  <div className="reservations">0</div>
-  </div>
-  </TableCard>
-</div>
+              <TableCard className={"gap-4"} style={{ width: "100%" }}>
+                <div className="flex justify-between items-center">
+                  <div className="table-title">Payment Due</div>
+                  <ArrowButton to="/payment-due">
+                    {" "}
+                    {/* Relative path */}
+                  </ArrowButton>
+                </div>
+                <div className="payment-due">
+                  <div className="payment-amount">1800$</div>
+                </div>
+              </TableCard>
+            </div>
+            {/* Upcoming Payments */}
+            <div className="small-table">
+              <TableCard className={"gap-4"} style={{ width: "100%" }}>
+                <div className="flex justify-between items-center">
+                  <div className="table-title">Upcoming Payment</div>
+                  <ArrowButton to="/Upcoming Payments">
+                    {" "}
+                    {/* Relative path */}
+                  </ArrowButton>
+                </div>
+                <div className="upcoming-payments">
+                  <div className="upcoming-payments">1800$</div>
+                </div>
+              </TableCard>
+            </div>
+            {/* Reservations */}
+            <div className="small-table">
+              <TableCard className={"gap-4"} style={{ width: "100%" }}>
+                <div className="flex justify-between items-center">
+                  <div className="table-title">Reservations</div>
+                  <ArrowButton to="/Reservations">
+                    {" "}
+                    {/* Relative path */}
+                  </ArrowButton>
+                </div>
+                <div className="reservations">
+                  <div className="reservations">0</div>
+                </div>
+              </TableCard>
+            </div>
 
             {/* Total Units */}
             <div className="small-table">
-  <TableCard className={"gap-4"} style={{ width: "100%" }}>
-  <div className="flex justify-between items-center">
-  <div className="table-title">Total Units</div>
-  <ArrowButton to="/Total-units"> {/* Relative path */}
-  </ArrowButton>
-  </div>
-  <div className="total-units">
-  <div className="total-units">300</div>
-  </div>
-  </TableCard>
-</div>
-
-            
+              <TableCard className={"gap-4"} style={{ width: "100%" }}>
+                <div className="flex justify-between items-center">
+                  <div className="table-title">Total Units</div>
+                  <ArrowButton to="/Total-units">
+                    {" "}
+                    {/* Relative path */}
+                  </ArrowButton>
+                </div>
+                <div className="total-units">
+                  <div className="total-units">300</div>
+                </div>
+              </TableCard>
+            </div>
           </div>
 
           <div className="table-space"></div>
@@ -176,7 +184,7 @@ const DashBoardHomeCO = () => {
                     description="Add the information associated to the property to add it to your account"
                     onExit={() => console.log("exit")}
                   >
-                    <PropertyAddForm onAddProperty={addPropertyToState}/>
+                    <PropertyAddForm onAddProperty={addPropertyToState} />
                   </ModalContent>
                 </Modal>
               </div>
@@ -232,7 +240,7 @@ const DashBoardHomeCO = () => {
 
           <div className="table-space"></div>
 
-          <TableCard className={"gap-4"}style={{ marginBottom: "48px"}}>
+          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Parking Units 🚗"}>
               <div className="flex items-center gap-4">
                 <Modal>
