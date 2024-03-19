@@ -1,4 +1,4 @@
-name: ESLint Server Workflow
+name: ESLint Workflow
 
 on: [ pull_request ]
 
