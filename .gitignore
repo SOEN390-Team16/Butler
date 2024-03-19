@@ -84,3 +84,6 @@ node_modules
 
 # ESLint report
 */eslint_report.json
+
+# Cypress
+client/cypress/screenshots/**/*.png
