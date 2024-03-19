@@ -33,7 +33,7 @@ const LoginCard = () => {
           if (userData.role === "cmc") {
             navigation("/DashboardHomeCMC");
           } else if (userData.role === "renter") {
-            navigation("/DashBoardHomeCR");
+            navigation("/DashBoardHomeCO");
           } else {
             navigation("/DashBoardHomeCO");
           }

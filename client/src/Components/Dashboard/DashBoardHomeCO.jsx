@@ -16,10 +16,8 @@ import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
-import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
 import axios from 'axios';
-import { IoMdArrowForward } from "react-icons/io";
-import { FaAngleRight } from "react-icons/fa";
+
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -30,50 +28,46 @@ const DashBoardHomeCO = () => {
   const [parkingSpots, setParkingSpots] = useState([]);
   const [lockers, setLockers] = useState([]);
   const userData = JSON.parse(localStorage.getItem('userData'));
+  const userDataArray = userData ? Object.entries(userData) : [];
+  const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem('token')
 
+
+  // Fetch parking spots data
+  const fetchParkingSpots = () => {
+    axios.get(`http://hortzcloud.com:3000/api/v1/aps/getByU/${userID}`, {
+      headers: {
+        'authorization': `Bearer ${token}`,
+      }
+    })
+    .then((parkingSpotsResponse) => {
+      setParkingSpots(parkingSpotsResponse.data);
+      console.log(parkingSpotsResponse.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching parking spots:", error);
+    });
+  };
+
+  // Fetch lockers data
+  const fetchLockers = () => {
+    axios.get(`http://hortzcloud.com:3000/api/v1/l/company/${userID}`, {
+      headers: {
+        'authorization': `Bearer ${token}`,
+      }
+    })
+    .then((lockersResponse) => {
+      setLockers(lockersResponse.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching lockers:", error);
+    });
+  };
+
   useEffect(() => {
-    const fetchPropertiesLockersAndParkingSpots = () => {
-      axios.get("http://hortzcloud.com:3000/api/v1/pp", {
-        headers: {
-          'authorization': `Bearer ${token}`,
-        }
-      })
-      .then((propertiesResponse) => {
-        setProperties(propertiesResponse.data.filter(property => property.companyid === userData.cmcId));
-      })
-      .catch((error) => {
-        console.error("Error fetching properties:", error);
-      });
-  
-      axios.get(`http://hortzcloud.com:3000/api/v1/l/company/${userData.cmcId}`, {
-        headers: {
-          'authorization': `Bearer ${token}`,
-        }
-      })
-      .then((lockersResponse) => {
-        setLockers(lockersResponse.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching lockers:", error);
-      });
-  
-      axios.get("http://hortzcloud.com:3000/api/v1/l/parking/spots", {
-        headers: {
-          'authorization': `Bearer ${token}`,
-        }
-      })
-      .then((parkingSpotsResponse) => {
-        setParkingSpots(parkingSpotsResponse.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching parking spots:", error);
-      });
-    };
-  
-    fetchPropertiesLockersAndParkingSpots();
-  }, [token, userData.cmcId]);
-  
+    fetchParkingSpots();
+    fetchLockers();
+  }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
@@ -269,14 +263,14 @@ const DashBoardHomeCO = () => {
               <Table>
                 <TableHeader>
         <th>Parking Spot ID</th>
-        <th>Property ID</th>
-        <th>Company ID</th>
+        <th>User ID</th>
+  
       </TableHeader>
       {parkingSpots.map((spot) => (
         <TableRow key={spot.parking_spot_id}>
           <td>{spot.parking_spot_id}</td>
-          <td>{spot.property_id}</td>
-          <td>{spot.company_id}</td>
+          <td>{userID}</td>
+    
         </TableRow>
         ))}
               </Table>
@@ -309,7 +303,7 @@ const DashBoardHomeCO = () => {
                 {lockers.map((locker) => (
              <TableRow key={locker.locker_id}>
             <td>{locker.locker_id}</td>
-           <td>{locker.user_id}</td>
+           <td>{userID}</td>
             </TableRow>
                 ))}
 
