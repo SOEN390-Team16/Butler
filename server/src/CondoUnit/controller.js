@@ -28,15 +28,48 @@ const getCondoUnitById = (req, res) => {
       res.status(400).json({ error: 'Condo Unit Not Found' })
     } else {
       res.status(200).json(results.rows)
-    };
+    }
   })
 }
+
+const getCondoUnitsByPropertyId = (req, res) => {
+  console.log('Getting condo units by property id')
+  const propertyId = parseInt(req.params.propertyId)
+  pool.query(queries.getCondoUnitsByPropertyId, [propertyId], (error, results) => {
+    if (error) {
+      console.error('Error finding unit by property id: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
+    if (results.rowCount === 0) {
+      res.status(400).json({ error: 'Condo Units Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+const getCondoUnitsByCompanyId = (req, res) => {
+  console.log('Getting condo units by company id')
+  const companyId = parseInt(req.params.companyId)
+  pool.query(queries.getCondoUnitsByPropertyId, [companyId], (error, results) => {
+    if (error) {
+      console.error('Error finding unit by company id: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
+    if (results.rowCount === 0) {
+      res.status(400).json({ error: 'Condo Units Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 // check if property, locker, parking, and
 // company exist before adding. Until those
 // other tables are created this works fine.
 const addCondoUnit = (req, res) => {
   console.log('Adding Condo Unit ')
-  const { lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number } = req.body
+  const { lockerid, parkingid, companyid, propertyid, size, total_fees, condo_number, occupant_type } = req.body
   pool.query(queries.getCondoUnitByNumber, [condo_number], (error, results) => {
     if (error) {
       console.error('Error finding condo unit: ', error)
@@ -46,7 +79,7 @@ const addCondoUnit = (req, res) => {
       res.status(400).json({ error: 'Condo Unit Already Exists' })
     } else {
       pool.query(queries.addCondoUnit,
-        [lockerid, parkingid, companyid, propertyid, condo_size, condo_fee, condo_number],
+        [lockerid, parkingid, companyid, propertyid, size, total_fees, condo_number, occupant_type],
         (error) => {
           if (error) {
             console.error('Error creating condo unit: ', error)
@@ -54,8 +87,7 @@ const addCondoUnit = (req, res) => {
           } else {
             pool.query(queries.getCondoUnitByNumber, [condo_number], (error, results) => {
               if (error) {
-                console.error('Error getting condo unit by condo number: ', error)
-                res.status(500).json({ error: 'Internal Server Error' })
+                console.error('Error getting condo by unit number: ', error)
               } else {
                 res.status(200).json(results.rows)
               }
@@ -149,15 +181,17 @@ const removeCondoUnit = (req, res) => {
           res.status(500).jason({ error: 'Internal Server Error' })
         } else {
           res.status(200).json({ message: 'Condo Unit Removed Successfully' })
-        };
+        }
       })
-    };
+    }
   })
 }
 
 module.exports = {
   getAllUnits,
   getCondoUnitById,
+  getCondoUnitsByPropertyId,
+  getCondoUnitsByCompanyId,
   addCondoUnit,
   updateCondoUnit,
   removeCondoUnit

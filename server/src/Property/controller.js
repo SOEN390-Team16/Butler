@@ -41,6 +41,51 @@ const getPropertyById = (req, res) => {
   })
 }
 
+const getPropertyByCondoId = (req, res) => {
+  console.log('Get Property By Condo ID')
+  const condoid = parseInt(req.params.condoid)
+  pool.query(queries.getPropertyByCondoId, [condoid], (error, results) => {
+    if (error) {
+      console.error('Error getting property: ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Property Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+const getPropertyByLockerId = (req, res) => {
+  console.log('Get Property By Locker ID')
+  const lockerid = parseInt(req.params.lockerid)
+  pool.query(queries.getPropertyByLockerId, [lockerid], (error, results) => {
+    if (error) {
+      console.error('Error getting property: ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Property Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+const getPropertyByParkingId = (req, res) => {
+  console.log('Get Property By Parking ID')
+  const parkingid = parseInt(req.params.parkingid)
+  pool.query(queries.getPropertyByParkingId, [parkingid], (error, results) => {
+    if (error) {
+      console.error('Error getting property: ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Property Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 // Add a new property
 const addProperty = (req, res) => {
   console.log('Add a Property')
@@ -175,6 +220,9 @@ const removeProperty = (req, res) => {
 module.exports = {
   getProperties,
   getPropertyById,
+  getPropertyByCondoId,
+  getPropertyByLockerId,
+  getPropertyByParkingId,
   addProperty,
   updateProperty,
   removeProperty
