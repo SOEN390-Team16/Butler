@@ -11,6 +11,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-console.log("Database connected successfully.");
+// console.log("Database connected successfully.");
 
 module.exports = pool;

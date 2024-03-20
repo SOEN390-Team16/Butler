@@ -1,83 +1,83 @@
-const pool = require("../../db");
-const queries = require("./queries");
-const bcrypt = require('bcrypt');
+const pool = require('../../db')
+const queries = require('./queries')
+const bcrypt = require('bcrypt')
 
 const getCondoRenters = (req, res) => {
-  console.log("get all Condo Renters");
+  console.log('get all Condo Renters')
   pool.query(queries.getCondoRenters, (error, results) => {
     if (error) {
-      console.error("Error finding condo renters:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error finding condo renters:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
-      return res.status(404).json({ error: "condo renters not found" });
+      return res.status(404).json({ error: 'condo renters not found' })
     } else {
-      res.status(200).json(results.rows);
+      res.status(200).json(results.rows)
     }
-  });
-};
+  })
+}
 
 const getCondoRenterById = (req, res) => {
-  console.log("get condo renter by id");
-  const renterid = parseInt(req.params.renterid);
+  console.log('get condo renter by id')
+  const renterid = parseInt(req.params.renterid)
   pool.query(queries.getCondoRenterById, [renterid], (error, results) => {
     if (error) {
-      console.error("Error finding condo renter:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error finding condo renter:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rows.length === 0) {
-      return res.status(404).json({ error: "Condo Renter Not Found" });
+      return res.status(404).json({ error: 'Condo Renter Not Found' })
     }
-    res.status(200).json(results.rows);
-  });
-};
+    res.status(200).json(results.rows)
+  })
+}
 
 const addCondoRenter = (req, res) => {
-  console.log("add a condo renter");
-  const { email } = req.body;
+  console.log('add a condo renter')
+  const { email } = req.body
   pool.query(queries.checkIfCREmailExists, [email], (error, results) => {
     if (error) {
-      console.error("Error checking email existence:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error checking email existence:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
     }
 
     if (results.rows.length < 1) {
-      res.status(400).json({ error: "Email Doesn't Exists" });
+      res.status(400).json({ error: "Email Doesn't Exists" })
     } else {
       pool.query(
         queries.checkIfUserAlreadyExists,
         [email],
         (error, results) => {
           if (error) {
-            console.log("Error checking if condo renter already exists");
+            console.log('Error checking if condo renter already exists')
           }
-          if (results.rows[0]["?column?"]) {
-            res.status(400).json({ error: "User already exists" });
+          if (results.rows[0]['?column?']) {
+            res.status(400).json({ error: 'User already exists' })
           } else {
             pool.query(queries.addCondoRenter, [email], (error, result) => {
               if (error) {
-                console.error("Error adding condo renter:", error);
-                return res.status(500).json({ error: "Internal Server Error" });
+                console.error('Error adding condo renter:', error)
+                return res.status(500).json({ error: 'Internal Server Error' })
               }
-              res.status(201).send("Condo Renter Created Successfully!");
-            });
+              res.status(201).send('Condo Renter Created Successfully!')
+            })
             pool.query(queries.updateParentToRenter, (error, result) => {
               if (error) {
-                console.error("Error updating parent table:", error);
-                return res.status(500).json({ error: "Internal Server Error" });
+                console.error('Error updating parent table:', error)
+                return res.status(500).json({ error: 'Internal Server Error' })
               }
-              console.log("Parent Table Updated Successfully!");
-            });
+              console.log('Parent Table Updated Successfully!')
+            })
           }
         }
-      );
+      )
     }
-  });
-};
+  })
+}
 
 const updateCondoRenter = async (req, res) => {
-  const renterid = req.params.renterid;
-  const { first_name, last_name, email, password, profile_picture } = req.body;
+  const renterid = req.params.renterid
+  const { first_name, last_name, email, password, profile_picture } = req.body
 
   if (
     !first_name &&
@@ -88,96 +88,96 @@ const updateCondoRenter = async (req, res) => {
   ) {
     return res
       .status(400)
-      .json({ error: "At least one field is required for updating" });
+      .json({ error: 'At least one field is required for updating' })
   }
 
-  const setClauses = [];
-  const values = [];
+  const setClauses = []
+  const values = []
 
   if (first_name) {
-    setClauses.push("first_name = $" + (values.length + 1));
-    values.push(first_name);
+    setClauses.push('first_name = $' + (values.length + 1))
+    values.push(first_name)
   }
   if (last_name) {
-    setClauses.push("last_name = $" + (values.length + 1));
-    values.push(last_name);
+    setClauses.push('last_name = $' + (values.length + 1))
+    values.push(last_name)
   }
   if (email) {
-    setClauses.push("email = $" + (values.length + 1));
-    values.push(email);
+    setClauses.push('email = $' + (values.length + 1))
+    values.push(email)
   }
   if (password) {
-    setClauses.push("password = $" + (values.length + 1));
-    values.push(await bcrypt.hash(password, 5));
+    setClauses.push('password = $' + (values.length + 1))
+    values.push(await bcrypt.hash(password, 5))
   }
   if (profile_picture !== undefined) {
-    setClauses.push("profile_picture = $" + (values.length + 1));
-    values.push(profile_picture);
+    setClauses.push('profile_picture = $' + (values.length + 1))
+    values.push(profile_picture)
   }
 
   const query = `UPDATE public_user SET ${setClauses} WHERE userid = (SELECT userid FROM renter WHERE renterid = $${
     values.length + 1
-  })`;
+  })`
 
   pool.query(queries.getCondoRenterById, [renterid], (error, results) => {
     if (error) {
-      console.error("Error finding condo renter:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error finding condo renter:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rows.length === 0) {
-      return res.status(404).json({ error: "Ccondo renter Not Found" });
+      return res.status(404).json({ error: 'Ccondo renter Not Found' })
     } else {
       pool.query(query, [...values, renterid], (error, result) => {
         if (error) {
-          console.error("Error updating condo renter:", error);
-          return res.status(500).json({ error: "Internal Server Error" });
+          console.error('Error updating condo renter:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
         }
 
         if (result.rowCount === 0) {
-          return res.status(404).json({ error: "condo renter not found" });
+          return res.status(404).json({ error: 'condo renter not found' })
         }
 
-        res.status(200).json({ message: "condo renter updated successfully" });
-      });
+        res.status(200).json({ message: 'condo renter updated successfully' })
+      })
     }
-  });
-};
+  })
+}
 
 const removeCondoRenter = (req, res) => {
-  const renterid = parseInt(req.params.renterid);
+  const renterid = parseInt(req.params.renterid)
   pool.query(queries.getCondoRenterById, [renterid], (error, result) => {
     if (error) {
-      console.error("Error finding condo renter:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error finding condo renter:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: "condo renter not found" });
+      return res.status(404).json({ error: 'condo renter not found' })
     } else {
       pool.query(
         queries.updateParentToPublicUser,
         [renterid],
         (error, results) => {
           if (error) {
-            console.error("Error Updating Public User: ", error);
-            return res.status(500).json({ error: "Internal Server Error" });
+            console.error('Error Updating Public User: ', error)
+            return res.status(500).json({ error: 'Internal Server Error' })
           }
         }
-      );
+      )
       pool.query(queries.removeCondoRenter, [renterid], (error, results) => {
         if (error) {
-          console.error("Error removing condo renter:", error);
-          return res.status(500).json({ error: "Internal Server Error" });
+          console.error('Error removing condo renter:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
         }
-      });
-      res.status(200).send("condo renter removed successfully.");
+      })
+      res.status(200).send('condo renter removed successfully.')
     }
-  });
-};
+  })
+}
 
 module.exports = {
   getCondoRenters,
   getCondoRenterById,
   addCondoRenter,
   updateCondoRenter,
-  removeCondoRenter,
-};
+  removeCondoRenter
+}
