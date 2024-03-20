@@ -36,6 +36,8 @@ const LoginCard = () => {
             navigation("/DashBoardHomeCR");
           } else if (userData.role === "condo_owner") {
             navigation("/DashBoardHomeCO");
+          } else {
+            navigation("/DashboardHome/editUser");
           }
         } else {
           console.log("Incorrect email or password");

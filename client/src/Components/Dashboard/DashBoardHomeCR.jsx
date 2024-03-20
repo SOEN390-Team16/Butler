@@ -17,7 +17,10 @@ import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
+import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
 import axios from "axios";
+import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
+import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -70,7 +73,8 @@ const DashBoardHomeCR = () => {
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
-        console.log(lockersResponse.data);
+        // console.log("locker id");
+        // console.log(lockers[0].lockerid);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
@@ -326,7 +330,7 @@ const DashBoardHomeCR = () => {
                 </TableHeader>
                 {lockers.map((locker) => (
                   <TableRow key={locker.locker_id}>
-                    <td>{locker.locker_id}</td>
+                    <td>{lockers[0].lockerid}</td>
                     <td>{userID}</td>
                   </TableRow>
                 ))}
@@ -334,6 +338,100 @@ const DashBoardHomeCR = () => {
             </div>
           </TableCard>
         </div>
+        <div className="table-space"></div>
+        <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+          <TableCardHeader title={"Condo Fees"}>
+            <div className="flex items-center gap-4">
+              {/* <Link className="underline" to={""}>
+                See more
+              </Link> */}
+
+              <Modal>
+                {/* <ModalToggler>
+                  <AddButton>Add Property</AddButton>
+                </ModalToggler> */}
+                <ModalContent
+                  title="Want to add a Property"
+                  description="Add the information associated to the property to add it to your account"
+                  onExit={() => console.log("exit")}
+                >
+                  <PropertyAddForm onAddProperty={addPropertyToState} />
+                </ModalContent>
+              </Modal>
+            </div>
+          </TableCardHeader>
+          <div>
+            {properties.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Condo ID</th>
+                  <th>Condo Fee</th>
+                  <th>Breakdown</th>
+                  <th>Make Payment</th>
+                </TableHeader>
+                {properties.map((property, index) => (
+                  <TableRow key={index}>
+                    <td>
+                      <GoArrowUpRight size={24} />
+                    </td>
+                    <td>{condo.condoid}</td>
+                    <td>{condo.condo_number}</td>
+                    <td>{condo.property_id}</td>
+                    <td>{condo.occupant_type}</td>
+                  </TableRow>
+                ))}
+              </Table>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Condo ID</th>
+                  <th>Total Condo Fee</th>
+                  <th></th>
+                  <th></th>
+                </TableHeader>
+                <TableRow>
+                  <td>
+                    <GoArrowUpRight size={24} />
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <Modal>
+                      <ModalToggler>
+                        <FeeBreakdownButton>
+                          View Fee Breakdown
+                        </FeeBreakdownButton>
+                      </ModalToggler>
+                      <ModalContent
+                        title="Condo Fee Breakdown"
+                        description="This Section Displays the Breakdown of Your Total Condo Fees."
+                        onExit={() => console.log("exit")}
+                      >
+                        <FeeBreakdownForm />
+                      </ModalContent>
+                    </Modal>
+                  </td>
+                  <td>
+                    <Modal>
+                      <ModalToggler>
+                        <MakePaymentButton>Make Payment</MakePaymentButton>
+                      </ModalToggler>
+                      <ModalContent
+                        title="Want to add a Property"
+                        description="Add the information associated to the property to add it to your account"
+                        onExit={() => console.log("exit")}
+                      >
+                        <PropertyAddForm onAddProperty={addPropertyToState} />
+                      </ModalContent>
+                    </Modal>
+                  </td>
+                </TableRow>
+              </Table>
+            )}
+          </div>
+        </TableCard>
         <div
           className="flex flex-col justify-center items-center w-full"
           style={{ paddingTop: 48, paddingBottom: 64 }}
