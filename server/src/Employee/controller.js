@@ -18,7 +18,6 @@ const getEmployees = (req, res) => {
 
 const getEmployeeByID = (req, res) => {
   console.log('get a specific Employee')
-  console.log(req.params)
   const empid = parseInt(req.params.empid)
   pool.query(queries.getEmployeeByID, [empid], (error, results) => {
     if (error) {

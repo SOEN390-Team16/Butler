@@ -195,7 +195,7 @@ const DashBoardHomeCO = () => {
           </div>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Properties 🏢"}>
+            <TableCardHeader title={"My Condo Units 🏢"}>
               <div className="flex items-center gap-4">
                 <Link className="underline" to={""}>
                   See more
@@ -321,8 +321,8 @@ const DashBoardHomeCO = () => {
                   <th>User ID</th>
                 </TableHeader>
                 {lockers.map((locker) => (
-                  <TableRow key={locker.locker_id}>
-                    <td>{locker.locker_id}</td>
+                  <TableRow key={locker.lockerid}>
+                    <td>{locker.lockerid}</td>
                     <td>{userID}</td>
                   </TableRow>
                 ))}
