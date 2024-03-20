@@ -1,12 +1,11 @@
-const { Router } = require("express");
-const controller = require("./controller");
-const authenticateToken = require('../auth/tokenValidator');
-const router = Router();
+const { Router } = require('express')
+const controller = require('./controller')
+const authenticateToken = require('../auth/tokenValidator')
+const router = Router()
 
-router.get('/', authenticateToken, controller.getAllUnits);
-router.get('/:condoid', authenticateToken, controller.getCondoUnitById);
-router.post('/', controller.addCondoUnit);
-router.patch('/:condoid', authenticateToken, controller.updateCondoUnit);
-router.delete('/:condoid', authenticateToken, controller.removeCondoUnit);
+router.get('/', authenticateToken, controller.getCondoUnits)
+router.get('/:condoid', authenticateToken, controller.getCondoUnitById)
+router.post('/:condoid', authenticateToken, controller.calculateTotalCondoFee)
+router.patch('/:condoid', authenticateToken, controller.updateCondoUnit)
 
-module.exports = router;
+module.exports = router
