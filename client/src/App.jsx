@@ -9,8 +9,11 @@ import EditAccount from "./Components/EditAccount/EditAccount";
 import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
+
+
 
 function App() {
   return (
@@ -27,8 +30,10 @@ function App() {
             path="/DashboardHome/editUserCMC"
             element={<EditAccountCMC />}
           />
+
           <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
           <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
+
         </Routes>
       </BrowserRouter>
       <ToastContainer />
