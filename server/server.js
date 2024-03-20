@@ -10,8 +10,10 @@ const CondoUnitRoutes = require('./src/CondoUnit/routes')
 const tokenRouter = require('./src/auth/refreshToken')
 const lockerRoutes = require('./src/Locker/routes')
 const assignedLockerRoutes = require('./src/assigned_locker/routes')
+const employeeRoutes = require('./src/Employee/routes')
 const parkingSpotRoutes = require('./src/ParkingSpot/routes')
 const assignedParkingSpotRoutes = require('./src/assigned_ParkingSpot/routes')
+
 const cors = require('cors')
 
 const app = express()
@@ -34,5 +36,6 @@ app.use('/api/v1/l', lockerRoutes)
 app.use('/api/v1/al', assignedLockerRoutes)
 app.use('/api/v1/ps', parkingSpotRoutes)
 app.use('/api/v1/aps', assignedParkingSpotRoutes)
+app.use('/api/v1/emp', employeeRoutes)
 
 app.listen(port, () => console.log(`app listening on ${port}`))

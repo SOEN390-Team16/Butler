@@ -22,6 +22,8 @@ import GenerateKeyForm from "./GenerateKeyForm.jsx";
 import UserRegistrationForm from "./UserRegistrationForm.jsx";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";
+import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
+import EmployeeSection from "./EmployeeSection.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -43,13 +45,13 @@ const DashBoardHomeCMC = () => {
 
   useEffect(() => {
     const fetchProperties = () => {
-      axios
-        .get("http://hortzcloud.com:3000/api/v1/pp", {
+      axios.get("http://hortzcloud.com:3000/api/v1/pp", {
           headers: {
             'authorization': `Bearer ${token}`,
           }
         })
         .then((res) => {
+         
           setProperties(res.data.filter(property => property.companyid === userData.cmcId));
         })
         .catch((err) => {
@@ -410,6 +412,9 @@ const DashBoardHomeCMC = () => {
             </div>
           </TableCard>
         </div>
+
+ {/* // EMPLOYEES */}
+                <EmployeeSection />
       </div>
     </div>
   );
