@@ -9,6 +9,7 @@ import EditAccount from "./Components/EditAccount/EditAccount";
 import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           <Route
             path="/DashboardHome/editUserCMC"
             element={<EditAccountCMC />}
+          />
+          <Route
+            path="/DashboardHomeCMC/property/:id"
+            element={<PropertyPage />}
           />
         </Routes>
       </BrowserRouter>
