@@ -80,4 +80,10 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 node_modules
-.DS_Store  
+.DS_Store
+
+# ESLint report
+*/eslint_report.json
+
+# Cypress
+client/cypress/screenshots/**/*.png
