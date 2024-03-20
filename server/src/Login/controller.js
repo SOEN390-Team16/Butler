@@ -34,7 +34,6 @@ const loginUserPU = async (email, password) => {
       : null
   } catch (error) {
     console.error('Error during loginUserPU:', error)
-    throw error
   }
 }
 
@@ -58,7 +57,6 @@ const loginUserCMC = async (email, password) => {
       : null
   } catch (error) {
     console.error('Error during loginUserCMC:', error)
-    throw error
   }
 }
 
