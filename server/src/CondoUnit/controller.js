@@ -8,7 +8,7 @@ const getAllUnits = (req, res) => {
       console.error('Error finding condo units:', error)
       res.status(500).json({ error: 'Internal Server Error' })
     }
-    if (results.rowCount === 0) {
+    if (results.rows.length === 0) {
       return res.status(404).json({ error: 'condo units not found' })
     } else {
       res.status(200).json(results.rows)
@@ -24,7 +24,7 @@ const getCondoUnitById = (req, res) => {
       console.error('Error finding unit by id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
     }
-    if (results.rowCount === 0) {
+    if (results.rows.length === 0) {
       res.status(400).json({ error: 'Condo Unit Not Found' })
     } else {
       res.status(200).json(results.rows)
@@ -34,13 +34,13 @@ const getCondoUnitById = (req, res) => {
 
 const getCondoUnitsByPropertyId = (req, res) => {
   console.log('Getting condo units by property id')
-  const propertyId = parseInt(req.params.propertyId)
-  pool.query(queries.getCondoUnitsByPropertyId, [propertyId], (error, results) => {
+  const property_id = parseInt(req.params.property_id)
+  pool.query(queries.getCondoUnitsByPropertyId, [property_id], (error, results) => {
     if (error) {
       console.error('Error finding unit by property id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
     }
-    if (results.rowCount === 0) {
+    if (results.rows.length === 0) {
       res.status(400).json({ error: 'Condo Units Not Found' })
     } else {
       res.status(200).json(results.rows)
@@ -50,8 +50,8 @@ const getCondoUnitsByPropertyId = (req, res) => {
 
 const getCondoUnitsByCompanyId = (req, res) => {
   console.log('Getting condo units by company id')
-  const companyId = parseInt(req.params.companyId)
-  pool.query(queries.getCondoUnitsByCompanyId, [companyId], (error, results) => {
+  const companyid = parseInt(req.params.companyid)
+  pool.query(queries.getCondoUnitsByCompanyId, [companyid], (error, results) => {
     if (error) {
       console.error('Error finding unit by company id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })

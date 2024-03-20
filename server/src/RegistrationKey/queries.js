@@ -14,6 +14,8 @@ const revokeRegistrationKey =
     'AND rk.registration_key IN (SELECT registration_key FROM active_registration_key WHERE condoID= $2);'
 const updateRoleBeforeRevoking =
     "UPDATE public_user SET role='public_user' WHERE userID= (SELECT pu.userID FROM public_user pu WHERE pu.email=$1);"
+const updateRoleBeforeActivating =
+    'UPDATE public_user SET role=$1 WHERE userID = (SELECT pu.userId FROM public_user pu WHERE pu.email = $1)'
 
 module.exports = {
   checkIfRegistrationKeyAlreadyExists,
@@ -22,5 +24,6 @@ module.exports = {
   checkIfPublicUserExists,
   checkIfUserHasActiveRegistrationKey,
   revokeRegistrationKey,
-  updateRoleBeforeRevoking
+  updateRoleBeforeRevoking,
+  updateRoleBeforeActivating
 }

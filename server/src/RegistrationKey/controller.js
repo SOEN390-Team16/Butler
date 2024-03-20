@@ -3,7 +3,7 @@ const queries = require('./queries')
 
 // This generates two random alphanumeric strings of length 10 and concatenates them to create a key of length 20
 function generateRandomKey () {
-  return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)
+  return Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2)
 }
 
 const generateRegistrationKey = (req, res) => {

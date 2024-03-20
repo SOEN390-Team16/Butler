@@ -33,8 +33,8 @@ const getLockerById = (req, res) => {
 
 const getLockersByPropertyId = (req, res) => {
   console.log('Getting lockers by property Id')
-  const propertyid = parseInt(req.params.propertyid)
-  pool.query(queries.getLockersByPropertyId, [propertyid], (error, results) => {
+  const property_id = parseInt(req.params.property_id)
+  pool.query(queries.getLockersByPropertyId, [property_id], (error, results) => {
     if (error) {
       console.error('Error getting lockers by property id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })

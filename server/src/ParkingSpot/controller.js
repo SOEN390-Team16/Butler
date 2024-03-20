@@ -21,8 +21,10 @@ const getParkingSpotById = (req, res) => {
   const parkingid = parseInt(req.params.parkingid)
   pool.query(queries.getParkingSpotById, [parkingid], (error, results) => {
     if (error) {
-      console.error('Error finding parking spot by id: ', error)
+      console.error('Error getting parking spot by id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Parking Spot Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -31,11 +33,13 @@ const getParkingSpotById = (req, res) => {
 
 const getParkingSpotsByPropertyId = (req, res) => {
   console.log('Getting parking spots by property Id')
-  const propertyid = parseInt(req.params.propertyid)
-  pool.query(queries.getParkingSpotsByPropertyId, [propertyid], (error, results) => {
+  const property_id = parseInt(req.params.property_id)
+  pool.query(queries.getParkingSpotsByPropertyId, [property_id], (error, results) => {
     if (error) {
-      console.error('Error finding parking spots by property id: ', error)
+      console.error('Error getting parking spots by property id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Parking Spots Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -47,8 +51,10 @@ const getParkingSpotsByCompanyId = (req, res) => {
   const companyid = parseInt(req.params.companyid)
   pool.query(queries.getParkingSpotsByCompanyId, [companyid], (error, results) => {
     if (error) {
-      console.error('Error finding parking spots by company id: ', error)
+      console.error('Error getting parking spots by company id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rows.length === 0) {
+      res.status(404).json({ error: 'Parking Spots Not Found' })
     } else {
       res.status(200).json(results.rows)
     }
