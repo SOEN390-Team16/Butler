@@ -17,9 +17,9 @@ const getCondoUnits = (req, res) => {
 
 const getCondoUnitById = (req, res) => {
   console.log('Get a specific condo unit profile')
-  
+
   const condoid = parseInt(req.params.condoid)
-  
+
   pool.query(queriesCU.getCondoUnitById, [condoid], (error, results) => {
     if (error) {
       console.error('Error fetching condo unit profile:', error)
@@ -34,9 +34,9 @@ const getCondoUnitById = (req, res) => {
 
 const updateCondoUnit = (req, res) => {
   console.log('Update a Condo Unit')
-  
+
   const condoid = parseInt(req.params.condoid)
-  
+
   const { companyid, propertyid, condo_number, size, occupant_type, total_fees } = req.body
   pool.query(queriesCU.checkIfCondoUnitExists, [condoid], (error, results) => {
     if (error) {
