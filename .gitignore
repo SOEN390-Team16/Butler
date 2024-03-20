@@ -83,5 +83,6 @@ node_modules
 .DS_Store
 
 # Tests Coverages
+server/coverage
 server/test_coverage
 server/jest_test_coverage
