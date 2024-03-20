@@ -22,7 +22,7 @@ const getPublicUserById = (req, res) => {
   const userid = parseInt(req.params.userid)
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {
-      console.error('Error getting user:', error)
+      // console.error('Error getting user:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -35,7 +35,7 @@ const getPublicUserById = (req, res) => {
 
 const addPublicUser = (req, res) => {
   console.log('add a Public User')
-  const { first_name, last_name, email, password, profile_picture } = req.body
+  const { first_name, last_name, email, password } = req.body
   pool.query(queries.checkIfPUEmailExists, [email], async (error, results) => {
     if (error) {
       console.error('Error finding email:', error)
@@ -46,10 +46,16 @@ const addPublicUser = (req, res) => {
     } else {
       try {
         const hashedPassword = await bcrypt.hash(password, 5)
-        pool.query(queries.addPublicUser, [first_name, last_name, email, hashedPassword, profile_picture], (error, result) => {
-          if (error) throw error
-          res.status(201).send('Public User Created Successfully!')
-        })
+        pool.query(
+          queries.addPublicUser,
+          [first_name, last_name, email, hashedPassword],
+          (error, result) => {
+            if (error) {
+              console.log(error)
+            }
+            res.status(201).json(result.rows)
+          }
+        )
       } catch (hashError) {
         console.error('Error hashing password:', hashError)
         res.status(500).json({ error: 'Internal Server Error' })
@@ -62,8 +68,16 @@ const updatePublicUser = async (req, res) => {
   const userid = req.params.userid
   const { first_name, last_name, email, password, profile_picture } = req.body
 
-  if (!first_name && !last_name && !email && !password && profile_picture === undefined) {
-    return res.status(400).json({ error: 'At least one field is required for updating' })
+  if (
+    !first_name &&
+    !last_name &&
+    !email &&
+    !password &&
+    profile_picture === undefined
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'At least one field is required for updating' })
   }
 
   const setClauses = []
@@ -90,7 +104,9 @@ const updatePublicUser = async (req, res) => {
     values.push(profile_picture)
   }
 
-  const query = `UPDATE public_user SET ${setClauses.join(', ')} WHERE userid = $${values.length + 1}`
+  const query = `UPDATE public_user SET ${setClauses.join(
+    ', '
+  )} WHERE userid = $${values.length + 1}`
 
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {

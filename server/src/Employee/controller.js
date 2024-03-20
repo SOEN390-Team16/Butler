@@ -18,7 +18,6 @@ const getEmployees = (req, res) => {
 
 const getEmployeeByID = (req, res) => {
   console.log('get a specific Employee')
-  console.log(req.params)
   const empid = parseInt(req.params.empid)
   pool.query(queries.getEmployeeByID, [empid], (error, results) => {
     if (error) {
@@ -78,7 +77,7 @@ const addEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
   const empid = req.params.empid
   const { first_name, last_name, companyid, role, property_id } = req.body
-
+  console.log(req.body)
   if (
     !first_name &&
     !last_name &&
@@ -112,7 +111,7 @@ const updateEmployee = async (req, res) => {
   }
   if (property_id !== undefined) {
     setClauses.push('property_id = $' + (values.length + 1))
-    values.push(role)
+    values.push(property_id)
   }
 
   const query = `UPDATE employee SET ${setClauses.join(
@@ -129,7 +128,7 @@ const updateEmployee = async (req, res) => {
     } else {
       pool.query(query, [...values, empid], (error, result) => {
         if (error) {
-          // console.error('Error updating employee:', error)
+          console.error('Error updating employee:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         }
 

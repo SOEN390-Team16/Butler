@@ -1,6 +1,9 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const userData = JSON.parse(localStorage.getItem('userData'));
+const token = localStorage.getItem('token')
+
 export const api = axios.create({
     baseURL: "http://hortzcloud.com:3000/api",
 });
@@ -70,3 +73,38 @@ export const addPublicUser = async (data) => {
         throw error;
     }
 };
+
+
+
+export const fetchProperties = () => {
+    axios.get("http://hortzcloud.com:3000/api/v1/pp", {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then((res) => {
+        console.log(res.data, ' this is properties')
+        setProperties(res.data.filter(property => property.companyid === userData.cmcId));
+      })
+      .catch((err) => {
+        console.error("Error fetching properties:", err);
+      });
+  };
+
+  
+  export const fetchEmployees = () => {
+    axios.get("/v1/emp", {
+        headers: {
+          'authorization': `Bearer ${token}`,
+        }
+      })
+      .then((res) => {
+        return res.data;
+      })
+      .catch((err) => {
+        console.error("Error fetching properties:", err);
+      });
+  };
+
+
+ 
