@@ -21,9 +21,6 @@ jobs:
       - name: Build
         working-directory: ./server
         run: npm run build --if-present
-      - name: Start server
-        working-directory: ./server
-        run: npm start &
       - name: Test
         working-directory: ./server
         run: npm test
