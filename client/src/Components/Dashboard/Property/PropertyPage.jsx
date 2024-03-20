@@ -7,8 +7,8 @@ import axios from "axios";
 
 // React Icons
 import { RxHamburgerMenu } from "react-icons/rx";
-import { GoArrowUpRight, GoPerson } from "react-icons/go";
-import { IoArrowBack, IoSearch } from "react-icons/io5";
+import { GoArrowUpRight } from "react-icons/go";
+import { IoArrowBack } from "react-icons/io5";
 
 // Components
 import SideDrawerCMC from "../SideDrawerCMC";
@@ -20,16 +20,9 @@ import TableRow from "../../Tables/TableRow.jsx";
 import ModalToggler from "../../Modals/ModalToggler.jsx";
 import ModalContent from "../../Modals/ModalContent.jsx";
 import Modal from "../../Modals/Modal.jsx";
-import PropertyAddForm from "../PropertyAddForm.jsx";
-import GenerateKeyForm from "../GenerateKeyForm.jsx";
-import UserRegistrationForm from "../UserRegistrationForm.jsx";
 
 // Buttons
 import AddButton from "../../Buttons/AddButton.jsx";
-import GenerateKeyButton from "../../Buttons/GenerateKeyButton.jsx";
-import DeleteButton from "../../Buttons/DeleteButton.jsx";
-import SearchButton from "../../Buttons/SearchButton.jsx";
-import RegisterButton from "../../Buttons/RegisterButton.jsx";
 
 // Assets
 import image from "../../../assets/condo.jpeg";
@@ -42,17 +35,12 @@ import CondoAddForm from "./CondoAddForm.jsx";
 // It will host the side drawer, profile information, condo information all that
 export default function PropertyPage() {
   const { id } = useParams();
-  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [property, setProperty] = useState();
   const [condoUnits, setCondoUnits] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
-
-  const handleHeadingClick = (heading) => {
-    setSelectedHeading(heading);
-  };
 
   useEffect(() => {
     const fetchProperty = () => {
@@ -236,17 +224,17 @@ export default function PropertyPage() {
                     <th>Unit Occupant Type</th>
                     <th>Unit Total Fees</th>
                   </TableHeader>
-                  {condoUnits.map((property, index) => (
+                  {condoUnits.map((condoUnit, index) => (
                     <TableRow key={index}>
                       <td>
                         <Link to={``}>
                           <GoArrowUpRight size={24} />
                         </Link>
                       </td>
-                      <td>{property.property_name}</td>
-                      <td>{property.address}</td>
-                      <td>{property.unit_count}</td>
-                      <td>{property.parking_count}</td>
+                      <td>{condoUnit.number}</td>
+                      <td>{condoUnit.size}</td>
+                      <td>{condoUnit.occupantType}</td>
+                      <td>{condoUnit.totalFees}</td>
                     </TableRow>
                   ))}
                 </Table>
@@ -264,7 +252,7 @@ export default function PropertyPage() {
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
           <TableCard className={"gap-4"}>
-            <TableCardHeader title={"Condo Units 🏢"}>
+            <TableCardHeader title={"Parking Units 🚘"}>
               <div className="flex items-center gap-4">
                 {/* See more button should appear when a certain threshold is exceeded */}
                 <Link className="underline" to={""}>
@@ -274,11 +262,11 @@ export default function PropertyPage() {
                 {/* This is the modal that display once a button is interacted with */}
                 <Modal>
                   <ModalToggler>
-                    <AddButton>Add Condo Units</AddButton>
+                    <AddButton>Add Parking Units</AddButton>
                   </ModalToggler>
                   <ModalContent
-                    title="Want to add a Condo Unit?"
-                    description="Add the information associated to the condo unit to add it to your account"
+                    title="Want to add a Parking Unit?"
+                    description="Add the information associated to the parking unit to add it to your account"
                   >
                     <CondoAddForm
                       onAddProperty={addPropertyToState}
