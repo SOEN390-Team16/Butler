@@ -1,44 +1,59 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const userData = JSON.parse(localStorage.getItem('userData'));
-const token = localStorage.getItem('token')
-
 export const api = axios.create({
   baseURL: "http://hortzcloud.com:3000/api",
 });
 
 export const fetchPublicUser = async (userid) => {
-  return await api.get(`/api/v1/pu/${userid}`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  }).catch((error) => {
-    toast.error(`Something went wrong ${error.message}`)
-  })
-}
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await api.get(`/v1/pu/${userid}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    toast.error(`Something went wrong ${error.message}`);
+    throw error;
+  }
+};
 
 export const generateRegistrationKey = async (role) => {
-  return await api.post(`/api/v1/reg/gen/${role}`, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  }).catch((error) => {
-    toast.error(`Something went wrong ${error.message}`)
-  })
-}
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await api.post(`/v1/reg/gen/${role}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    toast.error(`Something went wrong ${error.message}`);
+    throw error;
+  }
+};
 
 export const activateRegistrationKey = async (key) => {
-  return await api.patch(`/api/v1/reg/`,
-      {key: key, userid: userData.userId},
-      {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      }).catch((error) => {
-    toast.error(`Something went wrong ${error.message}`)
-  })
-}
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await api.patch(`/v1/reg/`, {key: key, userid: userData.userId}, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    toast.success("Successfully registered!");
+    return response;
+  } catch (error) {
+    toast.error(`Something went wrong ${error.message}`);
+    throw error;
+  }
+};
 
 
 export const getCondoOwners = async () => {
@@ -60,10 +75,10 @@ export const getCondoOwners = async () => {
 export const addCondoOwner = async (data) => {
   try {
     const response = await api.post("/v1/co/addCondoOwner",
-        {data},
-        {
-          timeout: 10 * 1000,
-        });
+      {data},
+      {
+        timeout: 10 * 1000,
+      });
     if (response.status === 400 || response.status === 500) {
       throw response.data;
     }
@@ -93,10 +108,10 @@ export const getPublicUsers = async () => {
 export const addPublicUser = async (data) => {
   try {
     const response = await api.post("/v1/pu/addPublicUser",
-        {data},
-        {
-          timeout: 10 * 1000,
-        });
+      {data},
+      {
+        timeout: 10 * 1000,
+      });
     if (response.status === 400 || response.status === 500) {
       throw response.data;
     }
@@ -114,13 +129,13 @@ export const fetchProperties = () => {
       'authorization': `Bearer ${token}`,
     }
   })
-      .then((res) => {
-        console.log(res.data, ' this is properties')
-        return res.data.filter(property => property.companyid === userData.cmcId)
-      })
-      .catch((err) => {
-        console.error("Error fetching properties:", err);
-      });
+    .then((res) => {
+      console.log(res.data, ' this is properties')
+      return res.data.filter(property => property.companyid === userData.cmcId)
+    })
+    .catch((err) => {
+      console.error("Error fetching properties:", err);
+    });
 };
 
 
@@ -130,12 +145,12 @@ export const fetchEmployees = () => {
       'authorization': `Bearer ${token}`,
     }
   })
-      .then((res) => {
-        return res.data;
-      })
-      .catch((err) => {
-        console.error("Error fetching properties:", err);
-      });
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.error("Error fetching properties:", err);
+    });
 };
 
 

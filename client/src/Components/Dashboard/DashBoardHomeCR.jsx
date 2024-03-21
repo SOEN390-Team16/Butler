@@ -199,26 +199,7 @@ const DashBoardHomeCR = () => {
           </div>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Properties 🏢"}>
-              <div className="flex items-center gap-4">
-                <Link className="underline" to={""}>
-                  See more
-                </Link>
-
-                <Modal>
-                  <ModalToggler>
-                    <AddButton>Add Property</AddButton>
-                  </ModalToggler>
-                  <ModalContent
-                    title="Want to add a Property"
-                    description="Add the information associated to the property to add it to your account"
-                    onExit={() => console.log("exit")}
-                  >
-                    <PropertyAddForm onAddProperty={addPropertyToState} />
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
+            <TableCardHeader title={"My Properties 🏢"} />
             <div>
               {properties.length > 0 ? (
                 <Table>
@@ -244,26 +225,8 @@ const DashBoardHomeCR = () => {
                   ))}
                 </Table>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <th></th>
-                    <th>Property Name</th>
-                    <th>Property Address</th>
-                    <th>Unit Count</th>
-                    <th>Parking Count</th>
-                    <th>Locker Count</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>
-                      <GoArrowUpRight size={24} />
-                    </td>
-                    <td>Property Name</td>
-                    <td>Property Address</td>
-                    <td>Unit Count</td>
-                    <td>Parking Count</td>
-                    <td>Locker Count</td>
-                  </TableRow>
-                </Table>
+                <h3>You do not have a property associated to your account yet. Contact your Condo Management Company for
+                  more information.</h3>
               )}
             </div>
           </TableCard>

@@ -11,7 +11,7 @@ import TableRow from "../Tables/TableRow.jsx";
 import { GoArrowUpRight, GoPerson } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import AddButton from "../Buttons/AddButton.jsx";
-import GenerateKeyButton from "../Buttons/GenerateKeyButton.jsx";
+import KeyButton from "../Buttons/KeyButton.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
 import SearchButton from "../Buttons/SearchButton.jsx";
 import RegisterButton from "../Buttons/RegisterButton.jsx";
@@ -22,7 +22,6 @@ import GenerateKeyForm from "./GenerateKeyForm.jsx";
 import UserRegistrationForm from "./UserRegistrationForm.jsx";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";
-import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
 import EmployeeSection from "./EmployeeSection.jsx";
 
 // Dashboard home is the home component where clients will enter
@@ -202,7 +201,7 @@ const DashBoardHomeCMC = () => {
                 {/* This is the modal that display once a button is interacted with */}
                 <Modal>
                   <ModalToggler>
-                    <GenerateKeyButton>Generate Key</GenerateKeyButton>
+                    <KeyButton>Generate Key</KeyButton>
                   </ModalToggler>
                   <ModalContent
                     title="Want to generate a Registration Key?"
