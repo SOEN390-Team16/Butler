@@ -31,8 +31,8 @@ const getParkingSpotById = (req, res) => {
 
 const getParkingSpotsByPropertyId = (req, res) => {
   console.log('Getting parking spots by property Id')
-  const propertyid = parseInt(req.params.propertyid)
-  pool.query(queries.getParkingSpotsByPropertyId, [propertyid], (error, results) => {
+  const property_id = parseInt(req.params.property_id)
+  pool.query(queries.getParkingSpotsByPropertyId, [property_id], (error, results) => {
     if (error) {
       console.error('Error finding parking spots by property id: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
