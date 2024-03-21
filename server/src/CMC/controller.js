@@ -43,7 +43,7 @@ const addCMC = (req, res) => {
         .send('An error occurred while checking email existence.')
     }
     if (results.rows.length) {
-      res.send('Email Already Exists')
+      return res.status(400).send('Email Already Exists')
     } else {
       try {
         const hashedPassword = await bcrypt.hash(password, 5)
@@ -70,7 +70,7 @@ const updateCMC = async (req, res) => {
   const companyID = req.params.companyID
   const { company_name, email, password } = req.body
 
-  if (!company_name && !email && !password === undefined) {
+  if (!company_name && !email && password === undefined) {
     return res
       .status(400)
       .json({ error: 'At least one field is required for updating' })
@@ -92,9 +92,9 @@ const updateCMC = async (req, res) => {
     values.push(await bcrypt.hash(password, 5))
   }
 
-  const query = `UPDATE condo_management_company SET ${setClauses.join(', ')} WHERE companyID = $${
-    values.length + 1
-  }`
+  const query = `UPDATE condo_management_company SET ${setClauses.join(
+    ', '
+  )} WHERE companyID = $${values.length + 1}`
 
   pool.query(queries.getCMCById, [companyID], (error, results) => {
     if (error) {

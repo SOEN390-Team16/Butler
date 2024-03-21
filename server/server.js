@@ -16,12 +16,14 @@ const assignedParkingSpotRoutes = require('./src/assigned_ParkingSpot/routes')
 
 const cors = require('cors')
 
-const app = express()
-const port = 3000
 
-app.use(express.json())
+const app = express();
+const port = 3000;
 
-app.use(cors())
+app.use(express.json());
+
+app.use(cors());
+
 
 app.use('/api/v1/co', CondoOwnerRoutes)
 app.use('/api/v1/cr', CondoRenterRoutes)
@@ -38,4 +40,5 @@ app.use('/api/v1/ps', parkingSpotRoutes)
 app.use('/api/v1/aps', assignedParkingSpotRoutes)
 app.use('/api/v1/emp', employeeRoutes)
 
-app.listen(port, () => console.log(`app listening on ${port}`))
+
+app.listen(port, () => console.log(`app listening on ${port}`));

@@ -1,15 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import "./ContinueButton.css";
 
 const ContinueButton = (props) => {
-  // Continue button is the button that is used for logging in and signing up for accounts
-
   return (
     <div className="continue__button">
       <button onClick={props.onClick}>{props.name}</button>
     </div>
   );
+};
+
+// Define prop types for validation
+ContinueButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default ContinueButton;

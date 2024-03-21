@@ -222,3 +222,4 @@ describe("generateRegistrationKey", () => {
     expect(res.json).toHaveBeenCalledWith({ error: "User not found" });
   });
 });
+

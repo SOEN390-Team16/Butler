@@ -13,8 +13,6 @@ import "react-toastify/dist/ReactToastify.css";
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 
-
-
 function App() {
   return (
     <>
@@ -33,7 +31,6 @@ function App() {
 
           <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
           <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
-
         </Routes>
       </BrowserRouter>
       <ToastContainer />
