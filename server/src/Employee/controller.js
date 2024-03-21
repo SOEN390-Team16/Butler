@@ -77,7 +77,7 @@ const addEmployee = async (req, res) => {
 const updateEmployee = async (req, res) => {
   const empid = req.params.empid
   const { first_name, last_name, companyid, role, property_id } = req.body
-
+  console.log(req.body)
   if (
     !first_name &&
     !last_name &&
@@ -128,7 +128,7 @@ const updateEmployee = async (req, res) => {
     } else {
       pool.query(query, [...values, empid], (error, result) => {
         if (error) {
-          // console.error('Error updating employee:', error)
+          console.error('Error updating employee:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         }
 

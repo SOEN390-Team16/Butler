@@ -35,7 +35,7 @@ const getPublicUserById = (req, res) => {
 
 const addPublicUser = (req, res) => {
   console.log('add a Public User')
-  const { first_name, last_name, email, password, profile_picture } = req.body
+  const { first_name, last_name, email, password } = req.body
   pool.query(queries.checkIfPUEmailExists, [email], async (error, results) => {
     if (error) {
       // console.error('Error finding email:', error)
@@ -48,10 +48,13 @@ const addPublicUser = (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 5)
         pool.query(
           queries.addPublicUser,
-          [first_name, last_name, email, hashedPassword, profile_picture],
+
+          [first_name, last_name, email, hashedPassword],
           (error, result) => {
-            if (error) throw error
-            res.status(201).send('Public User Created Successfully!')
+            if (error) {
+              console.log(error)
+            }
+            res.status(201).json(result.rows)
           }
         )
       } catch (hashError) {

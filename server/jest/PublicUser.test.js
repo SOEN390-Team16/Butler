@@ -3,6 +3,7 @@ const mockDb = require("mock-knex");
 mockDb.mock(pool);
 jest.mock("../db");
 
+
 const {
   getPublicUsers,
   getPublicUserById,
@@ -11,10 +12,6 @@ const {
   removePublicUser,
 } = require("../src/PublicUser/controller");
 
-// Mock the pool.query function
-// jest.mock("../db", () => ({
-//   query: jest.fn(),
-// }));
 
 /*** GET PUBLIC USERS ***/
 describe("getPublicUsers", () => {
@@ -170,6 +167,7 @@ describe("addPublicUser", () => {
   beforeEach(() => {
     pool.query.mockClear();
     req = {
+
       body: {
         first_name: "John",
         last_name: "Doe",
@@ -188,6 +186,7 @@ describe("addPublicUser", () => {
     pool.query.mockResolvedValueOnce({ rows: [] }); // Mock email does not exist
     pool.query.mockResolvedValueOnce({}); // Mock addPublicUser
 
+
     await addPublicUser(req, res);
 
     expect(res.status).toHaveBeenCalledWith(201);
@@ -204,6 +203,7 @@ describe("addPublicUser", () => {
   //   expect(res.status).toHaveBeenCalledWith(404);
   //   expect(res.send).toHaveBeenCalledWith("Email Already Exists");
   // });
+
 
   it("should return a 500 error on server error", async () => {
     pool.query.mockRejectedValue(new Error("Server error")); // Simulate server error

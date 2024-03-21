@@ -129,7 +129,7 @@ const CreateAccount = (props) => {
       )}
       <div className="flex flex-col justify-center items-center">
         <p>Already have an account ?</p>
-        <Link to={""} className="underline">
+        <Link to={"/"} className="underline">
           <p>Sign in</p>
         </Link>
       </div>
