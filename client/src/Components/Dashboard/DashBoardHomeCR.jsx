@@ -42,7 +42,22 @@ const DashBoardHomeCR = () => {
   });
 
   const [locket, setLocker] = useState({});
-
+// Fetch condo units data
+const fetchCondoUnits = () => {
+  axios
+    .get(`http://hortzcloud.com:3000/api/v1/unit/${condoid}`, { 
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then((condounitsResponse) => {
+      setCondoUnits(condounitsResponse.data);
+      console.log(condounitsResponse.data) 
+    })
+    .catch((error) => {
+      console.error("Error fetching condo units:", error);
+    });
+};
   // Fetch parking spots data
   const fetchParkingSpots = () => {
     axios
@@ -81,13 +96,10 @@ const DashBoardHomeCR = () => {
       });
   };
 
-  const fetchProperty = () => {
-    axios.get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`);
-  };
-
-  useEffect(() => {
+   useEffect(() => {
     fetchParkingSpots();
     fetchLockers();
+    fetchCondoUnits();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
