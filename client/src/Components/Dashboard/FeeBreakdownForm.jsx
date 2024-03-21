@@ -6,10 +6,11 @@ import { useFormik } from "formik";
 import { useModal } from "../Modals/Modal.jsx";
 import { object, string } from "yup";
 
-export default function UserRegistrationForm() {
+export default function FeeBreakdownForm() {
   const { toggle } = useModal();
   const [userRole] = useState(""); // State for selected user role
-  const [showError, setShowError] = useState(false); // State to control visibility of error message
+
+  const dummyCondoFee = 100;
 
   let propertySchema = object({
     propertyName: string().required("A property name is required"),
@@ -28,7 +29,6 @@ export default function UserRegistrationForm() {
   const handleSubmit = (values) => {
     if (!userRole) {
       // If no radio input is selected, show the error message and prevent form submission
-      setShowError(true);
       return;
     }
     values.userRole = userRole; // Assign selected user role to form values
@@ -39,22 +39,21 @@ export default function UserRegistrationForm() {
   return (
     <>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
-        {showError && (
-          <h4 className="flex flex-row text-red-500 text-sm place-items-center justify-center">
-            Please select a user role
-          </h4>
-        )}
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="propertyName">Company Email</Label>
-          <h2>Company@email.com</h2>
+          <Label htmlFor="propertyName">Parking Fee</Label>
+          <h2>{dummyCondoFee * 0.7}</h2>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="propertyAddress">Company Phone</Label>
-          <h2>438-123-4567</h2>
+          <Label htmlFor="propertyAddress">Locker Fee</Label>
+          <h2>{dummyCondoFee * 0.3}</h2>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="userRole">Company Office Location</Label>
-          <h2>Some office location ...</h2>
+          <Label htmlFor="userRole">Other Condo Service Fees</Label>
+          <h2>0</h2>
+        </div>
+        <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
+          <Label htmlFor="propertyName">Total Condo Fee</Label>
+          <h2>{dummyCondoFee}</h2>
         </div>
       </form>
     </>

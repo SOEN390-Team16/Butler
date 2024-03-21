@@ -24,18 +24,10 @@ function App() {
           <Route path="/DashboardHome" element={<DashboardHome />} />
           <Route path="/DashboardHomeCMC" element={<DashboardHomeCMC />} />
           <Route path="/DashboardHome/editUser" element={<EditAccount />} />
-          <Route
-            path="/DashboardHome/editUserCMC"
-            element={<EditAccountCMC />}
-          />
-
+          <Route path="/DashboardHome/editUserCMC" element={<EditAccountCMC />} />
           <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
           <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
-
-          <Route
-            path="/DashBoardHomeCMC/property/:id"
-            element={<PropertyPage />}
-          />
+          <Route path="/DashBoardHomeCMC/property/:id" element={<PropertyPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

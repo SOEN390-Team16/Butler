@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
-
+import { GoPerson } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import AddButton from "../Buttons/AddButton.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
@@ -18,13 +18,15 @@ import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
 import EditButton from "../Buttons/EditButton.jsx";
 import { toast } from "react-toastify";
-import ConfirmButton from "../Buttons/ConfirmButton.jsx";
+import ConfirmButton from '../Buttons/ConfirmButton.jsx'
+
+
 
 export default function EmployeeSection() {
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const token = localStorage.getItem("token");
-  const [properties, setProperties] = useState([]);
-  const [employees, setEmployees] = useState([]);
+  const userData = JSON.parse(localStorage.getItem('userData'));
+  const token = localStorage.getItem('token')
+  const [properties, setProperties] = useState([])
+  const [employees, setEmployees] = useState([])
 
   useEffect(() => {
     const fetchProperties = () => {
@@ -62,27 +64,23 @@ export default function EmployeeSection() {
         throw err;
       });
   }, [token]);
-  console.log(employees);
 
   const onDelete = async (e, emp) => {
     e.preventDefault();
-    console.log(emp);
     await axios
       .delete(`http://hortzcloud:3000/api/v1/emp/${emp.employeeid}`, {
         headers: {
-          authorization: `Bearer ${token}`,
-        },
+          'authorization': `Bearer ${token}`,
+        }
       })
       .then((res) => {
-        console.log(res.data);
         toast.success("Successfully deleted.");
       })
       .catch((err) => {
         console.error(err);
         toast.error("Couldn't delete the employee.");
       });
-    toggle();
-  };
+    }
 
   return (
     <div
