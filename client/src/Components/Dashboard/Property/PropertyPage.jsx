@@ -160,7 +160,7 @@ export default function PropertyPage() {
     fetchAssignedParkingUnits();
     fetchParkingUnits();
     fetchLockerUnits();
-  }, [token]);
+  }, [assignedParkingUnits, id, token, userData.cmcId]);
 
   const toggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);

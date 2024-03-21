@@ -45,7 +45,7 @@ export default function EmployeeSection() {
         });
     };
     fetchProperties();
-  }, [token]);
+  }, [token, userData.cmcId]);
 
   // CHange this to localhost later
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function EmployeeSection() {
           'authorization': `Bearer ${token}`,
         }
       })
-      .then((res) => {
+      .then(() => {
         toast.success("Successfully deleted.");
       })
       .catch((err) => {
