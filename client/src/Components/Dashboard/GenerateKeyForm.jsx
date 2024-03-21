@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import GenerateKeyButton from "../Buttons/GenerateKeyButton.jsx";
+import { useState } from "react";
+import KeyButton from "../Buttons/KeyButton.jsx";
 import Checkbox from "../Checkbox/Checkbox.jsx";
 import Input from "../Forms/Input.jsx";
 import Label from "../Forms/Label.jsx";
@@ -98,9 +98,9 @@ export default function GenerateKeyForm() {
           />
         </div>
       </form>
-      <GenerateKeyButton onClick={formik.submitForm}>
+      <KeyButton onClick={formik.submitForm}>
         Generate Key
-      </GenerateKeyButton>
+      </KeyButton>
     </>
   );
 }
