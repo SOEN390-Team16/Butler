@@ -5,106 +5,138 @@ const userData = JSON.parse(localStorage.getItem('userData'));
 const token = localStorage.getItem('token')
 
 export const api = axios.create({
-    baseURL: "http://hortzcloud.com:3000/api",
+  baseURL: "http://hortzcloud.com:3000/api",
 });
 
-export const getCondoOwners = async () => {
-    try {
-        const response = await api.get("/v1/co/getCondoOwners", {
-            timeout: 10 * 1000,
-        });
+export const fetchPublicUser = async (userid) => {
+  return await api.get(`/api/v1/pu/${userid}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  }).catch((error) => {
+    toast.error(`Something went wrong ${error.message}`)
+  })
+}
 
-        if (response.status === 400 || response.status === 500) {
-            throw response.data;
-        }
-        return response.data;
-    } catch (error) {
-        toast.error("Something went wrong executing 'getCondoOwners'")
-        throw error;
+export const generateRegistrationKey = async (role) => {
+  return await api.post(`/api/v1/reg/gen/${role}`, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  }).catch((error) => {
+    toast.error(`Something went wrong ${error.message}`)
+  })
+}
+
+export const activateRegistrationKey = async (key) => {
+  return await api.patch(`/api/v1/reg/`,
+      {key: key, userid: userData.userId},
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }).catch((error) => {
+    toast.error(`Something went wrong ${error.message}`)
+  })
+}
+
+
+export const getCondoOwners = async () => {
+  try {
+    const response = await api.get("/v1/co/getCondoOwners", {
+      timeout: 10 * 1000,
+    });
+
+    if (response.status === 400 || response.status === 500) {
+      throw response.data;
     }
+    return response.data;
+  } catch (error) {
+    toast.error("Something went wrong executing 'getCondoOwners'")
+    throw error;
+  }
 };
 
 export const addCondoOwner = async (data) => {
-    try {
-        const response = await api.post("/v1/co/addCondoOwner",
-            { data },
-            {
-                timeout: 10 * 1000,
-            });
-        if (response.status === 400 || response.status === 500) {
-            throw response.data;
-        }
-        return response.data;
-    } catch (error) {
+  try {
+    const response = await api.post("/v1/co/addCondoOwner",
+        {data},
+        {
+          timeout: 10 * 1000,
+        });
+    if (response.status === 400 || response.status === 500) {
+      throw response.data;
+    }
+    return response.data;
+  } catch (error) {
     toast.error("Something went wrong executing 'addCondoOwner'");
     throw error;
-    }
+  }
 };
 
 export const getPublicUsers = async () => {
-    try {
-        const response = await api.get("/v1/pu/getPublicUsers", {
-            timeout: 10 * 1000,
-        });
+  try {
+    const response = await api.get("/v1/pu/getPublicUsers", {
+      timeout: 10 * 1000,
+    });
 
-        if (response.status === 400 || response.status === 500) {
-            throw response.data;
-        }
-        return response.data;
-    } catch (error) {
-        toast.error("Something went wrong executing 'getPublicUsers'")
-        throw error;
+    if (response.status === 400 || response.status === 500) {
+      throw response.data;
     }
+    return response.data;
+  } catch (error) {
+    toast.error("Something went wrong executing 'getPublicUsers'")
+    throw error;
+  }
 };
 
 export const addPublicUser = async (data) => {
-    try {
-        const response = await api.post("/v1/pu/addPublicUser",
-            { data },
-            {
-                timeout: 10 * 1000,
-            });
-        if (response.status === 400 || response.status === 500) {
-            throw response.data;
-        }
-        return response.data;
-    } catch (error) {
-        toast.error("Something went wrong executing 'addPublicUser'");
-        throw error;
+  try {
+    const response = await api.post("/v1/pu/addPublicUser",
+        {data},
+        {
+          timeout: 10 * 1000,
+        });
+    if (response.status === 400 || response.status === 500) {
+      throw response.data;
     }
+    return response.data;
+  } catch (error) {
+    toast.error("Something went wrong executing 'addPublicUser'");
+    throw error;
+  }
 };
 
 
-
 export const fetchProperties = () => {
-    axios.get("http://hortzcloud.com:3000/api/v1/pp", {
-        headers: {
-          'authorization': `Bearer ${token}`,
-        }
-      })
+  axios.get("http://localhost:3000/api/v1/pp", {
+    headers: {
+      'authorization': `Bearer ${token}`,
+    }
+  })
       .then((res) => {
         console.log(res.data, ' this is properties')
-        setProperties(res.data.filter(property => property.companyid === userData.cmcId));
+        return res.data.filter(property => property.companyid === userData.cmcId)
       })
       .catch((err) => {
         console.error("Error fetching properties:", err);
       });
-  };
+};
 
-  
-  export const fetchEmployees = () => {
-    axios.get("/v1/emp", {
-        headers: {
-          'authorization': `Bearer ${token}`,
-        }
-      })
+
+export const fetchEmployees = () => {
+  axios.get("/v1/emp", {
+    headers: {
+      'authorization': `Bearer ${token}`,
+    }
+  })
       .then((res) => {
         return res.data;
       })
       .catch((err) => {
         console.error("Error fetching properties:", err);
       });
-  };
+};
 
 
  
