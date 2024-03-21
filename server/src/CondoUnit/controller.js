@@ -169,32 +169,32 @@ const calculateTotalCondoFee = (req, res) => {
 }
 
 const sendCondoFeesToOwners = (req, res) => {
-    const propertyId = req.body.propertyId;
-  
-    pool.query(queries.getCondoOwnersEmailsByProperty, [propertyId], (error, ownersResults) => {
-      if (error) {
-        console.error('Error fetching condo owners:', error);
-        return res.status(500).send('Error fetching condo owners');
-      }
-  
-      ownersResults.rows.forEach(owner => {
-        const condoId = owner.condoid;
-        const ownerEmail = owner.user_email;
-  
-        calculateTotalCondoFeeForEmail(condoId, (condoFeeInfo) => {
-          if (condoFeeInfo) {
-            sendEmail({
-              to: ownerEmail,
-              subject: 'Your Condo Fees',
-              text: `Hello, here are your condo fees details:\n\n${JSON.stringify(condoFeeInfo, null, 2)}`
-            });
-          }
-        });
-      });
-  
-      res.send('Condo fees sent to owners');
-    });
-  };
+  const propertyId = req.body.propertyId
+
+  pool.query(queries.getCondoOwnersEmailsByProperty, [propertyId], (error, ownersResults) => {
+    if (error) {
+      console.error('Error fetching condo owners:', error)
+      return res.status(500).send('Error fetching condo owners')
+    }
+
+    ownersResults.rows.forEach(owner => {
+      const condoId = owner.condoid
+      const ownerEmail = owner.user_email
+
+      calculateTotalCondoFeeForEmail(condoId, (condoFeeInfo) => {
+        if (condoFeeInfo) {
+          sendEmail({
+            to: ownerEmail,
+            subject: 'Your Condo Fees',
+            text: `Hello, here are your condo fees details:\n\n${JSON.stringify(condoFeeInfo, null, 2)}`
+          })
+        }
+      })
+    })
+
+    res.send('Condo fees sent to owners')
+  })
+}
 
 const calculateTotalCondoFeeForEmail = (condoId, callback) => {
   pool.query(queries.getCondoFeePerSqrft, [condoId], (error, feeResults) => {
