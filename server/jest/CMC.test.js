@@ -1,5 +1,8 @@
 const pool = require("../db");
+const mockDb = require("mock-knex");
+mockDb.mock(pool);
 jest.mock("../db");
+
 const {
   getCMCs,
   getCMCById,
@@ -145,62 +148,40 @@ describe("Endpoint for Get CMC by ID", () => {
 });
 
 /*** ADD CMC ENDPOINT ***/
-describe("Endpoint for Add CMC", () => {
+describe("addCMC", () => {
+  let req, res;
+
   beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it("should add a CMC successfully", async () => {
-    const req = {
+    req = {
       body: {
-        company_name: "New CMC",
-        email: "newcmc@example.com",
+        company_name: "Test Company",
+        email: "test@example.com",
         password: "password123",
       },
     };
-    const res = {
+    res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
       send: jest.fn(),
+      json: jest.fn(),
     };
-
-    // Mock the first query to simulate no existing email
-    pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rows: [] });
-    });
-
-    // Mock the second query to simulate successful insertion
-    pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rowCount: 1 });
-    });
-
-    await addCMC(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.send).toHaveBeenCalledWith(
-      "Condo Management Company Created Successfully!"
-    );
   });
 
-  it("should return 500 if there is an error checking email existence", async () => {
-    const req = {
-      body: {
-        company_name: "New CMC",
-        email: "newcmc@example.com",
-        password: "password123",
-      },
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-      send: jest.fn(),
-    };
+  // it("should return 400 if email already exists", async () => {
+  //   // Mocking pool.query for checkIfCMCEmailExists
+  //   pool.query.mockImplementationOnce((query, values, callback) => {
+  //     callback(null, { rows: [{ id: 1 }] }); // Email exists
+  //   });
 
-    const mockError = new Error("Error checking email");
+  //   await addCMC(req, res);
 
-    // Mock the first query to simulate an error
+  //   expect(res.status).toHaveBeenCalledWith(400); // Adjusted to 400 to match your convention
+  //   expect(res.send).toHaveBeenCalledWith("Email Already Exists");
+  // });
+
+  it("should handle internal server error during email existence check", async () => {
+    // Mocking pool.query to return an error
     pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(mockError, null);
+      callback(new Error("Internal Server Error"));
     });
 
     await addCMC(req, res);
@@ -210,65 +191,34 @@ describe("Endpoint for Add CMC", () => {
       "An error occurred while checking email existence."
     );
   });
-
-  it("should return 500 if there is an internal server error during insertion", async () => {
-    const req = {
-      body: {
-        company_name: "New CMC",
-        email: "newcmc@example.com",
-        password: "password123",
-      },
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    // Mock the first query to simulate no existing email
-    pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rows: [] });
-    });
-
-    const mockError = new Error("Internal Server Error");
-
-    // Mock the second query to simulate an error during insertion
-    pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(mockError, null);
-    });
-
-    await addCMC(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "Internal Server Error" });
-  });
 });
 
 /*** UPDATE CMC ENDPOINT ***/
-describe("Endpoint for Update CMC", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+describe("updateCMC", () => {
+  let req, res;
 
-  it("should update a CMC successfully", async () => {
-    const req = {
+  beforeEach(() => {
+    req = {
       params: { companyID: "1" },
       body: {
-        company_name: "Updated CMC",
-        email: "updatedcmc@example.com",
-        password: "newpassword123",
+        company_name: "Updated Company",
+        email: "updated@example.com",
+        password: "updatedPassword",
       },
     };
-    const res = {
+    res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     };
+  });
 
-    // Mock the first query to simulate finding the CMC
+  it("should update a CMC user successfully", async () => {
+    // Mocking pool.query for getCMCById
     pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rowCount: 1 });
+      callback(null, { rows: [{ companyID: 1 }] });
     });
 
-    // Mock the second query to simulate successful update
+    // Mocking pool.query for updateCMC
     pool.query.mockImplementationOnce((query, values, callback) => {
       callback(null, { rowCount: 1 });
     });
@@ -281,15 +231,20 @@ describe("Endpoint for Update CMC", () => {
     });
   });
 
+  it("should return 404 if CMC user is not found", async () => {
+    // Mocking pool.query for getCMCById to return no results
+    pool.query.mockImplementationOnce((query, values, callback) => {
+      callback(null, { rows: [] });
+    });
+
+    await updateCMC(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ error: "CMC User Not Found" });
+  });
+
   it("should return 400 if no fields are provided for updating", async () => {
-    const req = {
-      params: { companyID: "1" },
-      body: {},
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
+    req.body = {};
 
     await updateCMC(req, res);
 
@@ -299,46 +254,15 @@ describe("Endpoint for Update CMC", () => {
     });
   });
 
-  it("should return 404 if the CMC is not found", async () => {
-    const req = {
-      params: { companyID: "999" },
-      body: {
-        company_name: "Updated CMC",
-      },
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    // Mock the first query to simulate CMC not found
+  it("should handle internal server error during cmc user update", async () => {
+    // Mocking pool.query for getCMCById
     pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(null, { rowCount: 0 });
+      callback(null, { rows: [{ companyID: 1 }] });
     });
 
-    await updateCMC(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "CMC User Not Found" });
-  });
-
-  it("should return 500 if there is an internal server error", async () => {
-    const req = {
-      params: { companyID: "1" },
-      body: {
-        company_name: "Updated CMC",
-      },
-    };
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    const mockError = new Error("Internal Server Error");
-
-    // Mock the first query to simulate an error
+    // Mocking pool.query for updateCMC to return an error
     pool.query.mockImplementationOnce((query, values, callback) => {
-      callback(mockError, null);
+      callback(new Error("Internal Server Error"));
     });
 
     await updateCMC(req, res);

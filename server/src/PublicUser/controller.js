@@ -6,7 +6,7 @@ const getPublicUsers = (req, res) => {
   console.log('Get All Public Users')
   pool.query(queries.getPublicUsers, (error, results) => {
     if (error) {
-      console.error('Error finding public users:', error)
+      // console.error('Error finding public users:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -38,7 +38,7 @@ const addPublicUser = (req, res) => {
   const { first_name, last_name, email, password } = req.body
   pool.query(queries.checkIfPUEmailExists, [email], async (error, results) => {
     if (error) {
-      console.error('Error finding email:', error)
+      // console.error('Error finding email:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rows.length !== 0) {
@@ -48,6 +48,7 @@ const addPublicUser = (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 5)
         pool.query(
           queries.addPublicUser,
+
           [first_name, last_name, email, hashedPassword],
           (error, result) => {
             if (error) {
@@ -57,7 +58,7 @@ const addPublicUser = (req, res) => {
           }
         )
       } catch (hashError) {
-        console.error('Error hashing password:', hashError)
+        // console.error('Error hashing password:', hashError)
         res.status(500).json({ error: 'Internal Server Error' })
       }
     }
@@ -110,7 +111,7 @@ const updatePublicUser = async (req, res) => {
 
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {
-      console.error('Error updating user:', error)
+      // console.error("Error updating user:", error);
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
@@ -118,7 +119,7 @@ const updatePublicUser = async (req, res) => {
     } else {
       pool.query(query, [...values, userid], (error, result) => {
         if (error) {
-          console.error('Error updating public user:', error)
+          // console.error("Error updating public user:", error);
           return res.status(500).json({ error: 'Internal Server Error' })
         }
 
@@ -136,7 +137,7 @@ const removePublicUser = (req, res) => {
   const userid = parseInt(req.params.userid)
   pool.query(queries.getPublicUserById, [userid], (error, result) => {
     if (error) {
-      console.error('Error finding user:', error)
+      // console.error("Error finding user:", error);
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (result.rows.length === 0) {
@@ -144,7 +145,7 @@ const removePublicUser = (req, res) => {
     }
     pool.query(queries.removePublicUser, [userid], (error, results) => {
       if (error) {
-        console.error('Error removing user:', error)
+        // console.error("Error removing user:", error);
         return res.status(500).json({ error: 'Internal Server Error' })
       }
       res.status(200).send('user removed successfully.')
