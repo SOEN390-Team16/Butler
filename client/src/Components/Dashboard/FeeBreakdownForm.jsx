@@ -8,8 +8,7 @@ import { object, string } from "yup";
 
 export default function FeeBreakdownForm() {
   const { toggle } = useModal();
-  const [userRole, setUserRole] = useState(""); // State for selected user role
-  const [showError, setShowError] = useState(false); // State to control visibility of error message
+  const [userRole] = useState(""); // State for selected user role
 
   const dummyCondoFee = 100;
 
@@ -30,7 +29,6 @@ export default function FeeBreakdownForm() {
   const handleSubmit = (values) => {
     if (!userRole) {
       // If no radio input is selected, show the error message and prevent form submission
-      setShowError(true);
       return;
     }
     values.userRole = userRole; // Assign selected user role to form values

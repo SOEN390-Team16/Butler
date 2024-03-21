@@ -1,6 +1,6 @@
 // used in the dashboards of CO and CR to display contact
 // information of the company
-import React, { useState } from "react";
+import { useState } from "react";
 import Label from "../Forms/Label.jsx";
 import { useFormik } from "formik";
 import { useModal } from "../Modals/Modal.jsx";
@@ -8,8 +8,7 @@ import { object, string } from "yup";
 
 export default function UserRegistrationForm() {
   const { toggle } = useModal();
-  const [userRole, setUserRole] = useState(""); // State for selected user role
-  const [isButtonEnabled, setIsButtonEnabled] = useState(false); // State to control button enable/disable
+  const [userRole] = useState(""); // State for selected user role
   const [showError, setShowError] = useState(false); // State to control visibility of error message
 
   let propertySchema = object({
@@ -25,21 +24,6 @@ export default function UserRegistrationForm() {
     validationSchema: propertySchema,
     onSubmit: (values) => handleSubmit(values),
   });
-
-  const errorMessage = (fieldName) => {
-    if (formik.touched[fieldName] && formik.errors[fieldName]) {
-      return (
-        <span className="text-red-400 text-sm">{formik.errors[fieldName]}</span>
-      );
-    }
-    return null;
-  };
-
-  const handleUserRoleChange = (event) => {
-    setUserRole(event.target.value);
-    setIsButtonEnabled(true); // Enable the button when a radio input is selected
-    setShowError(false); // Hide the error message when a radio input is selected
-  };
 
   const handleSubmit = (values) => {
     if (!userRole) {
