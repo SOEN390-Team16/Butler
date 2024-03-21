@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "cypress:open": "cypress open",
+    "cy:open": "cypress open",
     "cy:run": "cypress run",
     "dev": "vite",
     "host": "vite --host",

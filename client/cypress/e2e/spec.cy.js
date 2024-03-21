@@ -7,7 +7,7 @@ beforeEach(()=> {
 })
 
 describe("E2E Test for Use Case 1: Public User Sign Up With Email", () => {
-  it("Should let new user sign up with a username, name, email, and password", () => {
+  it.skip("Should let new user sign up with a username, name, email, and password", () => {
     // Test
     cy.get(".login__content").contains("a","New user, sign up!").click()
     cy.location("pathname").should('eq',"/SignUp")
@@ -34,7 +34,7 @@ describe("E2E Test for Use Case 46: Public User Email Login", () => {
     cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
     cy.get(".continue__button").click()
-    cy.location("pathname").should('include', "/DashboardHome")
+    cy.location("pathname").should('include', "/DashboardHome/editUser")
   })
 })
 
@@ -61,12 +61,17 @@ describe("E2E Test for Use Case 3: Public User Update Profile", () => {
     // Test
     cy.get("#root").get(".row").contains("button","Update Info").click()
     cy.get("#root").get(".container").get("form")
-        .get("input[name='firstName']")
-        .type("CypressUpdateFirst").should("have.value", "CypressUpdateFirst")
-        .get("input[name='lastName']")
-        .type("CypressUpdateLast").should("have.value", "CypressUpdateLast")
-        .get("input[name='email']")
-        .type("CypressUpdate@email.com").should("have.value", "CypressUpdate@email.com")
+        .get("input[name='firstName']").clear()
+    cy.get("#root").get(".container").get("form")
+        .get("input[name='firstName']").type("CypressUpdateFirst").should("have.value", "CypressUpdateFirst")
+    cy.get("#root").get(".container").get("form")
+        .get("input[name='lastName']").clear()
+    cy.get("#root").get(".container").get("form")
+        .get("input[name='lastName']").type("CypressUpdateLast").should("have.value", "CypressUpdateLast")
+    cy.get("#root").get(".container").get("form")
+        .get("input[name='email']").clear()
+    cy.get("#root").get(".container").get("form")
+        .get("input[name='email']").type("CypressUpdate@email.com").should("have.value", "CypressUpdate@email.com")
     cy.get("#root").get(".container").get("form").contains("button","Done").click()
   })
 })

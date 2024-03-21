@@ -5,7 +5,7 @@ export function loginPublicUser(){
     cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
     cy.get(".continue__button").click()
-    cy.location("pathname").should('include', "/DashBoardHome")
+    cy.location("pathname").should('include', "/DashboardHome/editUser")
 }
 
 export function viewProfilePublicUser(baseURL) {
