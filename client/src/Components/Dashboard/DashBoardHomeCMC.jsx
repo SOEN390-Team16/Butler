@@ -22,7 +22,6 @@ import GenerateKeyForm from "./GenerateKeyForm.jsx";
 import UserRegistrationForm from "./UserRegistrationForm.jsx";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";
-import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
 import EmployeeSection from "./EmployeeSection.jsx";
 
 // Dashboard home is the home component where clients will enter
@@ -152,19 +151,6 @@ const DashBoardHomeCMC = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const visibleUsers = publicUsers.slice(startIndex, endIndex);
-
-  // for search bar
-  const [searchValue, setSearchValue] = useState("");
-
-  const handleSearchInputChange = (event) => {
-    setSearchValue(event.target.value);
-  };
-
-  const filteredAllUsers = publicUsers.filter((user) =>
-    user.email.toLowerCase().includes(searchValue.toLowerCase())
-  );
-
-  const filteredRegisterUsers = filteredAllUsers;
 
   return (
     <div className="dashboard__home">
@@ -363,8 +349,6 @@ const DashBoardHomeCMC = () => {
                   type="text"
                   placeholder="Email Address..."
                   className="border border-gray-300 py-2 w-[360px] rounded-md pl-10"
-                  value={searchValue}
-                  onChange={handleSearchInputChange}
                 />
               </div>
 

@@ -6,13 +6,12 @@ import { Link } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
-import { GoArrowUpRight, GoPerson } from "react-icons/go";
+import { GoPerson } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import AddButton from "../Buttons/AddButton.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import axios from "axios";
-import { fetchEmployees } from "../../utils/api.js";
 import EditEmployeeForm from "./EditEmployeeForm.jsx";
 import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
@@ -81,7 +80,7 @@ export default function EmployeeSection() {
         console.error(err);
         toast.error("Couldn't delete the employee.");
       });
-    toggle();
+    // toggle();
   };
 
   return (

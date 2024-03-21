@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -25,7 +25,6 @@ import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
 const DashBoardHomeCR = () => {
-  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [parkingSpots, setParkingSpots] = useState([]);

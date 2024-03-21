@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -25,7 +25,6 @@ import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
 const DashBoardHomeCO = () => {
-  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [parkingSpots, setParkingSpots] = useState([]);
@@ -35,12 +34,6 @@ const DashBoardHomeCO = () => {
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
-
-  const [parking, setParking] = useState({
-    userid: 0,
-    property_id: 0,
-    parkingid: 0,
-  });
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
@@ -53,7 +46,6 @@ const DashBoardHomeCO = () => {
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
         // console.log(parkingSpotsResponse.data[0]);
-        setParking(parkingSpots[0]);
         console.log("parking:");
         console.log(parkingSpots);
       })
