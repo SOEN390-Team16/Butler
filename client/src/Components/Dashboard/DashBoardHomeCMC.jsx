@@ -39,22 +39,39 @@ const DashBoardHomeCMC = () => {
   // toggles the drawer between being open and closed
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
+  const [publicUsers, setPublicUsers] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
 
+  const deletePublicUser = (user) => {
+    axios
+      .delete(`http://hortzcloud.com:3000/api/v1/pu/${user.userid}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log("res for deleting user:");
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
+
   useEffect(() => {
     const fetchProperties = () => {
-      axios.get("http://hortzcloud.com:3000/api/v1/pp", {
+      axios
+        .get("http://hortzcloud.com:3000/api/v1/pp", {
           headers: {
             authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
-
-         
-          setProperties(res.data.filter(property => property.companyid === userData.cmcId));
-
+          setProperties(
+            res.data.filter((property) => property.companyid === userData.cmcId)
+          );
         })
         .catch((err) => {
           console.error("Error fetching properties:", err);
@@ -62,6 +79,27 @@ const DashBoardHomeCMC = () => {
     };
 
     fetchProperties();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchPublicUsers = () => {
+      axios
+        .get("http://hortzcloud.com:3000/api/v1/pu", {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setPublicUsers(res.data);
+          // console.log("public users:");
+          // console.log(publicUsers);
+        })
+        .catch((err) => {
+          console.error("Error fetching properties:", err);
+        });
+    };
+
+    fetchPublicUsers();
   }, [token]);
 
   // TODO: Add the property to the database
@@ -96,6 +134,37 @@ const DashBoardHomeCMC = () => {
     fName: "Condo",
     lName: "Owner",
   };
+
+  // for register users table
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const totalPages = Math.ceil(publicUsers.length / itemsPerPage);
+
+  const handleClickNext = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handleClickPrevious = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleUsers = publicUsers.slice(startIndex, endIndex);
+
+  // for search bar
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleSearchInputChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const filteredAllUsers = publicUsers.filter((user) =>
+    user.email.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  const filteredRegisterUsers = filteredAllUsers;
 
   return (
     <div className="dashboard__home">
@@ -294,6 +363,8 @@ const DashBoardHomeCMC = () => {
                   type="text"
                   placeholder="Email Address..."
                   className="border border-gray-300 py-2 w-[360px] rounded-md pl-10"
+                  value={searchValue}
+                  onChange={handleSearchInputChange}
                 />
               </div>
 
@@ -301,140 +372,128 @@ const DashBoardHomeCMC = () => {
             </div>
             <div>
               {selectedHeading === "allUsers" && (
-                <Table>
-                  <TableHeader>
-                    <th></th>
-                    <th>Client Name</th>
-                    <th>Email Address</th>
-                    <th>Status</th>
-                    <th>Token</th>
-                    <th>Delete</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Public</td>
-                    <td>/</td>
-                    <td>
-                      <DeleteButton>Delete</DeleteButton>
-                    </td>
-                  </TableRow>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Rental</td>
-                    <td>****_****_****</td>
-                    <td>
-                      <DeleteButton>Delete</DeleteButton>
-                    </td>
-                  </TableRow>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Owner</td>
-                    <td>****_****_****</td>
-                    <td>
-                      <DeleteButton>Delete</DeleteButton>
-                    </td>
-                  </TableRow>
-                </Table>
+                <div>
+                  <Table>
+                    <TableHeader>
+                      <th></th>
+                      <th>Client Name</th>
+                      <th>Email Address</th>
+                      <th>Status</th>
+                      <th>Register</th>
+                    </TableHeader>
+                    {visibleUsers.map((user, index) => (
+                      <TableRow key={index}>
+                        <td>
+                          <GoPerson size={24} />
+                        </td>
+                        <td>{user.first_name + " " + user.last_name}</td>
+                        <td>{user.email}</td>
+                        <td>Public User</td>
+                        <td>
+                          <DeleteButton onClick={() => deletePublicUser(user)}>
+                            Delete
+                          </DeleteButton>
+                        </td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "1rem",
+                      alignItems: "center",
+                      paddingTop: "2%",
+                    }}
+                  >
+                    <SearchButton
+                      onClick={handleClickPrevious}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </SearchButton>
+                    <span
+                      style={{ fontSize: "1.2rem" }}
+                    >{`Page ${currentPage} of ${totalPages}`}</span>
+                    <SearchButton
+                      onClick={handleClickNext}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </SearchButton>
+                  </div>
+                </div>
               )}
-              {selectedHeading === "registerUsers" && (
-                <Table>
-                  <TableHeader>
-                    <th></th>
-                    <th>Client Name</th>
-                    <th>Email Address</th>
-                    <th>Status</th>
-                    <th>Token</th>
-                    <th>Register</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Public</td>
-                    <td>/</td>
-                    <td>
-                      <Modal>
-                        <ModalToggler>
-                          <RegisterButton>Register</RegisterButton>
-                        </ModalToggler>
-                        <ModalContent
-                          title="User Registration"
-                          description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
-                          onExit={() => console.log("exit")}
-                        >
-                          <UserRegistrationForm />
-                        </ModalContent>
-                      </Modal>
-                    </td>
-                  </TableRow>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Public</td>
-                    <td>/</td>
-                    <td>
-                      <Modal>
-                        <ModalToggler>
-                          <RegisterButton>Register</RegisterButton>
-                        </ModalToggler>
-                        <ModalContent
-                          title="User Registration"
-                          description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
-                          onExit={() => console.log("exit")}
-                        >
-                          <UserRegistrationForm />
-                        </ModalContent>
-                      </Modal>
-                    </td>
-                  </TableRow>
-                  <TableRow>
-                    <td>
-                      <GoPerson size={24} />
-                    </td>
-                    <td>Client Name</td>
-                    <td>Email Address</td>
-                    <td>Public</td>
-                    <td>/</td>
-                    <td>
-                      <Modal>
-                        <ModalToggler>
-                          <RegisterButton>Register</RegisterButton>
-                        </ModalToggler>
-                        <ModalContent
-                          title="User Registration"
-                          description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
-                          onExit={() => console.log("exit")}
-                        >
-                          <UserRegistrationForm />
-                        </ModalContent>
-                      </Modal>
-                    </td>
-                  </TableRow>
-                </Table>
-              )}
+              <div>
+                {selectedHeading === "registerUsers" && (
+                  <div>
+                    <Table>
+                      <TableHeader>
+                        <th></th>
+                        <th>Client Name</th>
+                        <th>Email Address</th>
+                        <th>Status</th>
+                        <th>Register</th>
+                      </TableHeader>
+                      {visibleUsers.map((user, index) => (
+                        <TableRow key={index}>
+                          <td>
+                            <GoPerson size={24} />
+                          </td>
+                          <td>{user.first_name + " " + user.last_name}</td>
+                          <td>{user.email}</td>
+                          <td>Public User</td>
+                          <td>
+                            <Modal>
+                              <ModalToggler>
+                                <RegisterButton>Register</RegisterButton>
+                              </ModalToggler>
+                              <ModalContent
+                                title="User Registration"
+                                description="Is this the user you would like to register? A Registration Key will automatically be associated to their account."
+                                onExit={() => console.log("exit")}
+                              >
+                                <UserRegistrationForm />
+                              </ModalContent>
+                            </Modal>
+                          </td>
+                        </TableRow>
+                      ))}
+                    </Table>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        gap: "1rem",
+                        alignItems: "center",
+                        paddingTop: "2%",
+                      }}
+                    >
+                      <SearchButton
+                        onClick={handleClickPrevious}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </SearchButton>
+                      <span
+                        style={{ fontSize: "1.2rem" }}
+                      >{`Page ${currentPage} of ${totalPages}`}</span>
+                      <SearchButton
+                        onClick={handleClickNext}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </SearchButton>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </TableCard>
         </div>
 
- {/* // EMPLOYEES */}
-                <EmployeeSection />
+        {/* // EMPLOYEES */}
+        <EmployeeSection />
       </div>
     </div>
   );

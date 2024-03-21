@@ -30,18 +30,11 @@ const DashBoardHomeCR = () => {
   const [properties, setProperties] = useState([]);
   const [parkingSpots, setParkingSpots] = useState([]);
   const [lockers, setLockers] = useState([]);
+  const [condoUnit, setCondoUnit] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
-
-  const [parking, setParking] = useState({
-    userid: 0,
-    property_id: 0,
-    parkingid: 0,
-  });
-
-  const [locket, setLocker] = useState({});
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
@@ -54,9 +47,8 @@ const DashBoardHomeCR = () => {
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
         // console.log(parkingSpotsResponse.data[0]);
-        setParking(parkingSpots[0]);
         // console.log("parking:");
-        // console.log(parking.userid);
+        console.log(parkingSpots[0]);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
@@ -81,13 +73,44 @@ const DashBoardHomeCR = () => {
       });
   };
 
-  const fetchProperty = () => {
-    axios.get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`);
+  const fetchCondos = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/cu`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log("all condos");
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching condo units:", error);
+      });
+  };
+
+  const fetchCondo = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/cu/${17}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setCondoUnit(res.data);
+        console.log("condo:");
+        console.log(condoUnit);
+      })
+      .catch((error) => {
+        console.error("Error fetching condo unit:", error);
+      });
   };
 
   useEffect(() => {
     fetchParkingSpots();
     fetchLockers();
+    fetchCondos();
+    fetchCondo();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
@@ -203,16 +226,16 @@ const DashBoardHomeCR = () => {
           </div>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Properties 🏢"}>
+            <TableCardHeader title={"My Condo Units"}>
               <div className="flex items-center gap-4">
                 <Link className="underline" to={""}>
                   See more
                 </Link>
 
                 <Modal>
-                  <ModalToggler>
-                    <AddButton>Add Property</AddButton>
-                  </ModalToggler>
+                  {/* <ModalToggler> */}
+                  <AddButton>Add Condo Unit</AddButton>
+                  {/* </ModalToggler> */}
                   <ModalContent
                     title="Want to add a Property"
                     description="Add the information associated to the property to add it to your account"
@@ -251,21 +274,25 @@ const DashBoardHomeCR = () => {
                 <Table>
                   <TableHeader>
                     <th></th>
-                    <th>Property Name</th>
-                    <th>Property Address</th>
-                    <th>Unit Count</th>
-                    <th>Parking Count</th>
-                    <th>Locker Count</th>
+                    <th>Condo ID</th>
+                    <th>Condo Number</th>
+                    <th>Company ID</th>
+                    <th>Property ID</th>
+                    <th>Occupant Type</th>
+                    <th>Size</th>
                   </TableHeader>
                   <TableRow>
                     <td>
                       <GoArrowUpRight size={24} />
                     </td>
-                    <td>Property Name</td>
-                    <td>Property Address</td>
-                    <td>Unit Count</td>
-                    <td>Parking Count</td>
-                    <td>Locker Count</td>
+                    <td>{condoUnit.condoid}</td>
+                    <td>{condoUnit.condo_number}</td>
+                    <td>{condoUnit.companyid}</td>
+                    <td>{condoUnit.property_id}</td>
+                    <td>{userData.role}</td>
+                    <td>
+                      670 m<sup>2</sup>
+                    </td>
                   </TableRow>
                 </Table>
               )}
@@ -375,10 +402,10 @@ const DashBoardHomeCR = () => {
                     <td>
                       <GoArrowUpRight size={24} />
                     </td>
-                    <td>{condo.condoid}</td>
-                    <td>{condo.condo_number}</td>
-                    <td>{condo.property_id}</td>
-                    <td>{condo.occupant_type}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </TableRow>
                 ))}
               </Table>
@@ -395,8 +422,8 @@ const DashBoardHomeCR = () => {
                   <td>
                     <GoArrowUpRight size={24} />
                   </td>
-                  <td></td>
-                  <td></td>
+                  <td>{condoUnit.condoid}</td>
+                  <td>100</td>
                   <td>
                     <Modal>
                       <ModalToggler>
@@ -415,9 +442,7 @@ const DashBoardHomeCR = () => {
                   </td>
                   <td>
                     <Modal>
-                      <ModalToggler>
-                        <MakePaymentButton>Make Payment</MakePaymentButton>
-                      </ModalToggler>
+                      <MakePaymentButton>Make Payment</MakePaymentButton>
                       <ModalContent
                         title="Want to add a Property"
                         description="Add the information associated to the property to add it to your account"
