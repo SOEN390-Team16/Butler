@@ -21,8 +21,6 @@ const EditAccount = () => {
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const currentPlan = userDataArray.length > 1 ? userDataArray[4][1] : "";
 
-  const profilePicture = userData ? userData.profile_picture : "";
-
   const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({

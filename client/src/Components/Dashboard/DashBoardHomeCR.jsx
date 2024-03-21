@@ -18,6 +18,9 @@ import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
 import axios from "axios";
+import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
+import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
+import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -102,7 +105,7 @@ const DashBoardHomeCR = () => {
     fetchLockers();
     fetchCondos();
     fetchCondo();
-  }, [token, userID]);
+  }, [fetchCondo, fetchCondos, fetchLockers, fetchParkingSpots, token, userID]);
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);

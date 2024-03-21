@@ -106,7 +106,7 @@ const DashBoardHomeCO = () => {
     fetchLockers();
     fetchCondos();
     fetchCondo();
-  }, [token, userID]);
+  }, [fetchCondo, fetchCondos, fetchLockers, fetchParkingSpots, token, userID]);
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);

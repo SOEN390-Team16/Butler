@@ -78,7 +78,7 @@ const DashBoardHomeCMC = () => {
     };
 
     fetchProperties();
-  }, [token]);
+  }, [token, userData.cmcId]);
 
   useEffect(() => {
     const fetchPublicUsers = () => {

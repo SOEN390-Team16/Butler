@@ -122,36 +122,4 @@ export const addPublicUser = async (data) => {
   }
 };
 
-
-export const fetchProperties = () => {
-  axios.get("http://localhost:3000/api/v1/pp", {
-    headers: {
-      'authorization': `Bearer ${token}`,
-    }
-  })
-    .then((res) => {
-      console.log(res.data, ' this is properties')
-      return res.data.filter(property => property.companyid === userData.cmcId)
-    })
-    .catch((err) => {
-      console.error("Error fetching properties:", err);
-    });
-};
-
-
-export const fetchEmployees = () => {
-  axios.get("/v1/emp", {
-    headers: {
-      'authorization': `Bearer ${token}`,
-    }
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.error("Error fetching properties:", err);
-    });
-};
-
-
  
