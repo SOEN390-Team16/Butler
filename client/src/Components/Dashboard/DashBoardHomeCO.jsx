@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import SideDrawer from "./SideDrawer";
@@ -17,28 +17,23 @@ import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
+import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
 import axios from "axios";
+import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
+import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
 const DashBoardHomeCO = () => {
-  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [parkingSpots, setParkingSpots] = useState([]);
   const [lockers, setLockers] = useState([]);
+  const [condoUnit, setCondoUnit] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
-
-  const [parking, setParking] = useState({
-    userid: 0,
-    property_id: 0,
-    parkingid: 0,
-  });
-
-  const [locket, setLocker] = useState({});
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
@@ -51,9 +46,6 @@ const DashBoardHomeCO = () => {
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
         // console.log(parkingSpotsResponse.data[0]);
-        setParking(parkingSpots[0]);
-        // console.log("parking:");
-        // console.log(parking.userid);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
@@ -70,16 +62,50 @@ const DashBoardHomeCO = () => {
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
-        console.log(lockersResponse.data);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
       });
   };
 
+  const fetchCondos = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/cu`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log("all condos");
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching condo units:", error);
+      });
+  };
+
+  const fetchCondo = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/cu/${19}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setCondoUnit(res.data);
+        console.log("condo:");
+        console.log(condoUnit);
+      })
+      .catch((error) => {
+        console.error("Error fetching condo unit:", error);
+      });
+  };
+
   useEffect(() => {
     fetchParkingSpots();
     fetchLockers();
+    fetchCondos();
+    fetchCondo();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
@@ -195,7 +221,26 @@ const DashBoardHomeCO = () => {
           </div>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Condo Units 🏢"}/>
+            <TableCardHeader title={"My Condo Units"}>
+              <div className="flex items-center gap-4">
+                <Link className="underline" to={""}>
+                  See more
+                </Link>
+
+                <Modal>
+                  {/* <ModalToggler> */}
+                  <AddButton>Add Condo Unit</AddButton>
+                  {/* </ModalToggler> */}
+                  <ModalContent
+                    title="Want to add a Property"
+                    description="Add the information associated to the property to add it to your account"
+                    onExit={() => console.log("exit")}
+                  >
+                    <PropertyAddForm onAddProperty={addPropertyToState} />
+                  </ModalContent>
+                </Modal>
+              </div>
+            </TableCardHeader>
             <div>
               {properties.length > 0 ? (
                 <Table>
@@ -284,8 +329,8 @@ const DashBoardHomeCO = () => {
                   <th>User ID</th>
                 </TableHeader>
                 {lockers.map((locker) => (
-                  <TableRow key={locker.lockerid}>
-                    <td>{locker.lockerid}</td>
+                  <TableRow key={locker.locker_id}>
+                    <td>{lockers[0].lockerid}</td>
                     <td>{userID}</td>
                   </TableRow>
                 ))}
@@ -293,6 +338,98 @@ const DashBoardHomeCO = () => {
             </div>
           </TableCard>
         </div>
+        <div className="table-space"></div>
+        <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+          <TableCardHeader title={"Condo Fees"}>
+            <div className="flex items-center gap-4">
+              {/* <Link className="underline" to={""}>
+                See more
+              </Link> */}
+
+              <Modal>
+                {/* <ModalToggler>
+                  <AddButton>Add Property</AddButton>
+                </ModalToggler> */}
+                <ModalContent
+                  title="Want to add a Property"
+                  description="Add the information associated to the property to add it to your account"
+                  onExit={() => console.log("exit")}
+                >
+                  <PropertyAddForm onAddProperty={addPropertyToState} />
+                </ModalContent>
+              </Modal>
+            </div>
+          </TableCardHeader>
+          <div>
+            {properties.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Condo ID</th>
+                  <th>Condo Fee</th>
+                  <th>Breakdown</th>
+                  <th>Make Payment</th>
+                </TableHeader>
+                {properties.map((property, index) => (
+                  <TableRow key={index}>
+                    <td>
+                      <GoArrowUpRight size={24} />
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </TableRow>
+                ))}
+              </Table>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Condo ID</th>
+                  <th>Total Condo Fee</th>
+                  <th></th>
+                  <th></th>
+                </TableHeader>
+                <TableRow>
+                  <td>
+                    <GoArrowUpRight size={24} />
+                  </td>
+                  <td>{condoUnit.condoid}</td>
+                  <td>100</td>
+                  <td>
+                    <Modal>
+                      <ModalToggler>
+                        <FeeBreakdownButton>
+                          View Fee Breakdown
+                        </FeeBreakdownButton>
+                      </ModalToggler>
+                      <ModalContent
+                        title="Condo Fee Breakdown"
+                        description="This Section Displays the Breakdown of Your Total Condo Fees."
+                        onExit={() => console.log("exit")}
+                      >
+                        <FeeBreakdownForm />
+                      </ModalContent>
+                    </Modal>
+                  </td>
+                  <td>
+                    <Modal>
+                      <MakePaymentButton>Make Payment</MakePaymentButton>
+                      <ModalContent
+                        title="Want to add a Property"
+                        description="Add the information associated to the property to add it to your account"
+                        onExit={() => console.log("exit")}
+                      >
+                        <PropertyAddForm onAddProperty={addPropertyToState} />
+                      </ModalContent>
+                    </Modal>
+                  </td>
+                </TableRow>
+              </Table>
+            )}
+          </div>
+        </TableCard>
         <div
           className="flex flex-col justify-center items-center w-full"
           style={{ paddingTop: 48, paddingBottom: 64 }}
