@@ -14,13 +14,15 @@ export default function CondoAddForm(props) {
   let condoUnitSchema = object({
     condoUnitNumber: number()
       .required("A condo unit number is required")
-      .integer("Condo unit number must be an integer"),
+      .integer("Condo unit number must be an integer")
+      .min(1, "Condo unit number must be a positive integer and greater than 0")
+      .default(props.condoUnitsUncompleted[0].condo_number),
     condoUnitSize: number()
       .required("A condo unit size is required")
       .integer("Condo unit size must be an integer"),
-    condoUnitOccupantType: string().required(
-      "A condo unit occupant type is required"
-    ),
+    condoUnitOccupantType: string()
+      .required("A condo unit occupant type is required")
+      .oneOf(["Owner", "Renter"]),
     condoUnitTotalFees: number()
       .typeError("Condo unit total fees must be a number")
       .required("A condo unit total fees is required")
@@ -48,26 +50,42 @@ export default function CondoAddForm(props) {
   };
 
   const handleSubmit = (values) => {
+    console.log("Condo Unit values:", values);
     const userData = JSON.parse(localStorage.getItem("userData"));
     const token = localStorage.getItem("token");
     const condoUnit = {
       companyid: userData.cmcId,
-      propertyid: props.propertyId,
+      property_id: props.propertyId,
       condo_number: values.condoUnitNumber,
       size: values.condoUnitSize,
       occupant_type: values.condoUnitOccupantType,
       total_fees: values.condoUnitTotalFees,
     };
 
+    for (const key in condoUnit) {
+      if (condoUnit[key] === "") {
+        toast.error(`Please fill in the ${key} field`);
+        return;
+      }
+    }
+
+    console.log("Condo Unit:", condoUnit);
+
+    const currCondoUnit = props.condoUnitsUncompleted.find(
+      (unit) => unit.condo_number == condoUnit.condo_number
+    );
+
+    console.log("Current Condo Unit:", currCondoUnit);
+    const condoUnitId = currCondoUnit.condoid;
+
     axios
-      .post("http://hortzcloud.com:3000/api/v1/unit", condoUnit, {
+      .patch(`http://hortzcloud.com:3000/api/v1/cu/${condoUnitId}`, condoUnit, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
       .then(() => {
         toast.success("Condo Unit Successfully Added!");
-        props.onAddCondoUnit(condoUnit);
         toggle();
       })
       .catch((reason) => {
@@ -82,12 +100,22 @@ export default function CondoAddForm(props) {
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitNumber">Condo Unit Number</Label>
           {errorMessage("condoUnitNumber")}
-          <Input
-            onChange={formik.handleChange}
+          <select
             id="condoUnitNumber"
             name="condoUnitNumber"
             value={formik.values.condoUnitNumber}
-          />
+            onChange={formik.handleChange}
+            className="border border-gray-400 rounded-lg px-4 py-3"
+          >
+            {props.condoUnitsUncompleted.map((condoUnit) => (
+              <option
+                key={condoUnit.condo_number}
+                value={condoUnit.condo_number}
+              >
+                {condoUnit.condo_number}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitSize">Condo Unit Size</Label>
@@ -104,12 +132,16 @@ export default function CondoAddForm(props) {
             Condo Unit Occupant Type
           </Label>
           {errorMessage("condoUnitOccupantType")}
-          <Input
+          <select
             onChange={formik.handleChange}
             id="condoUnitOccupantType"
             name="condoUnitOccupantType"
             value={formik.values.condoUnitOccupantType}
-          />
+            className="border border-gray-400 rounded-lg px-4 py-3"
+          >
+            <option value="Owner">Owner</option>
+            <option value="Renter">Renter</option>
+          </select>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitTotalFees">Condo Unit Total Fees</Label>
@@ -128,6 +160,6 @@ export default function CondoAddForm(props) {
 }
 
 CondoAddForm.propTypes = {
-  onAddCondoUnit: PropTypes.func.isRequired,
   propertyId: PropTypes.number.isRequired,
+  condoUnitsUncompleted: PropTypes.array.isRequired,
 };
