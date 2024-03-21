@@ -1,5 +1,31 @@
 const pool = require('../../db')
 const queries = require('./queries')
+const nodemailer = require('nodemailer')
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.BUTLER_EMAIL,
+    pass: process.env.BUTLER_EMAIL_PASSWORD
+  }
+})
+
+const sendEmail = ({ to, subject, text }) => {
+  const mailOptions = {
+    from: process.env.BUTLER_EMAIL,
+    to,
+    subject,
+    text
+  }
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error)
+    } else {
+      console.log('Email sent:', info.response)
+    }
+  })
+}
 
 const getCondoUnits = (req, res) => {
   console.log('Get All Condo Units')
@@ -142,11 +168,72 @@ const calculateTotalCondoFee = (req, res) => {
   })
 }
 
+const sendCondoFeesToOwners = (propertyId) => {
+  pool.query(queries.getCondoOwnersEmailsByProperty, [propertyId], (error, ownersResults) => {
+    if (error) {
+      console.error('Error fetching condo owners:', error)
+      return
+    }
+
+    ownersResults.rows.forEach(owner => {
+      const condoId = owner.condoid
+      const ownerEmail = owner.user_email
+
+      calculateTotalCondoFeeForEmail(condoId, (condoFeeInfo) => {
+        if (condoFeeInfo) {
+          sendEmail({
+            to: ownerEmail,
+            subject: 'Your Condo Fees',
+            text: `Hello, here are your condo fees details:\n\n${JSON.stringify(condoFeeInfo, null, 2)}`
+          })
+        }
+      })
+    })
+  })
+}
+
+const calculateTotalCondoFeeForEmail = (condoId, callback) => {
+  pool.query(queries.getCondoFeePerSqrft, [condoId], (error, feeResults) => {
+    if (error || feeResults.rowCount === 0) {
+      console.error('Error fetching condo fee or condo unit not found:', error)
+      callback(null)
+    } else {
+      const condoInformation = feeResults.rows[0]
+      const condoSize = condoInformation.size
+      const feePerSquareFoot = condoInformation.condo_fee_per_sqrft
+      const CondoFee = condoSize * feePerSquareFoot
+
+      pool.query(queries.getCondoParkingFee, [condoId], (parkingError, parkingResults) => {
+        const parkingFee = parkingResults.rows.length > 0 ? parkingResults.rows[0].parking_fee : 0
+
+        pool.query(queries.getCondoLockerFee, [condoId], (lockerError, lockerResults) => {
+          const lockerFee = lockerResults.rows.length > 0 ? lockerResults.rows[0].locker_fee : 0
+
+          const condoFeeInfo = {
+            'Condo Size': condoSize,
+            'Fee Per Square Foot': feePerSquareFoot,
+            'Condo Fee': CondoFee,
+            'Additional Fees': {
+              'Parking Fee': parkingFee,
+              'Locker Fee': lockerFee
+            },
+            'Total Additional Fees': parkingFee + lockerFee,
+            'Total Condo Fee': CondoFee + parkingFee + lockerFee
+          }
+
+          callback(condoFeeInfo)
+        })
+      })
+    }
+  })
+}
+
 module.exports = {
   getCondoUnits,
   getCondoUnitById,
   addCondoUnit,
   removeCondoUnit,
   updateCondoUnit,
-  calculateTotalCondoFee
+  calculateTotalCondoFee,
+  sendCondoFeesToOwners
 }
