@@ -16,6 +16,7 @@ import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
+import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
 import axios from "axios";
 
 // Dashboard home is the home component where clients will enter
@@ -31,6 +32,14 @@ const DashBoardHomeCO = () => {
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
 
+  const [parking, setParking] = useState({
+    userid: 0,
+    property_id: 0,
+    parkingid: 0,
+  });
+
+  const [locket, setLocker] = useState({});
+
   // Fetch parking spots data
   const fetchParkingSpots = () => {
     axios
@@ -41,7 +50,10 @@ const DashBoardHomeCO = () => {
       })
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
-        console.log(parkingSpotsResponse.data);
+        // console.log(parkingSpotsResponse.data[0]);
+        setParking(parkingSpots[0]);
+        // console.log("parking:");
+        // console.log(parking.userid);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
@@ -51,13 +63,14 @@ const DashBoardHomeCO = () => {
   // Fetch lockers data
   const fetchLockers = () => {
     axios
-      .get(`http://hortzcloud.com:3000/api/v1/l/company/${userID}`, {
+      .get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
+        console.log(lockersResponse.data);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
@@ -182,7 +195,7 @@ const DashBoardHomeCO = () => {
           </div>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Properties 🏢"}>
+            <TableCardHeader title={"My Condo Units 🏢"}>
               <div className="flex items-center gap-4">
                 <Link className="underline" to={""}>
                   See more
@@ -272,11 +285,13 @@ const DashBoardHomeCO = () => {
                 <TableHeader>
                   <th>Parking Spot ID</th>
                   <th>User ID</th>
+                  <th>Property ID</th>
                 </TableHeader>
                 {parkingSpots.map((spot) => (
-                  <TableRow key={spot.parking_spot_id}>
-                    <td>{spot.parking_spot_id}</td>
+                  <TableRow key={spot.parkingid}>
+                    <td>{spot.parkingid}</td>
                     <td>{userID}</td>
+                    <td>{spot.property_id}</td>
                   </TableRow>
                 ))}
               </Table>
@@ -306,14 +321,34 @@ const DashBoardHomeCO = () => {
                   <th>User ID</th>
                 </TableHeader>
                 {lockers.map((locker) => (
-                  <TableRow key={locker.locker_id}>
-                    <td>{locker.locker_id}</td>
+                  <TableRow key={locker.lockerid}>
+                    <td>{locker.lockerid}</td>
                     <td>{userID}</td>
                   </TableRow>
                 ))}
               </Table>
             </div>
           </TableCard>
+        </div>
+        <div
+          className="flex flex-col justify-center items-center w-full"
+          style={{ paddingTop: 48, paddingBottom: 64 }}
+        >
+          <Modal>
+            <ModalToggler>
+              <h2>
+                Need support from the management team? Click here to view their
+                contact info
+              </h2>
+            </ModalToggler>
+            <ModalContent
+              title="Company Contact Info"
+              description=""
+              onExit={() => console.log("exit")}
+            >
+              <CompanyContactDisplayForm />
+            </ModalContent>
+          </Modal>
         </div>
       </div>
     </div>
