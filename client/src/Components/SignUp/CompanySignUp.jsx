@@ -28,6 +28,7 @@ const CompanySignUp = (props) => {
           console.log("Company account created successfully");
           let userData = res.data;
           console.log("User data:", userData);
+          navigation('/')
           //   navigation("/DashboardHome");
         } else {
           console.log("Incorrect email or password");
