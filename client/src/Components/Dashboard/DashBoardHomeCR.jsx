@@ -17,10 +17,10 @@ import Modal from "../Modals/Modal.jsx";
 import PropertyAddForm from "./PropertyAddForm.jsx";
 import PageHeaderTable from "../Tables/PageHeaderTable.jsx";
 import CompanyContactDisplayForm from "./CompanyContactDisplayForm.jsx";
-import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
 import axios from "axios";
-import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
+import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
+import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -45,9 +45,6 @@ const DashBoardHomeCR = () => {
       })
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
-        // console.log(parkingSpotsResponse.data[0]);
-        // console.log("parking:");
-        console.log(parkingSpots[0]);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
@@ -64,8 +61,6 @@ const DashBoardHomeCR = () => {
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
-        // console.log("locker id");
-        // console.log(lockers[0].lockerid);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
@@ -110,7 +105,7 @@ const DashBoardHomeCR = () => {
     fetchLockers();
     fetchCondos();
     fetchCondo();
-  }, [token, userID]);
+  }, [fetchCondo, fetchCondos, fetchLockers, fetchParkingSpots, token, userID]);
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
@@ -270,30 +265,8 @@ const DashBoardHomeCR = () => {
                   ))}
                 </Table>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <th></th>
-                    <th>Condo ID</th>
-                    <th>Condo Number</th>
-                    <th>Company ID</th>
-                    <th>Property ID</th>
-                    <th>Occupant Type</th>
-                    <th>Size</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>
-                      <GoArrowUpRight size={24} />
-                    </td>
-                    <td>{condoUnit.condoid}</td>
-                    <td>{condoUnit.condo_number}</td>
-                    <td>{condoUnit.companyid}</td>
-                    <td>{condoUnit.property_id}</td>
-                    <td>{userData.role}</td>
-                    <td>
-                      670 m<sup>2</sup>
-                    </td>
-                  </TableRow>
-                </Table>
+                <h3>You do not have a property associated to your account yet. Contact your Condo Management Company for
+                  more information.</h3>
               )}
             </div>
           </TableCard>

@@ -5,9 +5,9 @@ import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { toast } from "react-toastify";
 
-const CreateAccount = (props) => {
+const CreateAccount = () => {
   const navigation = useNavigate();
 
   const [userAccount, setIsUserAccount] = useState(true);
@@ -35,7 +35,8 @@ const CreateAccount = (props) => {
           console.log("Account created successfully");
           let userData = res.data;
           console.log("User data:", userData);
-          navigation("/DashboardHome");
+          toast.success("Successfully registered!")
+          navigation("/");
         } else {
           console.log("Incorrect email or password");
         }
