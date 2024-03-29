@@ -18,6 +18,7 @@ router.patch(
   authenticateToken,
   controller.updateRequestStatus
 )
+router.patch('/:reqid/', authenticateToken, controller.updateRequest)
 router.delete('/:reqid', authenticateToken, controller.deleteRquest)
 
 module.exports = router

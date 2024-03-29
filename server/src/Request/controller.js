@@ -203,11 +203,76 @@ const updateRequestStatus = async (req, res) => {
     const updatedRequestData = updatedRequest.rows[0]
     return res.status(200).json({
       message: 'Request status updated successfully',
-      request: updatedRequestData
+      request: updatedRequestData.status
     })
   } catch (error) {
     return res.status(500).json({ error: 'Internal Server Error' })
   }
+}
+
+const updateRequest = async (req, res) => {
+  const reqid = req.params.request_id
+  const { employee_Id, user_id, description, type, status } = req.body
+  if (!employee_Id && !user_id && !description && !type && !status) {
+    return res
+      .status(400)
+      .json({ error: 'At least one field is required for updating' })
+  }
+
+  const setClauses = []
+  const values = []
+
+  if (employee_Id) {
+    setClauses.push('employee_Id = $' + (values.length + 1))
+    values.push(employee_Id)
+  }
+  if (user_id) {
+    setClauses.push('user_id = $' + (values.length + 1))
+    values.push(user_id)
+  }
+  if (description) {
+    setClauses.push('description = $' + (values.length + 1))
+    values.push(description)
+  }
+  if (type) {
+    setClauses.push('type = $' + (values.length + 1))
+    values.push(type)
+  }
+  if (status) {
+    setClauses.push('status = $' + (values.length + 1))
+    values.push(status)
+  }
+
+  const query = `UPDATE request SET ${setClauses.join(
+    ', '
+  )} WHERE request_id = $${values.length + 1}`
+
+  pool.query(queries.getRequestByID, [reqid], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Internal Server Error' })
+    }
+    if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Request not found' })
+    } else {
+      pool.query(query, [...values, reqid], (error, result) => {
+        if (error) {
+          return res.status(500).json({ error: 'Internal Server Error' })
+        }
+        if (result.rowCount === 0) {
+          return res.status(404).json({ error: 'request not found' })
+        }
+        pool.query(queries.getRequestByID, [reqid], (error, results) => {
+          if (error) {
+            return res.status(500).json({ error: 'Internal Server Error' })
+          }
+          res.status(201).json({
+            message: 'Request Updated Successfully!',
+            employee: results.rows
+          })
+        })
+      })
+    }
+  })
 }
 
 module.exports = {
@@ -218,5 +283,6 @@ module.exports = {
   addRequest,
   assignRequestToEmployee,
   deleteRquest,
-  updateRequestStatus
+  updateRequestStatus,
+  updateRequest
 }
