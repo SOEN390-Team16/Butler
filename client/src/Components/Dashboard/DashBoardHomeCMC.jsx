@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
-import SideDrawerCMC from "./SideDrawerCMC";
+
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import { Link } from "react-router-dom";
@@ -23,6 +23,7 @@ import UserRegistrationForm from "./UserRegistrationForm.jsx";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";
 import EmployeeSection from "./EmployeeSection.jsx";
+import SideNavCMC from "../SideNav/SideNavCMC.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -122,18 +123,6 @@ const DashBoardHomeCMC = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  const options = [
-    { key: 1, option: "Label 1" },
-    { key: 2, option: "Label 2" },
-    { key: 3, option: "Label 3" },
-    { key: 4, option: "Label 4" },
-  ];
-
-  const dummyUser = {
-    fName: "Condo",
-    lName: "Owner",
-  };
-
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -160,23 +149,7 @@ const DashBoardHomeCMC = () => {
       </button>
 
       {/* The Side drawer is whats being opened for main navigation */}
-      <SideDrawerCMC
-        isOpen={isDrawerOpen}
-        onClose={toggleDrawer}
-        firstName={dummyUser.fName}
-        lastName={dummyUser.lName}
-      >
-        <div className="link__holder">
-          {options &&
-            options.map((obj) => {
-              return (
-                <div key={obj.key} className="link__option">
-                  <p>{obj.option}</p>
-                </div>
-              );
-            })}
-        </div>
-      </SideDrawerCMC>
+      <SideNavCMC isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       {/* Your main content goes here */}
       <div className="container flex flex-col items-center px-24 pb-16">
         <div className="flex flex-col justify-center items-center w-full">
