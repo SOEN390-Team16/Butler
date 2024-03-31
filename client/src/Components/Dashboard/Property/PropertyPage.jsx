@@ -1,6 +1,6 @@
 // React imports
 import { useEffect, useState } from "react";
-import { Navigate, useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 // Axios for API calls
 import axios from "axios";

@@ -24,6 +24,7 @@ import { IoSearch } from "react-icons/io5";
 import axios from "axios";
 import EmployeeSection from "./EmployeeSection.jsx";
 import SideNavCMC from "../SideNav/SideNavCMC.jsx";
+import { IconButton } from "@chakra-ui/react";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -144,9 +145,14 @@ const DashBoardHomeCMC = () => {
   return (
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
-      <button className="patty__button" onClick={toggleDrawer}>
-        <RxHamburgerMenu size={40} />
-      </button>
+      <IconButton
+        onClick={toggleDrawer}
+        icon={<RxHamburgerMenu />}
+        className="fixed top-10 shadow z-50"
+        backgroundColor={"#FFFFFF"}
+        rounded={"0 10px 10px 0"}
+        _hover={{ backgroundColor: "#CCCCCC" }}
+      />
 
       {/* The Side drawer is whats being opened for main navigation */}
       <SideNavCMC isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
