@@ -36,7 +36,7 @@ const LoginCard = () => {
             navigation("/DashBoardHomeCR");
           } else if (userData.role === "condo_owner") {
             navigation("/DashBoardHomeCO");
-          } else {
+          } else if (userData.role === "public_user") {
             navigation("/DashboardHome/editUser");
           }
         } else {

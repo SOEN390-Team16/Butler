@@ -12,6 +12,7 @@ import AddButton from "../Buttons/AddButton.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import axios from "axios";
+
 import EditEmployeeForm from "./EditEmployeeForm.jsx";
 import CreateEmployeeForm from "./CreateEmployeeForm.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
@@ -42,12 +43,12 @@ export default function EmployeeSection() {
         });
     };
     fetchProperties();
-  }, [token]);
+  }, [token, userData.cmcId]);
 
   // CHange this to localhost later
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/v1/emp", {
+      .get("http://hortzcloud.com:3000/api/v1/emp", {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -60,27 +61,23 @@ export default function EmployeeSection() {
         toast.error(`Something went wrong: ${err.message}`);
         throw err;
       });
-  }, []);
-  // console.log(employees)
+  }, [token]);
 
   const onDelete = async (e, emp) => {
     e.preventDefault();
-    console.log(emp);
     await axios
-      .delete(`http://localhost:3000/api/v1/emp/${emp.employeeid}`, {
+      .delete(`http://hortzcloud:3000/api/v1/emp/${emp.employeeid}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         toast.success("Successfully deleted.");
       })
       .catch((err) => {
         console.error(err);
         toast.error("Couldn't delete the employee.");
       });
-    // toggle();
   };
 
   return (
