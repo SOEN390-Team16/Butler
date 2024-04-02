@@ -13,6 +13,7 @@ import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
+import ServiceRequestCMC from "./Components/ServiceRequestPageCMC/ServiceRequestCMC";
 function App() {
   return (
     <>
@@ -35,6 +36,7 @@ function App() {
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}
             />
+            <Route path="/ServiceRequestCMC" element={<ServiceRequestCMC />} />
           </Routes>
         </BrowserRouter>
         <ToastContainer />
