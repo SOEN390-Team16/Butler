@@ -22,6 +22,7 @@ import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
+import CreateRequestForm from "./CreateRequestForm.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -201,6 +202,81 @@ const DashBoardHomeCO = () => {
               </TableCard>
             </div>
           </div>
+          <div className="table-space"></div>
+          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+            <TableCardHeader title={"My Requests"}>
+              <div className="flex items-center gap-4">
+                <Link className="underline" to={""}>
+                  See more
+                </Link>
+
+                <Modal>
+                  <ModalToggler>
+                    <AddButton>Create New Request</AddButton>
+                  </ModalToggler>
+                  <ModalContent
+                    title="Submit a Service Request"
+                    description="Fill the form to submit a service request"
+                    onExit={() => console.log("exit")}
+                  >
+                    <CreateRequestForm onAddProperty={addPropertyToState} />
+                  </ModalContent>
+                </Modal>
+              </div>
+            </TableCardHeader>
+            <div>
+              {properties.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th></th>
+                    <th>Request Detail 1</th>
+                    <th>Request Detail 2</th>
+                    <th>Request Detail 3</th>
+                    <th>Request Detail 4</th>
+                    <th>Request Detail 5</th>
+                    <th>Request Detail 6</th>
+                  </TableHeader>
+                  {properties.map((property, index) => (
+                    <TableRow key={index}>
+                      <td>
+                        <GoArrowUpRight size={24} />
+                      </td>
+                      <td>{property.property_name}</td>
+                      <td>{property.address}</td>
+                      <td>{property.unit_count}</td>
+                      <td>{property.parking_count}</td>
+                      <td>{property.locker_count}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <th></th>
+                    <th>Request Detail 1</th>
+                    <th>Request Detail 2</th>
+                    <th>Request Detail 3</th>
+                    <th>Request Detail 4</th>
+                    <th>Request Detail 5</th>
+                    <th>Request Detail 6</th>
+                  </TableHeader>
+                  <TableRow>
+                    <td>
+                      <GoArrowUpRight size={24} />
+                    </td>
+                    <td>{condoUnit.condoid}</td>
+                    <td>{condoUnit.condo_number}</td>
+                    <td>{condoUnit.companyid}</td>
+                    <td>{condoUnit.property_id}</td>
+                    <td>{userData.role}</td>
+                    <td>
+                      670 m<sup>2</sup>
+                    </td>
+                  </TableRow>
+                </Table>
+              )}
+            </div>
+          </TableCard>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"My Condo Units"}>
