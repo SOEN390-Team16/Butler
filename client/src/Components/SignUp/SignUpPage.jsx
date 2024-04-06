@@ -1,6 +1,3 @@
-import React from "react";
-import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 import SidePicture from "../Login/SidePicture";
 

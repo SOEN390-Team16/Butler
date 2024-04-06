@@ -2,10 +2,12 @@ import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 
 import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
+import useAuthStore from "../../store/auth/auth.store.js";
+import { UserRoles } from "../../models/user-roles.enum.js";
+
 const LoginCard = () => {
   const navigation = useNavigate();
 
@@ -16,38 +18,41 @@ const LoginCard = () => {
   });
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
+  const login = useAuthStore(state => state.login)
 
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
     // This is where the user will be logged in and redirected to their profile
-    axios
-      .post("http://hortzcloud.com:3000/api/v1/login/", userInfo) // Added 'http://' protocol
-      .then((res) => {
-        if (res.data.token) {
-          console.log("Logged in successfully");
-          let userData = jwtDecode(res.data.token);
-          console.log("User data:", userData);
-          localStorage.setItem("userData", JSON.stringify(userData)); // Save userData to localStorage
-          localStorage.setItem("token", res.data.token);
-          if (userData.role === "cmc") {
+    try {
+      const data = await login(userInfo.email, userInfo.password);
+      if (data) {
+        console.log("Logged in successfully");
+        let userData = jwtDecode(data.token);
+        localStorage.setItem("userData", JSON.stringify(userData));
+        switch (String(userData.role)) {
+          case UserRoles.CONDO_MANAGEMENT_COMPANY:
             navigation("/DashboardHomeCMC");
-          } else if (userData.role === "renter") {
-            navigation("/DashBoardHomeCR");
-          } else if (userData.role === "condo_owner") {
+            break;
+          case UserRoles.CONDO_OWNER:
             navigation("/DashBoardHomeCO");
-          } else if (userData.role === "public_user") {
+            break;
+          case UserRoles.CONDO_RENTER:
+            navigation("/DashBoardHomeCR");
+            break;
+          case UserRoles.PUBLIC_USER:
             navigation("/DashboardHome/editUser")
-          }
-        } else {
-          console.log("Incorrect email or password");
-          setIncorrectInfo(true);
         }
-      })
-      .catch((err) => {
-        console.log("Error logging in:", err);
+      }
+    } catch (err) {
+      if (err.response.date.message === "Invalid email or password") {
+        console.log("Incorrect email or password");
+        setIncorrectInfo(true);
+      } else {
+        console.log("Error logging in:", err.message);
         setError(true);
-      });
+      }
+    }
   };
   // Function that stores the users information into the object for querying
   const handleChange = (e) => {

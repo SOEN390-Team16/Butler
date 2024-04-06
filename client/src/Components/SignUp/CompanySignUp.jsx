@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import "./CompanySignUp.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const CompanySignUp = (props) => {
+const CompanySignUp = () => {
   const navigation = useNavigate();
 
   const [companyInfo, setCompanyInfo] = useState({
@@ -12,8 +12,6 @@ const CompanySignUp = (props) => {
     email: "",
     password: "",
   });
-
-  const [wrongInformation, setIsWrongInformation] = useState(false);
 
   // Onclick function that will take care of all the login API calls
   const handleClick = async (e) => {
@@ -32,7 +30,6 @@ const CompanySignUp = (props) => {
           //   navigation("/DashboardHome");
         } else {
           console.log("Incorrect email or password");
-          wrongInformation(true);
         }
       })
       .catch((err) => {
