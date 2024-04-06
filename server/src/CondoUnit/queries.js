@@ -8,6 +8,7 @@ const updateCondoUnit = 'UPDATE condo_unit SET companyid = $1, property_id = $2,
 const getCondoFeePerSqrft = 'SELECT pp.condo_fee_per_sqrft, cu.size FROM property pp, condo_unit cu WHERE pp.property_id = cu.property_id AND cu.condoid = $1'
 const getCondoParkingFee = 'SELECT p.parking_fee FROM property p, condo_unit c, active_registration_key ark, assigned_parking_spot asp WHERE ark.condoid = $1 AND asp.userid = ark.userid AND c.condoid = $1 AND c.property_id = p.property_id'
 const getCondoLockerFee = 'SELECT p.locker_fee FROM property p, condo_unit c, active_registration_key ark, assigned_locker al WHERE ark.condoid = $1 AND al.userid = ark.userid AND c.condoid = $1 AND c.property_id = p.property_id'
+const getCondoOwnersEmailsByProperty = 'SELECT cu.condoid, pu.email AS user_email FROM condo_unit cu INNER JOIN active_registration_key ark ON cu.condoid = ark.condoid INNER JOIN public_user pu ON ark.userid = pu.userid WHERE cu.property_id = $1'
 
 module.exports = {
   getCondoUnits,
@@ -19,5 +20,6 @@ module.exports = {
   updateCondoUnit,
   getCondoFeePerSqrft,
   getCondoParkingFee,
-  getCondoLockerFee
+  getCondoLockerFee,
+  getCondoOwnersEmailsByProperty
 }

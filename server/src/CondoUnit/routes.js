@@ -10,5 +10,6 @@ router.post('/', authenticateToken, controller.addCondoUnit)
 router.post('/:condoid', authenticateToken, controller.calculateTotalCondoFee)
 router.delete('/:condoid', authenticateToken, controller.removeCondoUnit)
 router.patch('/:condoid', authenticateToken, controller.updateCondoUnit)
+router.post('/send-fees', authenticateToken, controller.sendCondoFeesToOwners)
 
 module.exports = router
