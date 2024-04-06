@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-
 import image from "../../pictures/loginHero.jpg";
 
 SideNav.propTypes = {
@@ -92,7 +91,7 @@ export default function SideNav({ isOpen, toggleDrawer }) {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/ServicesDashBoard")}
               >
                 Your Requests
               </Button>
