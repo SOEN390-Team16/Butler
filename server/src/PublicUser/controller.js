@@ -46,17 +46,12 @@ const addPublicUser = (req, res) => {
     } else {
       try {
         const hashedPassword = await bcrypt.hash(password, 5)
-        pool.query(
-          queries.addPublicUser,
-
-          [first_name, last_name, email, hashedPassword],
-          (error, result) => {
-            if (error) {
-              console.log(error)
-            }
-            res.status(201).json(result.rows)
+        pool.query(queries.addPublicUser, [first_name, last_name, email, hashedPassword], (error, result) => {
+          if (error) {
+            console.log(error)
           }
-        )
+          res.status(201).json(result.rows)
+        })
       } catch (hashError) {
         // console.error('Error hashing password:', hashError)
         res.status(500).json({ error: 'Internal Server Error' })
