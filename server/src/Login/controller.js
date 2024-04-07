@@ -34,6 +34,7 @@ const loginUserPU = async (email, password) => {
       : null
   } catch (error) {
     console.error('Error during loginUserPU:', error)
+    throw error
   }
 }
 
