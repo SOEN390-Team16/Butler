@@ -1,8 +1,33 @@
 const { login } = require('../src/Login/controller')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const pool = require('../db')
+const mockDb = require("mock-knex");
+mockDb.mock(pool)
+jest.mock("../db");
 
 describe('Login functionality', () => {
+  beforeEach(() => {
+    // Clear mock data before each test
+    jest.clearAllMocks()
+  });
+
   it('should handle login for PublicUser with valid credentials', async () => {
+    pool.query.mockResolvedValue({
+      rows: [{
+        userid: 'someUserId',
+        password: 'hashedPassword', // Presumed to be bcrypt-hashed
+        first_name: 'Test',
+        last_name: 'User',
+        email: 'testUser@email.com',
+        role: 'userRole'
+      }],
+      rowCount: 1
+    });
+
+    bcrypt.compare = jest.fn().mockResolvedValue(true);
+    jwt.sign = jest.fn().mockReturnValue("mockedToken");
+
     const req = { body: { email: 'testCey@email.com', password: '12345' } }
     const res = {
       send: jest.fn(),
@@ -34,6 +59,9 @@ describe('Login functionality', () => {
       send: jest.fn(),
       status: jest.fn(() => ({ json: jest.fn() }))
     }
+
+    bcrypt.compare = jest.fn().mockResolvedValue(false);
+    jwt.sign = jest.fn().mockReturnValue("mockedToken");
 
     await login(req, res)
     expect(res.send).not.toHaveBeenCalled()
@@ -83,12 +111,4 @@ describe('Login functionality', () => {
     expect(res.send).not.toHaveBeenCalled()
     expect(res.status).toHaveBeenCalledWith(500)
   })
-})
-
-afterAll(async () => {
-  try {
-    await pool.end()
-  } catch (err) {
-    console.error('Error closing the database connection:', err)
-  }
 })
