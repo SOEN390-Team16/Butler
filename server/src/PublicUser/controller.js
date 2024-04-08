@@ -28,7 +28,7 @@ const getPublicUserById = (req, res) => {
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Public User not found' })
     } else {
-      res.status(200).json(results.rows)
+      res.status(200).json(results.rows[0])
     }
   })
 }
