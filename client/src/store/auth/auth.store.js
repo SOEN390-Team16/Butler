@@ -19,10 +19,16 @@ const useAuthStore = create((set, get) => ({
         return res.data;
       }
     } catch (err) {
-      toast.error("Login Failed: " + ("Unknown error"));
+      toast.error(`Login Failed: ${err.message}`);
     }
-
   },
+  registerPublicUser: async (userInfo) => {
+    try {
+      return await AuthService.registerPublicUser(userInfo);
+    } catch (err) {
+      return err.response;
+    }
+  }
 
 }))
 
