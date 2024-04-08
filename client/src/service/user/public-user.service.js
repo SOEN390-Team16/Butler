@@ -4,21 +4,23 @@ import { PublicUser } from "../../models/user/public-user.model.js";
 
 const PublicUserService = {
   getAllUsers: async () => {
-    const res = await axios.get(`${AppProperties.API_URL}/api/v1/pu`)
-    return res.data.map(json => PublicUser.fromJson(json))
+    return await axios.get(`${AppProperties.API_URL}/api/v1/pu`)
+      .then(res => res.data.map(user => PublicUser.fromJson(user)))
   },
   getPubicUser: async (userid) => {
-    const res = await axios.get(`${AppProperties.API_URL}/api/v1/pu/${userid}`)
-    return PublicUser.fromJson(res.data)
+    return await axios.get(`${AppProperties.API_URL}/api/v1/pu/${userid}`)
+      .then(res => PublicUser.fromJson(res.data))
   },
   createPublicUser: async (publicUser) => {
-    await axios.post(`${AppProperties.API_URL}/api/v1/pu`, publicUser)
+    return await axios.post(`${AppProperties.API_URL}/api/v1/pu`, publicUser)
+      .then(res => PublicUser.fromJson(res.data))
   },
-  pathPublicUser: async (id, publicUser) => {
-    await axios.patch(`${AppProperties.API_URL}/api/v1/pu/${id}`, publicUser)
+  updatePublicUser: async (publicUser) => {
+    return await axios.patch(`${AppProperties.API_URL}/api/v1/pu/${publicUser.id}`, publicUser)
+      .then(res => PublicUser.fromJson(res.data))
   },
   deletePublicUser: async (id) => {
-    await axios.delete(`${AppProperties.API_URL}/api/v1/pu/${id}`)
+    return await axios.delete(`${AppProperties.API_URL}/api/v1/pu/${id}`)
   }
 }
 
