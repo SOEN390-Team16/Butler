@@ -7,7 +7,7 @@ function generateRandomKey () {
       Math.random().toString(36).slice(2)
 }
 
-const generateRegistrationKey = (req, res, randomKeyGenerator = generateRandomKey) => {
+const generateRegistrationKey = (randomKeyGenerator = generateRandomKey) => (req, res) => {
   console.log('Generating Unique Registration Key')
 
   const role = req.params.role
