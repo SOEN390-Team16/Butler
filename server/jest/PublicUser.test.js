@@ -125,7 +125,7 @@ describe("getPublicUserById", () => {
     await getPublicUserById(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([mockPublicUser]);
+    expect(res.json).toHaveBeenCalledWith(mockPublicUser);
   });
 
   it("should return a 404 error if public user is not found", async () => {
