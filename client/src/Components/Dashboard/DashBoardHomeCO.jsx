@@ -99,9 +99,7 @@ const DashBoardHomeCO = () => {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        console.log("all condos");
-        console.log(res.data);
+      .then(() => {
       })
       .catch((error) => {
         console.error("Error fetching condo units:", error);
@@ -117,8 +115,6 @@ const DashBoardHomeCO = () => {
       })
       .then((res) => {
         setCondoUnit(res.data);
-        console.log("condo:");
-        console.log(condoUnit);
       })
       .catch((error) => {
         console.error("Error fetching condo unit:", error);
