@@ -7,6 +7,7 @@ import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
 import useAuthStore from "../../store/auth/auth.store.js";
 import { UserRoles } from "../../models/user-roles.enum.js";
+import usePublicUserStore from "../../store/user/public-user.store.js";
 
 const LoginCard = () => {
   const navigation = useNavigate();
@@ -19,37 +20,39 @@ const LoginCard = () => {
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
   const login = useAuthStore(state => state.login)
+  const publicUserStore = usePublicUserStore()
 
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
     // This is where the user will be logged in and redirected to their profile
     try {
-      const data = await login(userInfo.email, userInfo.password);
-      if (data) {
-        console.log("Logged in successfully");
-        let userData = jwtDecode(data.token);
-        localStorage.setItem("userData", JSON.stringify(userData));
+      const response = await login(userInfo.email, userInfo.password);
+      if (response.status === 200) {
+        const userData = jwtDecode(response.data.token)
+
         switch (String(userData.role)) {
           case UserRoles.CONDO_MANAGEMENT_COMPANY:
             navigation("/DashboardHomeCMC");
             break;
           case UserRoles.CONDO_OWNER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashBoardHomeCO");
             break;
           case UserRoles.CONDO_RENTER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashBoardHomeCR");
             break;
           case UserRoles.PUBLIC_USER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashboardHome/editUser")
         }
       }
     } catch (err) {
-      if (err.response.date.message === "Invalid email or password") {
-        console.log("Incorrect email or password");
+      console.log(err)
+      if (err.response.data.message === "Invalid email or password") {
         setIncorrectInfo(true);
       } else {
-        console.log("Error logging in:", err.message);
         setError(true);
       }
     }
