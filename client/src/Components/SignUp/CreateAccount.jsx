@@ -27,19 +27,18 @@ const CreateAccount = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log(userInfo);
     const response = await registerPublicUser(userInfo)
-    console.log(response)
     if (response && response.status === 201) {
       toast.success("Successfully registered!")
       navigation("/");
-    } else if (response.status === 404) {
+    } else if (response && response.status === 404) {
       toast.error("Email already in use")
     } else {
-      toast.error(`Something went wrong: ${response.data.error}`);
+      if (response.data.error) {
+        toast.error(`Something went wrong: ${response.data.error}`)
+      }
     }
-
-  };
+  }
 
   // Create account holds the information records for when a client signs up.
   // 1. when a client signs up , there will be an axios post method to see whether the email/password combo already exists
