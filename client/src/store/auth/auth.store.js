@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import AuthService from "../../service/auth/auth.service.js";
-import { toast } from "react-toastify";
 
 const TOKEN = "token"
 
@@ -16,10 +15,10 @@ const useAuthStore = create((set, get) => ({
       const res = await AuthService.login(email, password);
       if (res.data && res.data.token) {
         get().setToken(res.data.token);
-        return res.data;
+        return res;
       }
     } catch (err) {
-      toast.error(`Login Failed: ${err.message}`);
+      return err.response
     }
   },
   registerPublicUser: async (userInfo) => {
