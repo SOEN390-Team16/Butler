@@ -1,11 +1,13 @@
 import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
 import "./CompanySignUp.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import useAuthStore from "../../store/auth/auth.store.js";
+import { toast } from "react-toastify";
 
 const CompanySignUp = () => {
   const navigation = useNavigate();
+  const registerCompany = useAuthStore(state => state.registerCompany)
 
   const [companyInfo, setCompanyInfo] = useState({
     company_name: "",
@@ -16,26 +18,19 @@ const CompanySignUp = () => {
   // Onclick function that will take care of all the login API calls
   const handleClick = async (e) => {
     e.preventDefault();
-    // This is where the user will be logged in and redirected to their profile
-    console.log(companyInfo);
-    axios
-      .post("http://hortzcloud.com:3000/api/v1/cmc/", companyInfo) // Added 'http://' protocol
-      .then((res) => {
-        console.log("res", res);
-        if (res) {
-          console.log("Company account created successfully");
-          let userData = res.data;
-          console.log("User data:", userData);
-          navigation('/')
-          //   navigation("/DashboardHome");
-        } else {
-          console.log("Incorrect email or password");
-        }
-      })
-      .catch((err) => {
-        console.log("Error logging in:", err);
-      });
-  };
+    const response = await registerCompany(companyInfo)
+    if (response && response.status === 201) {
+      toast.success("Successfully registered!")
+      navigation('/')
+    } else if (response && response.status === 400) {
+      toast.error("Email already in use")
+    } else {
+      if (response.data.error) {
+        toast.error(`Something went wrong: ${response.data.error}`)
+      }
+    }
+  }
+
   // Function that stores the users information into the object for querying as theyre typing
   const handleChange = (e) => {
     setCompanyInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -80,7 +75,7 @@ const CompanySignUp = () => {
           />
         </div>
       </div>
-      <ContinueButton onClick={handleClick} name={"Create Account"} />
+      <ContinueButton onClick={handleClick} name={"Create Account"}/>
     </div>
   );
 };

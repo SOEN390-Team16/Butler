@@ -28,6 +28,13 @@ const useAuthStore = create((set, get) => ({
     } catch (err) {
       return err.response;
     }
+  },
+  registerCompany: async (companyInfo) => {
+    try {
+      return await AuthService.registerCompany(companyInfo.company_name, companyInfo.email, companyInfo.password);
+    } catch (err) {
+      return err.response;
+    }
   }
 
 }))
