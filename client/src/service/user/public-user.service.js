@@ -16,7 +16,7 @@ const PublicUserService = {
       .then(res => PublicUser.fromJson(res.data))
   },
   updatePublicUser: async (publicUser) => {
-    return await axios.patch(`${AppProperties.API_URL}/api/v1/pu/${publicUser.id}`, publicUser)
+    return await axios.patch(`${AppProperties.API_URL}/api/v1/pu/${publicUser.userid}`, publicUser)
       .then(res => PublicUser.fromJson(res.data))
   },
   deletePublicUser: async (id) => {
