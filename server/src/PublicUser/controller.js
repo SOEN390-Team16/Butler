@@ -100,9 +100,11 @@ const updatePublicUser = async (req, res) => {
     values.push(profile_picture)
   }
 
-  const query = `UPDATE public_user SET ${setClauses.join(
-    ', '
-  )} WHERE userid = $${values.length + 1}`
+  const query = `UPDATE public_user
+                 SET ${setClauses.join(
+                         ', '
+                 )}
+                 WHERE userid = $${values.length + 1} RETURNING *`
 
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {
@@ -121,8 +123,8 @@ const updatePublicUser = async (req, res) => {
         if (result.rowCount === 0) {
           return res.status(404).json({ error: 'Public User not found' })
         }
-
-        res.status(200).json({ message: 'Public User updated successfully' })
+        console.log(result.rows)
+        res.status(200).json(result.rows[0])
       })
     }
   })
