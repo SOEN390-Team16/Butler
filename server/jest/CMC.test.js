@@ -103,7 +103,7 @@ describe("Endpoint for Get CMC by ID", () => {
     await getCMCById(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([mockResult]);
+    expect(res.json).toHaveBeenCalledWith(mockResult);
   });
 
   it("should return 404 if the CMC is not found", async () => {
