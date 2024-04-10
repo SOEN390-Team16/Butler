@@ -97,7 +97,18 @@ const createFacility = (req, res) => {
     })
 }
 
-
+const reserveFacility = (req, res) => {
+    console.log('Reserving a Facility')
+    const property_id = parseInt(req.params.property_id)
+    pool.query(queries.reserveFacility, [property_id], (error, results) => {
+      if (error) {
+        console.error('Error freserving a facility: ', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+}
 
 module.exports = {
   getFacilityByDate,
