@@ -71,6 +71,20 @@ const getReservedFacilityById = (req, res) => {
     })
 }
 
+const getFacilityByDate = (req, res) => {
+  console.log('Getting facility by date')
+
+  pool.query(queries.getFacilityByDate, [property_id], (error, results) => {
+    if (error) {
+      console.error('Error finding facility by date: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+
 module.exports = {
   getFacilityByDate,
   getFacilityById
