@@ -83,8 +83,8 @@ const getRequestsByUserID = (req, res) => {
 const addRequest = async (req, res) => {
   console.log('Add a Request')
   const { user_id, description, type } = req.body
-  const empid = null;
-  const status = "Received";
+  const empid = null
+  const status = 'Received'
   try {
     const userExists = await pool.query(queries.checkIfUserExists, [user_id])
     if (userExists.rows.length === 0) {
@@ -165,60 +165,58 @@ const assignRequestToEmployee = (req, res) => {
 }
 
 const deleteRquest = (req, res) => {
-  const request_id = parseInt(req.params.request_id);
+  const request_id = parseInt(req.params.request_id)
   pool.query(queries.getRequestByID, [request_id], (error, result) => {
     if (error) {
-      return res.status(500).json({ error: 'Error checking if request exists'});
+      return res.status(500).json({ error: 'Error checking if request exists' })
     }
     if (result.rows.length === 0) {
       // Request not found, return 404
-      return res.status(404).json({ error: 'Request not found' });
+      return res.status(404).json({ error: 'Request not found' })
     }
     // Request exists, proceed with deletion
     pool.query(queries.deleteRequest, [request_id], (error, results) => {
       if (error) {
-        return res.status(500).json({ error: 'Could Not Delete Request' });
+        return res.status(500).json({ error: 'Could Not Delete Request' })
       }
       // Request deleted successfully, return 200
-      return res.status(200).json({ message: 'Request deleted successfully' });
-    });
-  });
-};
-
+      return res.status(200).json({ message: 'Request deleted successfully' })
+    })
+  })
+}
 
 const updateRequestStatus = async (req, res) => {
-  console.log('Update Request Status');
-  const request_id = parseInt(req.params.request_id);
-  const status = req.body.status;
+  console.log('Update Request Status')
+  const request_id = parseInt(req.params.request_id)
+  const status = req.body.status
 
   try {
-    const requestExists = await pool.query(queries.getRequestByID, [request_id]);
-    console.log(requestExists);
+    const requestExists = await pool.query(queries.getRequestByID, [request_id])
+    console.log(requestExists)
     if (requestExists.rows.length === 0) {
-      return res.status(404).json({ error: 'Request not found' });
+      return res.status(404).json({ error: 'Request not found' })
     }
 
     // Update the request status
-    await pool.query(queries.updateRequestStatus, [status, request_id]);
-    
+    await pool.query(queries.updateRequestStatus, [status, request_id])
+
     // Get the updated request
-    const updatedReq = await pool.query(queries.getRequestByID, [request_id]);
-    console.log("-----------------------------------------------------");
-    console.log(updatedReq);
-    
+    const updatedReq = await pool.query(queries.getRequestByID, [request_id])
+    console.log('-----------------------------------------------------')
+    console.log(updatedReq)
+
     // Extract the updated request data
-    const updatedRequestData = updatedReq.rows[0];
+    const updatedRequestData = updatedReq.rows[0]
 
     return res.status(200).json({
       message: 'Request status updated successfully',
       request: updatedRequestData
-    });
+    })
   } catch (error) {
-    console.error('Error updating request status:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error updating request status:', error)
+    return res.status(500).json({ error: 'Internal Server Error' })
   }
-};
-
+}
 
 const updateRequest = async (req, res) => {
   const request_id = req.params.request_id
