@@ -5,8 +5,8 @@ import { useModal } from "../Modals/Modal.jsx";
 import { object, string } from 'yup';
 import KeyButton from "../Buttons/KeyButton.jsx";
 import { activateRegistrationKey } from "../../utils/api.js";
-import { UserRoles } from "../../utils/enums/UserRoles.js";
 import { useNavigate } from "react-router-dom";
+import { UserRoles } from "../../models/user-roles.enum.js";
 
 export default function RegisterUserForm() {
   const {toggle} = useModal();

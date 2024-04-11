@@ -7,7 +7,7 @@ function generateRandomKey () {
       Math.random().toString(36).slice(2)
 }
 
-const generateRegistrationKey = (req, res) => {
+const generateRegistrationKey = (req, res, randomKeyGenerator = generateRandomKey) => {
   console.log('Generating Unique Registration Key')
 
   const role = req.params.role
@@ -17,7 +17,7 @@ const generateRegistrationKey = (req, res) => {
     return res.status(422).json({ error: 'Invalid Role Input' })
   }
 
-  const key = generateRandomKey()
+  const key = randomKeyGenerator()
 
   pool.query(queriesRK.checkIfRegistrationKeyAlreadyExists, [key], (error, results) => {
     if (error) {
