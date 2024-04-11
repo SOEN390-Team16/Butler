@@ -17,8 +17,8 @@ const getAllRequests = (req, res) => {
 
 const getRequestByID = (req, res) => {
   console.log('Get a Specific Request')
-  const reqid = parseInt(req.params.request_id)
-  pool.query(queries.getRequestsByID, [reqid], (error, results) => {
+  const request_id = req.query.reqid
+  pool.query(queries.getRequestByID, [request_id], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     }
@@ -32,15 +32,15 @@ const getRequestByID = (req, res) => {
 
 const getRequestsByEmpID = (req, res) => {
   console.log('Get Requests Associated With A Specific Employee')
-  const empid = parseInt(req.params.employee_id)
-  pool.query(queries.checkIfEmployeeExists, [empid], (error, results) => {
+  const employee_id = req.query.empid
+  pool.query(queries.checkIfEmployeeExists, [employee_id], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Employee not found' })
     } else {
-      pool.query(queries.getRequestsByEmpID, [empid], (error, results) => {
+      pool.query(queries.getRequestsByEmpID, [employee_id], (error, results) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
@@ -58,15 +58,15 @@ const getRequestsByEmpID = (req, res) => {
 
 const getRequestsByUserID = (req, res) => {
   console.log('Get Requests Associated With A Specific User')
-  const userid = parseInt(req.params.user_id)
-  pool.query(queries.checkIfUserExists, [userid], (error, results) => {
+  const user_id = req.query.userid
+  pool.query(queries.checkIfUserExists, [user_id], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'User not found' })
     } else {
-      pool.query(queries.getRequestsByUserID, [userid], (error, results) => {
+      pool.query(queries.getRequestsByUserID, [user_id], (error, results) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
@@ -83,22 +83,24 @@ const getRequestsByUserID = (req, res) => {
 const addRequest = async (req, res) => {
   console.log('Add a Request')
   const { user_id, description, type } = req.body
+  const empid = null;
+  const status = "Received";
   try {
     const userExists = await pool.query(queries.checkIfUserExists, [user_id])
     if (userExists.rows.length === 0) {
       return res.status(404).send('User Not Found')
     } else {
       const reqResults = await pool.query(queries.addRequest, [
+        empid,
         user_id,
         description,
-        type
+        type,
+        status
       ])
       if (reqResults.rowCount === 0) {
         return res.status(500).json({ error: 'Request could not be created' })
       } else {
         const createdRequest = reqResults.rows[0]
-        createdRequest.employee_id = null
-        createdRequest.status = 'Received'
         return res.status(200).json({
           message: 'Request Created Successfully',
           request: createdRequest
@@ -112,12 +114,12 @@ const addRequest = async (req, res) => {
 
 const assignRequestToEmployee = (req, res) => {
   console.log('Assign Request To Employee')
-  const requestId = parseInt(req.params.reqid)
-  const employeeId = parseInt(req.body.employee_id)
+  const request_id = parseInt(req.params.request_id)
+  const employee_id = parseInt(req.body.employee_id)
 
   pool.query(
     queries.checkIfEmployeeExists,
-    [employeeId],
+    [employee_id],
     (error, empResults) => {
       if (error) {
         return res.status(500).json({ error: 'Internal Server Error' })
@@ -125,7 +127,7 @@ const assignRequestToEmployee = (req, res) => {
       if (empResults.rowCount === 0) {
         return res.status(404).json({ error: 'Employee not found' })
       } else {
-        pool.query(queries.getRequestByID, [requestId], (error, reqResults) => {
+        pool.query(queries.getRequestByID, [request_id], (error, reqResults) => {
           if (error) {
             return res.status(500).json({ error: 'Internal Server Error' })
           }
@@ -134,7 +136,7 @@ const assignRequestToEmployee = (req, res) => {
           } else {
             pool.query(
               queries.assignRequestToEmployee,
-              [employeeId, requestId],
+              [employee_id, request_id],
               (error, assignResults) => {
                 if (error) {
                   return res
@@ -147,7 +149,7 @@ const assignRequestToEmployee = (req, res) => {
                     .json({ error: 'Request could not be assigned' })
                 } else {
                   const assignedRequest = reqResults.rows[0]
-                  assignedRequest.employee_id = employeeId
+                  assignedRequest.employee_id = employee_id
                   res.status(200).json({
                     message: 'Request assigned to employee successfully',
                     request: assignedRequest
@@ -163,57 +165,65 @@ const assignRequestToEmployee = (req, res) => {
 }
 
 const deleteRquest = (req, res) => {
-  const reqid = parseInt(req.params.request_id)
-  pool.query(queries.getRequestByID, [reqid], (error, result) => {
+  const request_id = parseInt(req.params.request_id);
+  pool.query(queries.getRequestByID, [request_id], (error, result) => {
     if (error) {
-      return res.status(500).json({ error: 'Internal Server Error' })
+      return res.status(500).json({ error: 'Error checking if request exists'});
     }
     if (result.rows.length === 0) {
-      return res.status(200)
+      // Request not found, return 404
+      return res.status(404).json({ error: 'Request not found' });
     }
-    pool.query(queries.deleteRequest, [reqid], (error, results) => {
+    // Request exists, proceed with deletion
+    pool.query(queries.deleteRequest, [request_id], (error, results) => {
       if (error) {
-        return res.status(500).json({ error: 'Internal Server Error' })
+        return res.status(500).json({ error: 'Could Not Delete Request' });
       }
-      res.status(200)
-    })
-  })
-}
+      // Request deleted successfully, return 200
+      return res.status(200).json({ message: 'Request deleted successfully' });
+    });
+  });
+};
+
 
 const updateRequestStatus = async (req, res) => {
-  console.log('Update Request Status')
-  const requestId = parseInt(req.params.reqid)
-  const { status } = req.body
+  console.log('Update Request Status');
+  const request_id = parseInt(req.params.request_id);
+  const status = req.body.status;
 
   try {
-    const requestExists = await pool.query(queries.getRequestByID, [requestId])
+    const requestExists = await pool.query(queries.getRequestByID, [request_id]);
+    console.log(requestExists);
     if (requestExists.rows.length === 0) {
-      return res.status(404).json({ error: 'Request not found' })
+      return res.status(404).json({ error: 'Request not found' });
     }
 
-    const updatedRequest = await pool.query(queries.updateRequestStatus, [
-      status,
-      requestId
-    ])
+    // Update the request status
+    await pool.query(queries.updateRequestStatus, [status, request_id]);
+    
+    // Get the updated request
+    const updatedReq = await pool.query(queries.getRequestByID, [request_id]);
+    console.log("-----------------------------------------------------");
+    console.log(updatedReq);
+    
+    // Extract the updated request data
+    const updatedRequestData = updatedReq.rows[0];
 
-    if (updatedRequest.rowCount === 0) {
-      return res.status(404).json({ error: 'Status could not be updated' })
-    }
-
-    const updatedRequestData = updatedRequest.rows[0]
     return res.status(200).json({
       message: 'Request status updated successfully',
-      request: updatedRequestData.status
-    })
+      request: updatedRequestData
+    });
   } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' })
+    console.error('Error updating request status:', error);
+    return res.status(500).json({ error: 'Internal Server Error' });
   }
-}
+};
+
 
 const updateRequest = async (req, res) => {
-  const reqid = req.params.request_id
-  const { employee_Id, user_id, description, type, status } = req.body
-  if (!employee_Id && !user_id && !description && !type && !status) {
+  const request_id = req.params.request_id
+  const { employee_id, user_id, description, type, status } = req.body
+  if (!employee_id && !user_id && !description && !type && !status) {
     return res
       .status(400)
       .json({ error: 'At least one field is required for updating' })
@@ -222,9 +232,9 @@ const updateRequest = async (req, res) => {
   const setClauses = []
   const values = []
 
-  if (employee_Id) {
-    setClauses.push('employee_Id = $' + (values.length + 1))
-    values.push(employee_Id)
+  if (employee_id) {
+    setClauses.push('employee_id = $' + (values.length + 1))
+    values.push(employee_id)
   }
   if (user_id) {
     setClauses.push('user_id = $' + (values.length + 1))
@@ -247,21 +257,21 @@ const updateRequest = async (req, res) => {
     ', '
   )} WHERE request_id = $${values.length + 1}`
 
-  pool.query(queries.getRequestByID, [reqid], (error, results) => {
+  pool.query(queries.getRequestByID, [request_id], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Request not found' })
     } else {
-      pool.query(query, [...values, reqid], (error, result) => {
+      pool.query(query, [...values, request_id], (error, result) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
         if (result.rowCount === 0) {
           return res.status(404).json({ error: 'request not found' })
         }
-        pool.query(queries.getRequestByID, [reqid], (error, results) => {
+        pool.query(queries.getRequestByID, [request_id], (error, results) => {
           if (error) {
             return res.status(500).json({ error: 'Internal Server Error' })
           }

@@ -38,6 +38,6 @@ app.use("/api/v1/al", assignedLockerRoutes);
 app.use("/api/v1/ps", parkingSpotRoutes);
 app.use("/api/v1/aps", assignedParkingSpotRoutes);
 app.use("/api/v1/emp", employeeRoutes);
-app.use("api/v1/req", RequestRoutes);
+app.use("/api/v1/req", RequestRoutes);
 
 app.listen(port, () => console.log(`app listening on ${port}`));
