@@ -164,7 +164,7 @@ const assignRequestToEmployee = (req, res) => {
   )
 }
 
-const deleteRquest = (req, res) => {
+const deleteRequest = (req, res) => {
   const request_id = parseInt(req.params.request_id)
   pool.query(queries.getRequestByID, [request_id], (error, result) => {
     if (error) {
@@ -290,7 +290,7 @@ module.exports = {
   getRequestsByUserID,
   addRequest,
   assignRequestToEmployee,
-  deleteRquest,
+  deleteRequest,
   updateRequestStatus,
   updateRequest
 }

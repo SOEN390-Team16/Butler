@@ -34,6 +34,6 @@ router.post('/', authenticateToken, controller.addRequest)
 router.patch('/:request_id/assign', authenticateToken, controller.assignRequestToEmployee)
 router.patch('/:request_id/status', authenticateToken, controller.updateRequestStatus)
 router.patch('/:request_id/', authenticateToken, controller.updateRequest)
-router.delete('/:request_id', authenticateToken, controller.deleteRquest)
+router.delete('/:request_id', authenticateToken, controller.deleteRequest)
 
 module.exports = router
