@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { uploadImage } from "../../utils/cloudinary";
@@ -8,73 +7,46 @@ import Modal from "../Modals/Modal.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import RegisterUserForm from "./RegisterUserForm.jsx";
+import usePublicUserStore from "../../store/user/public-user.store.js";
+import { toast } from "react-toastify";
 
 const EditAccount = () => {
-  // Retrieve userData from localStorage
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  // Convert userData object to array of entries
-  const userDataArray = userData ? Object.entries(userData) : [];
-  // Get username from userDataArray by index, or fallback to an empty string
-  const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming username is the second item
-  const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
-  const userEmail = userDataArray.length > 1 ? userDataArray[3][1] : "";
-  const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
-  const currentPlan = userDataArray.length > 1 ? userDataArray[4][1] : "";
-
+  const publicUserStore = usePublicUserStore()
+  const entity = publicUserStore.getEntity()
   const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
-    first_name: firstName,
-    last_name: lastName,
-    email: userEmail,
-    password: null,
-    profile_picture: { image },
+    first_name: entity.first_name ? entity.first_name : "",
+    last_name: entity.last_name ? entity.last_name : "",
+    email: entity.email ? entity.email : "",
+    profile_picture: image,
   });
 
   const navigate = useNavigate();
 
   // Function to update email in userData and localStorage
   const handleEmailChange = (e) => {
-    const newEmail = e.target.value;
-    setNewProfile((prev) => ({ ...prev, email: newEmail }));
+    setNewProfile((prev) => ({ ...prev, email: e.target.value }));
 
-    // Update email in userData
-    if (userData) {
-      const updatedUserData = { ...userData, email: newEmail };
-      localStorage.setItem("userData", JSON.stringify(updatedUserData));
-    }
     handleProfileChange(e);
   };
 
   // Function to update first name in userData and localStorage
   const handleFirstNameChange = (e) => {
-    const newFirstName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, first_name: newFirstName }));
+    setNewProfile((prev) => ({ ...prev, first_name: e.target.value }));
 
-    // Update first name in userData
-    if (userData) {
-      const updatedUserData = { ...userData, firstName: newFirstName };
-      localStorage.setItem("userData", JSON.stringify(updatedUserData));
-    }
     handleProfileChange(e);
   };
 
   // Function to update last name in userData and localStorage
   const handleLastNameChange = (e) => {
-    const newLastName = e.target.value;
-    setNewProfile((prev) => ({ ...prev, last_name: newLastName }));
+    setNewProfile((prev) => ({ ...prev, last_name: e.target.value }));
 
-    // Update last name in userData
-    if (userData) {
-      const updatedUserData = { ...userData, lastName: newLastName };
-      localStorage.setItem("userData", JSON.stringify(updatedUserData));
-    }
     handleProfileChange(e);
   };
 
   const handleProfileChange = async (e) => {
     setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    console.log(newProfile);
   };
 
   const handleImageChange = (e) => {
@@ -94,36 +66,19 @@ const EditAccount = () => {
   // const token = sessionStorage.getItem("token");
   const token = localStorage.getItem("token");
 
-  const config = {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(newProfile);
+
+    newProfile.userid = entity.userid;
+    delete newProfile.profile_picture
+    publicUserStore.updatePublicUser(newProfile);
+
     // Upload image to cloudinary
     uploadImage(newProfile.profile_picture)
       .then((res) => {
-        console.log("image url: ", res);
         setNewProfile((prev) => ({ ...prev, profile_picture: res }));
-        // Update the user data in the database
-        axios
-          .patch(
-            `http://localhost:3000/api/v1/pu/${userID}`,
-            newProfile,
-            config
-          )
-          .then((res) => {
-            console.log("res: ", res);
-            console.log("User data updated successfully");
-          })
-          .catch((error) => {
-            console.error("Error updating user data:", error);
-          });
+
+        toast.success("Public Profile Updated Successfully!")
       })
       .catch((error) => {
         console.error("Error uploading image:", error);
@@ -138,10 +93,10 @@ const EditAccount = () => {
       className="min-h-screen flex flex-col justify-start items-center bg-profile-hero bg-cover bg-no-repeat
       bg-center relative"
     >
-      {currentPlan !== "public_user" && (
+      {entity.role !== "public_user" && (
         <div className={"absolute top-0 left-0"}>
           <button onClick={() => navigate(-1)}>
-            <MdKeyboardDoubleArrowLeft size={40} />
+            <MdKeyboardDoubleArrowLeft size={40}/>
           </button>
         </div>
       )}
@@ -204,7 +159,7 @@ const EditAccount = () => {
                         <p>{newProfile.first_name}</p>
                         <p>{newProfile.last_name}</p>
                         <p>{newProfile.email}</p>
-                        <p>{currentPlan}</p>
+                        <p>{entity.role}</p>
                       </>
                     ) : (
                       <>
@@ -212,13 +167,13 @@ const EditAccount = () => {
                           type="text"
                           value={newProfile.first_name}
                           onChange={handleFirstNameChange}
-                          name="firstName"
+                          name="first_name"
                         />
                         <input
                           type="text"
                           value={newProfile.last_name}
                           onChange={handleLastNameChange}
-                          name="lastName"
+                          name="last_name"
                         />
                         <input
                           type="email"
@@ -226,7 +181,7 @@ const EditAccount = () => {
                           onChange={handleEmailChange}
                           name="email"
                         />
-                        <p>{currentPlan}</p>
+                        <p>{entity.role}</p>
                       </>
                     )}
                   </div>
@@ -264,7 +219,7 @@ const EditAccount = () => {
                       "account."
                     }
                   >
-                    <RegisterUserForm />
+                    <RegisterUserForm/>
                   </ModalContent>
                 </Modal>
               </div>
