@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "../DashBoardHome.css";
-import SideDrawerCMC from "../SideDrawer.jsx";
+import SideDrawerCMC from "../../SideNav/SideNavCMC.jsx";
 import TableCard from "../../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../../Cards/Tables/TableCardHeader.jsx";
 import { Link } from "react-router-dom";
@@ -12,8 +12,6 @@ import { GoArrowUpRight, GoPerson } from "react-icons/go";
 import ModalToggler from "../../Modals/ModalToggler.jsx";
 import AddButton from "../../Buttons/AddButton.jsx";
 import KeyButton from "../../Buttons/KeyButton.jsx";
-import DeleteButton from "../../Buttons/DeleteButton.jsx";
-import SearchButton from "../../Buttons/SearchButton.jsx";
 import RegisterButton from "../../Buttons/RegisterButton.jsx";
 import ModalContent from "../../Modals/ModalContent.jsx";
 import Modal from "../../Modals/Modal.jsx";
@@ -110,10 +108,6 @@ const FinanceHome = () => {
     { key: 4, option: "Label 4" },
   ];
 
-  const dummyUser = {
-    fName: "Condo",
-    lName: "Owner",
-  };
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
