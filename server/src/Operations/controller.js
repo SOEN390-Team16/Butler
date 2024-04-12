@@ -155,6 +155,39 @@ const setCostByOperationId = (req, res) => {
   })
 }
 
+const calculateOperationalBudget = (req, res) => {
+  console.log('Calculate Operational Budget')
+
+  let totalOperationalCosts = 0
+  let totalCondoFees = 0
+
+  pool.query(queries.getTotalOperationalCost, (error, operationalCostsResult) => {
+    if (error) {
+      console.error('Error calculating operational costs:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      totalOperationalCosts = parseFloat(operationalCostsResult.rows[0].total_cost || 0)
+
+      pool.query(queries.getTotalCondoFees, (error, condoFeesResult) => {
+        if (error) {
+          console.error('Error calculating condo fees:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
+        } else {
+          totalCondoFees = parseFloat(condoFeesResult.rows[0].total_fees || 0)
+
+          const totalOperationalBudget = totalCondoFees - totalOperationalCosts
+          const response = {
+            'Total Operational Costs': totalOperationalCosts,
+            'Total Condo Fees': totalCondoFees,
+            'Total Operational Budget': totalOperationalBudget
+          }
+          res.status(200).json(response)
+        }
+      })
+    }
+  })
+}
+
 module.exports = {
   getAllOperations,
   getOperationById,
@@ -163,5 +196,6 @@ module.exports = {
   updateOperation,
   readOperationalCosts,
   getCostByOperationId,
-  setCostByOperationId
+  setCostByOperationId,
+  calculateOperationalBudget
 }

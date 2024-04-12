@@ -14,6 +14,8 @@ const calculateTotalCostPerPropertyWithinYear = `
 `
 const getCostByOperationId = 'SELECT op.cost FROM operation op WHERE op.operation_id = $1'
 const setCostByOperationId = 'UPDATE operation SET cost = $1 WHERE operation_id = $2'
+const getTotalOperationalCost = 'SELECT SUM(cost) AS total_cost from operation'
+const getTotalCondoFees = 'SELECT SUM(total_fees) AS total_fees from condo_unit'
 
 module.exports = {
   getAllOperations,
@@ -25,5 +27,7 @@ module.exports = {
   checkIfOperationExistsById,
   calculateTotalCostPerPropertyWithinYear,
   getCostByOperationId,
-  setCostByOperationId
+  setCostByOperationId,
+  getTotalOperationalCost,
+  getTotalCondoFees
 }
