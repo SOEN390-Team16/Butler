@@ -37,7 +37,9 @@ describe('generateRegistrationKey', () => {
         callback(null, { rowCount: 1 }) // generateRegistrationKey
       })
 
-    await generateRegistrationKey(req, res, mockKeyGenerator)
+    const middleware = generateRegistrationKey(mockKeyGenerator)
+    await middleware(req, res)
+
     expect(res.status).toHaveBeenCalledWith(201)
     expect(res.send).toHaveBeenCalledWith('randomKey')
   })
@@ -58,7 +60,8 @@ describe('generateRegistrationKey', () => {
       callback(null, { rows: [{ registration_key }] }) // checkIfRegistrationKeyAlreadyExists
     })
 
-    await generateRegistrationKey(req, res)
+    const middleware = generateRegistrationKey()
+    await middleware(req, res)
 
     expect(res.status).toHaveBeenCalledWith(404)
     expect(res.send).toHaveBeenCalledWith('Registration Key Already Exists')
@@ -80,7 +83,8 @@ describe('generateRegistrationKey', () => {
       callback(null, { rows: [{ exists: true }] }) // Simulates key existence
     })
 
-    await generateRegistrationKey(req, res, mockKeyGenerator)
+    const middleware = generateRegistrationKey(mockKeyGenerator)
+    await middleware(req, res)
 
     expect(res.status).toHaveBeenCalledWith(404)
     expect(res.send).toHaveBeenCalledWith('Registration Key Already Exists')
@@ -100,7 +104,8 @@ describe('generateRegistrationKey', () => {
       callback(new Error('Internal Server Error'), null) // checkIfRegistrationKeyAlreadyExists
     })
 
-    await generateRegistrationKey(req, res)
+    const middleware = generateRegistrationKey()
+    await middleware(req, res)
 
     expect(res.status).toHaveBeenCalledWith(500)
     expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' })

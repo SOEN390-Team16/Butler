@@ -9,11 +9,8 @@ const AuthService = {
     })
   },
 
-  registerPublicUser: async (email, password) => {
-    return await axios.post(`${AppProperties.API_URL}/api/v1/pu/`, {
-      email,
-      password
-    })
+  registerPublicUser: async (userInfo) => {
+    return await axios.post(`${AppProperties.API_URL}/api/v1/pu/`, userInfo)
   },
 
   registerCompany: async (company_name, email, password) => {
