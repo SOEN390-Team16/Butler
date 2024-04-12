@@ -6,6 +6,11 @@ const checkIfPropertyExists = async (property_id) => {
   return results.rowCount > 0
 }
 
+const checkIfCompanyExists = async (companyid) => {
+  const results = await pool.query(queries.checkIfCompanyExists, [companyid])
+  return results.rowCount > 0
+}
+
 const getTotalCondoFeesCollected = (req, res) => {
   console.log('Getting total condo fees collected')
   const property_id = parseInt(req.params.property_id)
@@ -81,7 +86,7 @@ const getAnnualReport = (req, res) => {
   })
 }
 
-const getEverythingAtOnce = (req, res) => {
+const getEverythingAtOnceByPropertyId = (req, res) => {
   console.log('getting total collected condo fees, total operational costs for the year, and annual report')
   const property_id = parseInt(req.params.property_id)
   const year = parseInt(req.params.year)
@@ -94,7 +99,29 @@ const getEverythingAtOnce = (req, res) => {
     return res.status(500).json({ error: 'Internal Server Error' })
   }
 
-  pool.query(queries.getEverythingAtOnce, [property_id, year], (error, results) => {
+  pool.query(queries.getEverythingAtOnceByPropertyId, [property_id, year], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+const getEverythingAtOnceByCompanyId = (req, res) => {
+  console.log('getting total collected condo fees, total operational costs for the year, and annual report for all properties')
+  const companyid = parseInt(req.params.companyid)
+  const year = parseInt(req.params.year)
+
+  try {
+    if (!checkIfCompanyExists(companyid)) {
+      return res.status(404).json({ error: 'Company not found' })
+    }
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal Server Error' })
+  }
+
+  pool.query(queries.getEverythingAtOnceByCompanyId, [companyid, year], (error, results) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     } else {
@@ -107,5 +134,6 @@ module.exports = {
   getAnnualReport,
   getTotalOperationCosts,
   getTotalCondoFeesCollected,
-  getEverythingAtOnce
+  getEverythingAtOnceByPropertyId,
+  getEverythingAtOnceByCompanyId
 }
