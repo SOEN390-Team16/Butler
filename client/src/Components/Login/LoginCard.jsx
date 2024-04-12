@@ -32,6 +32,7 @@ const LoginCard = () => {
       const response = await login(userInfo.email, userInfo.password);
       if (response.status === 200) {
         const userData = jwtDecode(response.data.token)
+        localStorage.setItem("userData", JSON.stringify(userData))
 
         switch (String(userData.role)) {
           case UserRoles.CONDO_MANAGEMENT_COMPANY:
