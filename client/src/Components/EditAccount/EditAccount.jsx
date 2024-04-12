@@ -12,6 +12,7 @@ import "./EditAccount.css";
 
 const EditAccount = () => {
   const publicUserStore = usePublicUserStore()
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const entity = publicUserStore.getEntity()
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
@@ -25,16 +26,28 @@ const EditAccount = () => {
 
   const handleEmailChange = (e) => {
     setNewProfile((prev) => ({ ...prev, email: e.target.value }));
+    if (userData) {
+      const updatedUserData = { ...userData, email: e.target.value };
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+    }
     handleProfileChange(e);
   };
 
   const handleFirstNameChange = (e) => {
     setNewProfile((prev) => ({ ...prev, first_name: e.target.value }));
+    if (userData) {
+      const updatedUserData = { ...userData, firstName: e.target.value };
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+    }
     handleProfileChange(e);
   };
 
   const handleLastNameChange = (e) => {
     setNewProfile((prev) => ({ ...prev, last_name: e.target.value }));
+    if (userData) {
+      const updatedUserData = { ...userData, lastName: e.target.value };
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+    }
     handleProfileChange(e);
   };
 
