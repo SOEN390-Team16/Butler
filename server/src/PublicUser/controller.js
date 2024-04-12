@@ -123,7 +123,7 @@ const updatePublicUser = async (req, res) => {
         if (result.rowCount === 0) {
           return res.status(404).json({ error: 'Public User not found' })
         }
-        console.log(result.rows)
+
         res.status(200).json(result.rows[0])
       })
     }
