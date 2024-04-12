@@ -96,7 +96,7 @@ const createReservation = (req, res) => {
 
   const { user_id, facility_id, date } = req.body
 
-  pool.query(queries.checkIfReservationExistsByDetails, [user_id, facility_id, date], (error, results) => {
+  pool.query(queries.checkIfReservationExistsByDetails, [facility_id, date], (error, results) => {
     if (error) {
       console.error('Error checking reservation existence:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
