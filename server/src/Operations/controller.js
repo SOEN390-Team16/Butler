@@ -97,13 +97,18 @@ const updateOperation = (req, res) => {
 const readOperationalCosts = (req, res) => {
   console.log('Calculate Operational Budget')
 
-  pool.query(queries.calculateTotalCost, (error, results) => {
+  const currentYear = new Date().getFullYear()
+
+  pool.query(queries.calculateTotalCostPerPropertyWithinYear, [currentYear], (error, results) => {
     if (error) {
       console.error('Error calculating operational budget', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else {
-      const totalCost = results.rows[0].total_cost || 0
-      res.status(200).json({ 'Total Operational Cost': totalCost })
+      const response = {
+        Year: currentYear,
+        Operations: results.rows
+      }
+      res.status(200).json(response)
     }
   })
 }
