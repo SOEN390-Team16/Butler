@@ -80,9 +80,9 @@ const EditAccount = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const status = publicUserStore.updatePublicUser(newProfile);
+    const status = await publicUserStore.updatePublicUser(newProfile);
     if (status) {
       toast.success("Account updated successfully", { autoClose: 500 })
     }
@@ -225,8 +225,12 @@ const EditAccount = () => {
                 <Modal>
                   <ModalToggler>
                     <button
+                      type={"button"}
                       style={{ backgroundColor: "black", color: "white" }}
-                      onClick={() => setEditProfileActive(!editProfile)}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        setEditProfileActive(!editProfile)
+                      }}
                     >
                       Activate Registration Key
                     </button>
