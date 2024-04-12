@@ -1,47 +1,40 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { uploadImage } from "../../utils/cloudinary";
-import "./EditAccount.css";
+import { toast } from "react-toastify";
 import Modal from "../Modals/Modal.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import ModalToggler from "../Modals/ModalToggler.jsx";
 import RegisterUserForm from "./RegisterUserForm.jsx";
 import usePublicUserStore from "../../store/user/public-user.store.js";
-import { toast } from "react-toastify";
+import CloudinaryImageService from "../../service/asset/image.service.js";
+import "./EditAccount.css";
 
 const EditAccount = () => {
   const publicUserStore = usePublicUserStore()
   const entity = publicUserStore.getEntity()
-  const [image, setImage] = useState(null);
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
+    userid: entity.userid ? entity.userid : "",
     first_name: entity.first_name ? entity.first_name : "",
     last_name: entity.last_name ? entity.last_name : "",
     email: entity.email ? entity.email : "",
-    profile_picture: image,
   });
-
+  const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
 
-  // Function to update email in userData and localStorage
   const handleEmailChange = (e) => {
     setNewProfile((prev) => ({ ...prev, email: e.target.value }));
-
     handleProfileChange(e);
   };
 
-  // Function to update first name in userData and localStorage
   const handleFirstNameChange = (e) => {
     setNewProfile((prev) => ({ ...prev, first_name: e.target.value }));
-
     handleProfileChange(e);
   };
 
-  // Function to update last name in userData and localStorage
   const handleLastNameChange = (e) => {
     setNewProfile((prev) => ({ ...prev, last_name: e.target.value }));
-
     handleProfileChange(e);
   };
 
@@ -49,43 +42,37 @@ const EditAccount = () => {
     setNewProfile((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result);
-        setNewProfile((prev) => ({ ...prev, profile_picture: reader.result }));
-      };
-      reader.readAsDataURL(file);
+    let url;
+    if (!file)
+      return
+
+    const loadingToast = toast.loading('Saving image...');
+    try {
+      const response = await CloudinaryImageService.uploadImage(file)
+      url = response.data.url
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      console.log(err)
+      return
     }
 
-    console.log("Image: ", file);
+    if (url) {
+      const publicUser = publicUserStore.getEntity()
+      await publicUserStore.updatePublicUser({ ...publicUser, profile_picture: url })
+    }
+    toast.dismiss(loadingToast);
+    toast.success("Profile picture updated successfully", { autoClose: 500 })
   };
 
-  // const token = sessionStorage.getItem("token");
-  const token = localStorage.getItem("token");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    newProfile.userid = entity.userid;
-    delete newProfile.profile_picture
-    publicUserStore.updatePublicUser(newProfile);
-
-    // Upload image to cloudinary
-    uploadImage(newProfile.profile_picture)
-      .then((res) => {
-        setNewProfile((prev) => ({ ...prev, profile_picture: res }));
-
-        toast.success("Public Profile Updated Successfully!")
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
-
-    console.log("Form submitted", newProfile);
-    console.log("token: ", token);
+    const status = publicUserStore.updatePublicUser(newProfile);
+    if (status) {
+      toast.success("Account updated successfully", { autoClose: 500 })
+    }
   };
 
   return (
@@ -115,27 +102,46 @@ const EditAccount = () => {
             <div className="flex items-center justify-center gap-16">
               {/* Avatar Image */}
               <div
-                className="relative rounded-full overflow-hidden w-32 h-32 bg-gray-200 flex
-                items-center justify-center"
+                className="relative rounded-full overflow-hidden w-32 h-32 bg-gray-200 flex items-center justify-center"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
               >
-                {image && (
-                  <img
-                    src={image}
-                    alt="Uploaded"
-                    style={{ maxWidth: "100%", objectFit: "cover" }}
-                  />
-                )}
-                {!image && (
+                {publicUserStore.getEntity().profile_picture ? (
                   <>
-                    <label htmlFor="imageInput">
-                      <p>Upload Image</p>
+                    <img
+                      src={publicUserStore.getEntity().profile_picture}
+                      alt="Uploaded"
+                      className="absolute top-0 left-0 w-full h-full object-cover"
+                    />
+                    <label
+                      htmlFor="imageInput"
+                      className={`absolute inset-0 z-10 flex items-center justify-center cursor-pointer ${
+                        isHovering ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ transition: 'opacity 0.3s' }}
+                    >
+                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">Upload Image</p>
                     </label>
                     <input
                       type="file"
                       id="imageInput"
                       accept="image/*"
                       onChange={handleImageChange}
-                      style={{ display: "none" }}
+                      className="hidden"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <label htmlFor="imageInput"
+                           className={'absolute inset-0 z-10 flex items-center justify-center cursor-pointer'}>
+                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">Upload Image</p>
+                    </label>
+                    <input
+                      type="file"
+                      id="imageInput"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
                     />
                   </>
                 )}
