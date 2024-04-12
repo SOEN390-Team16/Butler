@@ -16,7 +16,7 @@ export class PublicUser {
   }
 
   static copy(publicUser) {
-    return new PublicUser.newBuilder()
+    return PublicUser.newBuilder()
       .withUserId(publicUser.userid)
       .withFirstName(publicUser.first_name)
       .withLastName(publicUser.last_name)

@@ -14,7 +14,7 @@ export class CondoManagementCompany {
   }
 
   static copy(condoManagementCompany) {
-    return new CondoManagementCompany.newBuilder()
+    return CondoManagementCompany.newBuilder()
       .withCompanyId(condoManagementCompany.companyid)
       .withCompanyName(condoManagementCompany.company_name)
       .withEmail(condoManagementCompany.email)
