@@ -12,6 +12,8 @@ const calculateTotalCostPerPropertyWithinYear = `
   GROUP BY property_id 
   ORDER BY total_cost DESC;
 `
+const getCostByOperationId = 'SELECT op.cost FROM operation op WHERE op.operation_id = $1'
+const setCostByOperationId = 'UPDATE operation SET cost = $1 WHERE operation_id = $2'
 
 module.exports = {
   getAllOperations,
@@ -21,5 +23,7 @@ module.exports = {
   updateOperation,
   checkIfOperationExistsByDetails,
   checkIfOperationExistsById,
-  calculateTotalCostPerPropertyWithinYear
+  calculateTotalCostPerPropertyWithinYear,
+  getCostByOperationId,
+  setCostByOperationId
 }
