@@ -1,4 +1,4 @@
-const getAllOperations = 'SELECT * FROM operation'
+const getAllOperations = 'SELECT o.operation_id, p.property_id, cost, date, type, p.property_name FROM Operation o JOIN property p on p.property_id = o.property_id'
 const getOperationById = 'SELECT op.operation_id, op.property_id, op.cost, op.date, op.type from operation op WHERE op.operation_id = $1'
 const createOperation = 'INSERT INTO operation(property_id, cost, date, type) VALUES ($1, $2, $3, $4)'
 const deleteOperation = 'DELETE FROM operation WHERE operation_id = $1'

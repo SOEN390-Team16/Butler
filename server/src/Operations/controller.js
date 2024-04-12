@@ -9,6 +9,7 @@ const getAllOperations = (req, res) => {
       console.error('Error getting all operations', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else {
+      console.log(res.status(200).json(results.rows))
       res.status(200).json(results.rows)
     }
   })

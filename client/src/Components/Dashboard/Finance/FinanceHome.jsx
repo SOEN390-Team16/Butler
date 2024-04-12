@@ -27,6 +27,7 @@ import AddOperationForm from "./AddOperationForm.jsx";
 const FinanceHome = () => {
   // test table
   const [selectedHeading, setSelectedHeading] = useState("allUsers");
+  const [operations, setOperations] = useState([])
 
   const handleHeadingClick = (heading) => {
     setSelectedHeading(heading);
@@ -79,7 +80,21 @@ const FinanceHome = () => {
   }, [token, userData.cmcId]);
 
 
-
+useEffect(() => {
+  const fetchOperations = () => {
+    axios.get('http://hortzcloud.com:3000/api/v1/op', {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then(res => {
+      setOperations(res.data)
+    }).catch(err => {
+      toast.error(err)
+    })
+  }
+  fetchOperations()
+}, [token])
   // TODO: Add the property to the database
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
@@ -101,13 +116,8 @@ const FinanceHome = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  const options = [
-    { key: 1, option: "Finance" },
-    { key: 2, option: "Label 2" },
-    { key: 3, option: "Label 3" },
-    { key: 4, option: "Label 4" },
-  ];
 
+  console.log('op: ', operations)
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
@@ -140,19 +150,7 @@ console.log(properties)
         onClose={toggleDrawer}
       
       >
-        <div className="link__holder">
-          {options &&
-            options.map((obj) => {
-              return (
-                <div key={obj.key} className="link__option">
-            
-                  <Link to="/DashboardHomeCMC/Finance" >
-                    {obj.option}
-                  </Link>
-                </div>
-              );
-            })}
-        </div>
+    
       </SideDrawerCMC>
       {/* Your main content goes here */}
       <div className="container flex flex-col items-center px-24 pb-16">
