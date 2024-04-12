@@ -49,7 +49,7 @@ export default function CreateRequestForm({ requestList }) {
         },
       })
       .then((res) => {
-        toast.success("Employee added successfully!");
+        toast.success("Request created successfully!");
         console.log(res.data);
       })
       .catch((err) => {

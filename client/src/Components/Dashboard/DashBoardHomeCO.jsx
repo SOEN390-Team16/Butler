@@ -63,7 +63,7 @@ const DashBoardHomeCO = () => {
     if (request.length > 0) {
       console.log("requests:", request);
     }
-  }, [request]); // Dependency array with 'request'
+  }, [request]);
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
