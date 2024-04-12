@@ -2,9 +2,9 @@ const pool = require('../../db')
 const queriesRK = require('./queries')
 const queriesPU = require('../PublicUser/queries')
 
-function generateRandomKey () {
+function generateRandomKey() {
   return Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2) + '-' +
-      Math.random().toString(36).slice(2)
+    Math.random().toString(36).slice(2)
 }
 
 const generateRegistrationKey = (randomKeyGenerator = generateRandomKey) => (req, res) => {
@@ -109,7 +109,7 @@ const updateUserRoleByRegistrationKeyAndUserId = (req, res) => {
                     } else if (results.rowCount === 0) {
                       return res.status(404).json({ error: 'Public User Not Found' })
                     } else {
-                      return res.status(200).json(results.rows)
+                      return res.status(200).json(results.rows[0])
                     }
                   })
                 }
