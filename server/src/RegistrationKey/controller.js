@@ -2,7 +2,7 @@ const pool = require('../../db')
 const queriesRK = require('./queries')
 const queriesPU = require('../PublicUser/queries')
 
-function generateRandomKey() {
+function generateRandomKey () {
   return Math.random().toString(36).slice(2) + '-' + Math.random().toString(36).slice(2) + '-' +
     Math.random().toString(36).slice(2)
 }
