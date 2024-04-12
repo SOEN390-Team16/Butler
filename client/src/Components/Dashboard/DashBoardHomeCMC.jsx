@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
-import SideDrawerCMC from "./SideDrawerCMC";
+
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import { Link } from "react-router-dom";
@@ -23,6 +23,8 @@ import UserRegistrationForm from "./UserRegistrationForm.jsx";
 import { IoSearch } from "react-icons/io5";
 import axios from "axios";
 import EmployeeSection from "./EmployeeSection.jsx";
+import SideNavCMC from "../SideNav/SideNavCMC.jsx";
+import { IconButton } from "@chakra-ui/react";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -122,15 +124,6 @@ const DashBoardHomeCMC = () => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-  const options = [
-    { key: 1, option: "Finance" },
-    { key: 2, option: "Label 2" },
-    { key: 3, option: "Label 3" },
-    { key: 4, option: "Label 4" },
-  ];
-
-  
-
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
@@ -152,29 +145,17 @@ const DashBoardHomeCMC = () => {
   return (
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
-      <button className="patty__button" onClick={toggleDrawer}>
-        <RxHamburgerMenu size={40} />
-      </button>
+      <IconButton
+        onClick={toggleDrawer}
+        icon={<RxHamburgerMenu />}
+        className="fixed top-10 shadow z-50"
+        backgroundColor={"#FFFFFF"}
+        rounded={"0 10px 10px 0"}
+        _hover={{ backgroundColor: "#CCCCCC" }}
+      />
 
       {/* The Side drawer is whats being opened for main navigation */}
-      <SideDrawerCMC
-        isOpen={isDrawerOpen}
-        onClose={toggleDrawer}
-       
-      >
-        <div className="link__holder">
-          {options &&
-            options.map((obj) => {
-              return (
-                <div key={obj.key} className="link__option">
-                   <Link to={`/DashboardHomeCMC/Finance`} >
-                    {obj.option}
-                  </Link>
-                </div>
-              );
-            })}
-        </div>
-      </SideDrawerCMC>
+      <SideNavCMC isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
       {/* Your main content goes here */}
       <div className="container flex flex-col items-center px-24 pb-16">
         <div className="flex flex-col justify-center items-center w-full">

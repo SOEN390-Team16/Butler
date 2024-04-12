@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
-import SideDrawer from "./SideDrawer";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import { Link } from "react-router-dom";
@@ -21,6 +20,8 @@ import FeeBreakdownForm from "./FeeBreakdownForm.jsx";
 import axios from "axios";
 import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
+import SideNav from "../SideNav/SideNav.jsx";
+import { IconButton } from "@chakra-ui/react";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -79,9 +80,7 @@ const DashBoardHomeCO = () => {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        console.log("all condos");
-        console.log(res.data);
+      .then(() => {
       })
       .catch((error) => {
         console.error("Error fetching condo units:", error);
@@ -97,8 +96,6 @@ const DashBoardHomeCO = () => {
       })
       .then((res) => {
         setCondoUnit(res.data);
-        console.log("condo:");
-        console.log(condoUnit);
       })
       .catch((error) => {
         console.error("Error fetching condo unit:", error);
@@ -116,18 +113,6 @@ const DashBoardHomeCO = () => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
   };
 
-  const options = [
-    { key: 1, option: "Label 1" },
-    { key: 2, option: "Label 2" },
-    { key: 3, option: "Label 3" },
-    { key: 4, option: "Label 4" },
-  ];
-
-  const dummyUser = {
-    fName: "Condo",
-    lName: "Owner",
-  };
-
   const toggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);
   };
@@ -135,27 +120,16 @@ const DashBoardHomeCO = () => {
   return (
     <div className="dashboard__home">
       <div className="sidedrawer__open"></div>
-      <button className="patty__button" onClick={toggleDrawer}>
-        <RxHamburgerMenu size={40} />
-      </button>
+      <IconButton
+        onClick={toggleDrawer}
+        icon={<RxHamburgerMenu />}
+        className="fixed top-10 shadow z-50"
+        backgroundColor={"#FFFFFF"}
+        rounded={"0 10px 10px 0"}
+        _hover={{ backgroundColor: "#CCCCCC" }}
+      />
 
-      <SideDrawer
-        isOpen={isDrawerOpen}
-        onClose={toggleDrawer}
-        firstName={dummyUser.fName}
-        lastName={dummyUser.lName}
-      >
-        <div className="link__holder">
-          {options &&
-            options.map((obj) => {
-              return (
-                <div key={obj.key} className="link__option">
-                  <p>{obj.option}</p>
-                </div>
-              );
-            })}
-        </div>
-      </SideDrawer>
+      <SideNav isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
 
       <PageHeaderTable />
       <div className="container flex flex-col items-center px-24">

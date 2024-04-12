@@ -13,17 +13,19 @@ const assignedLockerRoutes = require('./src/assigned_locker/routes')
 const employeeRoutes = require('./src/Employee/routes')
 const parkingSpotRoutes = require('./src/ParkingSpot/routes')
 const assignedParkingSpotRoutes = require('./src/assigned_ParkingSpot/routes')
+const RequestRoutes = require('./src/Request/routes')
+const facilityRoutes = require('./src/Facility/routes')
+const reservationRoutes = require('./src/Reservation/routes')
+const imageRoutes = require('./src/image/routes')
 
 const cors = require('cors')
 
+const app = express()
+const port = 3000
 
-const app = express();
-const port = 3000;
+app.use(express.json())
 
-app.use(express.json());
-
-app.use(cors());
-
+app.use(cors())
 
 app.use('/api/v1/co', CondoOwnerRoutes)
 app.use('/api/v1/cr', CondoRenterRoutes)
@@ -39,6 +41,9 @@ app.use('/api/v1/al', assignedLockerRoutes)
 app.use('/api/v1/ps', parkingSpotRoutes)
 app.use('/api/v1/aps', assignedParkingSpotRoutes)
 app.use('/api/v1/emp', employeeRoutes)
+app.use('/api/v1/req', RequestRoutes)
+app.use('/api/v1/fa', facilityRoutes)
+app.use('/api/v1/res', reservationRoutes)
+app.use('/api/v1/image', imageRoutes)
 
-
-app.listen(port, () => console.log(`app listening on ${port}`));
+app.listen(port, () => console.log(`app listening on ${port}`))

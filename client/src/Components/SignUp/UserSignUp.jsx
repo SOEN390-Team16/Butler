@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./UserSignUp.css";
 import { useMediaQuery } from "react-responsive";
 import SidePicture from "../Login/SidePicture";
 import InformationHolder from "./InformationHolder";
-import ContinueButton from "../Buttons/ContinueButton";
 import CreateAccount from "./CreateAccount";
 
 const UserSignUp = () => {
   const navigate = useNavigate();
-  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  const isMobile = useMediaQuery({query: `(max-width: 760px)`});
 
   // Userinfo object that stores the inserted info
   const [userInfo, setUserInfo] = useState({
@@ -18,8 +17,7 @@ const UserSignUp = () => {
     email: "",
     password: "",
   });
-  const [route, setRoute] = useState("/SignUp/userSignUp");
-  const [wrongInformation, setIsWrongInformation] = useState(false);
+  const route = "/SignUp/userSignUp";
 
   // Onclick function that will take care of all the login API calls
   const handleClick = async (e) => {
@@ -37,7 +35,7 @@ const UserSignUp = () => {
   };
   // Function that stores the users information into the object for querying as theyre typing
   const handleChange = (e) => {
-    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setUserInfo((prev) => ({...prev, [e.target.name]: e.target.value}));
     console.log(userInfo);
     console.log(route);
   };
@@ -48,7 +46,7 @@ const UserSignUp = () => {
         {/* if the user is on mobile , display this code */}
         {isMobile && (
           <InformationHolder>
-            <CreateAccount />
+            <CreateAccount/>
           </InformationHolder>
         )}
       </SidePicture>

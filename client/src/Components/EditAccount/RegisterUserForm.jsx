@@ -4,13 +4,16 @@ import Label from "../Forms/Label.jsx";
 import { useModal } from "../Modals/Modal.jsx";
 import { object, string } from 'yup';
 import KeyButton from "../Buttons/KeyButton.jsx";
-import { activateRegistrationKey } from "../../utils/api.js";
-import { UserRoles } from "../../utils/enums/UserRoles.js";
 import { useNavigate } from "react-router-dom";
+import { UserRoles } from "../../models/user-roles.enum.js";
+import RegistrationKeyService from "../../service/key/registration-key.service.js";
+import usePublicUserStore from "../../store/user/public-user.store.js";
+import { parseUserObjectToLocalStorage } from "../../../utils/localstorage-parser.js";
 
 export default function RegisterUserForm() {
-  const {toggle} = useModal();
+  const { toggle } = useModal();
   const navigation = useNavigate();
+  const publicUserStore = usePublicUserStore()
 
   let schema = object({
     token: string().required('A token is required')
@@ -29,33 +32,29 @@ export default function RegisterUserForm() {
     return null;
   }
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     const activationToken = values.token;
+    const registeredUser = await RegistrationKeyService
+      .registerUser(activationToken, publicUserStore.getEntity().userid).then(res => res.data)
+    const updatedUserStatus = await publicUserStore.updatePublicUser(registeredUser)
 
-    activateRegistrationKey(activationToken)
-      .then((response) => {
-        console.log(response)
-        if (response.status === 200) {
-          let userObject = response.data[0];
-          delete userObject.password;
-          const user = JSON.stringify(userObject)
-          console.log(user)
-          localStorage.setItem("userData", user);
-          toggle()
+    if (updatedUserStatus) {
+      let user = publicUserStore.getEntity()
+      parseUserObjectToLocalStorage(user)
+      toggle()
 
-          if (userObject.role === UserRoles.CONDO_OWNER) {
-            navigation("/DashBoardHomeCO")
-          } else if (userObject.role === UserRoles.CONDO_RENTER) {
-            navigation("/DashBoardHomeCR")
-          }
-        }
-      })
+      if (user.role === UserRoles.CONDO_OWNER) {
+        navigation("/DashBoardHomeCO")
+      } else if (user.role === UserRoles.CONDO_RENTER) {
+        navigation("/DashBoardHomeCR")
+      }
+    }
   }
 
   return (<>
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-        <Label htmlFor="token" className={"justify-start place-content-start start-bg-black"}>Property Name</Label>
+        <Label htmlFor="token" className={"justify-start place-content-start start-bg-black"}>Activation Key</Label>
         {errorMessage("token")}
         <Input onChange={formik.handleChange} id="token" name="token"/>
       </div>
