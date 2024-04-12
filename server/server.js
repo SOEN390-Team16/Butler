@@ -14,6 +14,8 @@ const employeeRoutes = require("./src/Employee/routes");
 const parkingSpotRoutes = require("./src/ParkingSpot/routes");
 const assignedParkingSpotRoutes = require("./src/assigned_ParkingSpot/routes");
 const RequestRoutes = require("./src/Request/routes");
+const facilityRoutes = require('./src/Facility/routes')
+const reservationRoutes = require('./src/Reservation/routes')
 
 const cors = require("cors");
 
@@ -39,5 +41,7 @@ app.use("/api/v1/ps", parkingSpotRoutes);
 app.use("/api/v1/aps", assignedParkingSpotRoutes);
 app.use("/api/v1/emp", employeeRoutes);
 app.use("/api/v1/req", RequestRoutes);
+app.use('/api/v1/fa', facilityRoutes)
+app.use('/api/v1/res', reservationRoutes)
 
 app.listen(port, () => console.log(`app listening on ${port}`));
