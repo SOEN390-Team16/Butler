@@ -1,27 +1,33 @@
-import AddButton from "../Buttons/AddButton.jsx";
 import Input from "../Forms/Input.jsx";
-import { useFormik } from "formik";
 import Label from "../Forms/Label.jsx";
+import { useFormik } from "formik";
 import { useModal } from "../Modals/Modal.jsx";
-import { number, object, string } from "yup";
-import axios from "axios";
+import { object, string } from "yup";
+import AddButton from "../Buttons/AddButton.jsx";
 import { toast } from "react-toastify";
+import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function PropertyAddForm(props) {
+export default function CreateRequestForm({ requestList }) {
   const { toggle } = useModal();
+  const token = localStorage.getItem("token");
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userDataArray = userData ? Object.entries(userData) : [];
+  const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
-  let propertySchema = object({
-    requestType: string().required("A request type is required"),
-    requestInfo: string().required("Information about the request is required"),
+  console.log("requests: ", requestList);
+  let requestSchema = object({
+    description: string().required("A description is required"),
+    type: string().required("A request type is required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      requestType: "",
-      requestInfo: "",
+      user_id: userID,
+      description: "",
+      type: "",
     },
-    validationSchema: propertySchema,
+    validationSchema: requestSchema,
     onSubmit: (values) => handleSubmit(values),
   });
 
@@ -34,62 +40,54 @@ export default function PropertyAddForm(props) {
     return null;
   };
 
-  // const handleSubmit = (values) => {
-  //   const userData = JSON.parse(localStorage.getItem("userData"));
-  //   const token = localStorage.getItem("token");
-  //   const property = {
-  //     companyid: userData.cmcId,
-  //     property_name: values.propertyName,
-  //     address: values.propertyAddress,
-  //     unit_count: values.numberOfCondoUnits,
-  //     parking_count: values.numberOfParkingUnits,
-  //     locker_count: values.numberOfLockers,
-  //   };
-
-  //   axios
-  //     .post("http://hortzcloud.com:3000/api/v1/pp/", property, {
-  //       headers: {
-  //         authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then(() => {
-  //       toast.success("Property Successfully Added!");
-  //       props.onAddProperty(property);
-  //       toggle();
-  //     })
-  //     .catch((reason) => {
-  //       toast.error(`Something went wrong: ${reason.message}`);
-  //       throw reason;
-  //     });
-  // };
+  const handleSubmit = async (values) => {
+    console.log(values);
+    await axios
+      .post("http://localhost:3000/api/v1/req", values, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        toast.success("Employee added successfully!");
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    toggle();
+    // alert(JSON.stringify(values, null, 2));
+  };
 
   return (
     <>
-      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="RequestType">Request Type</Label>
-          {errorMessage("requestType")}
-          <Input
-            // onChange={formik.handleChange}
-            id="requestType"
-            name="requestType"
-          />
+          <Label htmlFor="type">Request Type</Label>
+          {errorMessage("type")}
+          <Input onChange={formik.handleChange} id="type" name="type" />
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="RequestInfo">Information about the request</Label>
-          {errorMessage("requestInfo")}
+          <Label htmlFor="description">Description</Label>
+          {errorMessage("description")}
           <Input
-            // onChange={formik.handleChange}
-            id="requestInfo"
-            name="requestInfo"
+            onChange={formik.handleChange}
+            id="description"
+            name="description"
           />
         </div>
       </form>
+
       <AddButton onClick={formik.submitForm}>Submit Request</AddButton>
     </>
   );
 }
 
-PropertyAddForm.propTypes = {
-  onAddProperty: PropTypes.func.isRequired,
+CreateRequestForm.propTypes = {
+  propertyList: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
