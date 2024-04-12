@@ -59,6 +59,21 @@ const getReservationsByFacilityId = (req, res) => {
   })
 }
 
+const getReservationsByPropertyId = (req, res) => {
+  console.log('Get Reservations by Property Id')
+
+  const propertyid = parseInt(req.params.propertyid)
+
+  pool.query(queries.getAllReservationsByPropertyId, [propertyid], (error, results) => {
+    if (error) {
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 const getReservationById = (req, res) => {
   console.log('Get Reservation by Id')
 
@@ -145,6 +160,7 @@ module.exports = {
   getReservationsByUserId,
   getReservationsByDate,
   getReservationsByFacilityId,
+  getReservationsByPropertyId,
   getReservationById,
   createReservation,
   deleteReservation,
