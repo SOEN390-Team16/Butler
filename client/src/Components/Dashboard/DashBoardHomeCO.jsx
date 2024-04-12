@@ -37,6 +37,34 @@ const DashBoardHomeCO = () => {
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
 
+  const [request, setRequest] = useState([]);
+  const getRequestByUserID = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((requestResponse) => {
+        setRequest(requestResponse.data);
+        // console.log(parkingSpotsResponse.data[0]);
+        // console.log("requestResponse.data:");
+        // console.log(requestResponse.data);
+
+        // console.log("request:");
+        // console.log(request);
+      })
+      .catch((error) => {
+        console.error("Error fetching requests:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (request.length > 0) {
+      console.log("requests:", request);
+    }
+  }, [request]); // Dependency array with 'request'
+
   // Fetch parking spots data
   const fetchParkingSpots = () => {
     axios
@@ -112,10 +140,15 @@ const DashBoardHomeCO = () => {
     fetchLockers();
     fetchCondos();
     fetchCondo();
+    getRequestByUserID();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
+  };
+
+  const addRequestToState = (newRequest) => {
+    setRequest((prevRequest) => [...prevRequest, newRequest]);
   };
 
   const toggleDrawer = () => {
@@ -206,10 +239,6 @@ const DashBoardHomeCO = () => {
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"My Requests"}>
               <div className="flex items-center gap-4">
-                <Link className="underline" to={""}>
-                  See more
-                </Link>
-
                 <Modal>
                   <ModalToggler>
                     <AddButton>Create New Request</AddButton>
@@ -219,59 +248,42 @@ const DashBoardHomeCO = () => {
                     description="Fill the form to submit a service request"
                     onExit={() => console.log("exit")}
                   >
-                    <CreateRequestForm onAddProperty={addPropertyToState} />
+                    <CreateRequestForm onAddProperty={addRequestToState} />
                   </ModalContent>
                 </Modal>
               </div>
             </TableCardHeader>
             <div>
-              {properties.length > 0 ? (
+              {request.length > 0 ? (
                 <Table>
                   <TableHeader>
-                    <th></th>
-                    <th>Request Detail 1</th>
-                    <th>Request Detail 2</th>
-                    <th>Request Detail 3</th>
-                    <th>Request Detail 4</th>
-                    <th>Request Detail 5</th>
-                    <th>Request Detail 6</th>
+                    <th>Request ID</th>
+                    <th>Request Type</th>
+                    <th>Request Description</th>
+                    <th>Request Status</th>
                   </TableHeader>
-                  {properties.map((property, index) => (
+                  {request.map((req, index) => (
                     <TableRow key={index}>
-                      <td>
-                        <GoArrowUpRight size={24} />
-                      </td>
-                      <td>{property.property_name}</td>
-                      <td>{property.address}</td>
-                      <td>{property.unit_count}</td>
-                      <td>{property.parking_count}</td>
-                      <td>{property.locker_count}</td>
+                      <td>{req.request_id}</td>
+                      <td>{req.type}</td>
+                      <td>{req.description}</td>
+                      <td>{req.status}</td>
                     </TableRow>
                   ))}
                 </Table>
               ) : (
                 <Table>
                   <TableHeader>
-                    <th></th>
-                    <th>Request Detail 1</th>
-                    <th>Request Detail 2</th>
-                    <th>Request Detail 3</th>
-                    <th>Request Detail 4</th>
-                    <th>Request Detail 5</th>
-                    <th>Request Detail 6</th>
+                    <th>Request ID</th>
+                    <th>Request Type</th>
+                    <th>Request Description</th>
+                    <th>Request Status</th>
                   </TableHeader>
                   <TableRow>
-                    <td>
-                      <GoArrowUpRight size={24} />
-                    </td>
-                    <td>{condoUnit.condoid}</td>
-                    <td>{condoUnit.condo_number}</td>
-                    <td>{condoUnit.companyid}</td>
-                    <td>{condoUnit.property_id}</td>
-                    <td>{userData.role}</td>
-                    <td>
-                      670 m<sup>2</sup>
-                    </td>
+                    <td>{request.request_id}</td>
+                    <td>{request.type}</td>
+                    <td>{request.description}</td>
+                    <td>{request.status}</td>
                   </TableRow>
                 </Table>
               )}
