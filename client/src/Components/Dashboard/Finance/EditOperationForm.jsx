@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Input from "../Forms/Input.jsx";
-import Label from "../Forms/Label.jsx";
+import Input from "../../Forms/Input.jsx";
+import Label from "../../Forms/Label.jsx";
 import { useFormik } from "formik";
-import { useModal } from "../Modals/Modal.jsx";
+import { useModal } from "../../Modals/Modal.jsx";
 import { number, object, string } from "yup";
-import EditButton from "../Buttons/AddButton.jsx";
+import EditButton from "../../Buttons/AddButton.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function EditOperationForm({operation, propertyList}) {
+export default function EditOperationForm({operation, propertyList, type}) {
   //const userData = JSON.parse(localStorage.getItem('userData'));
     const token = localStorage.getItem('token')
   const { toggle } = useModal();
   const [employeeProperty, setEmployeeProperty] = useState()
 
   let operationSchema = object({
-    operation_type: string().required("Please define an operation type."),
+    type: string().required("Please define an operation type."),
     cost: string().required("Please enter an operational cost."),
     property_id: string().required("Please select a property."),
     date: string().required("Please insert date.")
@@ -23,15 +23,15 @@ export default function EditOperationForm({operation, propertyList}) {
 
   const formik = useFormik({
     initialValues: {
-      operation_type: "",
-      cost: 0,
-      property_id: 0,
-      date: ''
+      type: type,
+      cost: operation.cost,
+      property_id: operation.property_id,
+      date: operation.date
     },
     validationSchema: operationSchema,
     onSubmit: (values) => handleSubmit(values),
   });
-
+  console.log(type)
   const errorMessage = (fieldName) => {
     if (formik.touched[fieldName] && formik.errors[fieldName]) {
       return (
@@ -63,13 +63,13 @@ export default function EditOperationForm({operation, propertyList}) {
   
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id)
-    console.log(employee.employeeid)
-    await axios.patch(`http://localhost:3000/api/v1/emp/${employee.employeeid}`, values,{
+    console.log(operation.operation_id)
+    await axios.patch(`http://localhost:3000/api/v1/op/${operation.operation_id}`, values,{
       headers: {
         'authorization': `Bearer ${token}`,
       }
     }).then(res => {
-      toast.success('Employee edited successfully!');
+      toast.success('Operation edited successfully!');
       console.log(res.data)
     }).catch(err => {
       console.log(err)
@@ -77,7 +77,7 @@ export default function EditOperationForm({operation, propertyList}) {
     console.log(values)
 
     toggle();
-    // alert(JSON.stringify(values, null, 2));
+    
   };
 
 
@@ -86,13 +86,13 @@ export default function EditOperationForm({operation, propertyList}) {
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
       
           <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="operation_type">Operation Type:</Label>
-          {errorMessage("operation_type")}
+          <Label htmlFor="type">Operation Type:</Label>
+          {errorMessage("type")}
           <Input
             onChange={formik.handleChange}
-            id="operation_type"
-            value={formik.values.operation_type}
-            name="operation_type"
+            id="type"
+            value={formik.values.type}
+            name="type"
             className=""
           />
         </div>
@@ -144,7 +144,8 @@ export default function EditOperationForm({operation, propertyList}) {
             onChange={formik.handleChange}
             id="date"
             name="date"
-            value={formik.values.date}
+            type="date"
+            value={formik.values.date.substring(0,10)}
           />
         </div>
       </form>

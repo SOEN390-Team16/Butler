@@ -8,13 +8,13 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function AddOperationForm({ propertyList }) {
+export default function AddOperationForm({ propertyList, onClick }) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
 
   console.log("properties: ", propertyList);
   let operationSchema = object({
-    operation_type: string().required("Please define an operation type."),
+    type: string().required("Please define an operation type."),
     cost: string().required("Please enter an operational cost."),
     property_id: string().required("Please select a property."),
     date: string().required("Please insert date.")
@@ -22,10 +22,10 @@ export default function AddOperationForm({ propertyList }) {
 
   const formik = useFormik({
     initialValues: {
-      operation_type: "",
-      cost: 0,
       property_id: 0,
-      date: ''
+      cost: 0,
+      date: '',
+      type: "",
     },
     validationSchema: operationSchema,
     onSubmit: (values) => handleSubmit(values),
@@ -42,9 +42,11 @@ export default function AddOperationForm({ propertyList }) {
 
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id);
-    console.log(values);
+    const date = new Date(values.date)
+    values.date = date.toISOString().split('T')[0];
+
     await axios
-      .post("http://localhost:3000/api/v1/emp", values, {
+      .post("http://localhost:3000/api/v1/op", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -60,16 +62,17 @@ export default function AddOperationForm({ propertyList }) {
     // alert(JSON.stringify(values, null, 2));
   };
 
+  console.log(formik.values)
   return (
     <>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="operation_type">Operation Type:</Label>
-          {errorMessage("operational_type")}
+          <Label htmlFor="type">Operation Type:</Label>
+          {errorMessage("type")}
           <Input
             onChange={formik.handleChange}
-            id="operation_type"
-            name="operation_type"
+            id="type"
+            name="type"
           />
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
