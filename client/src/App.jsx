@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
+import FinanceHome from "./Components/Dashboard/Finance/FinanceHome";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
           <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
           <Route path="/DashBoardHomeCMC/property/:id" element={<PropertyPage />} />
+          <Route path="/DashBoardHomeCMC/Finance" element={<FinanceHome />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer />

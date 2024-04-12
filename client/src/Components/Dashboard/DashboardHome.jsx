@@ -32,10 +32,6 @@ const DashBoardHome = () => {
     { key: 4, option: "Label 4" },
   ];
 
-  const dummyUser = {
-    fName: "Condo",
-    lName: "Owner",
-  };
 
   return (
     <div className="dashboard__home">

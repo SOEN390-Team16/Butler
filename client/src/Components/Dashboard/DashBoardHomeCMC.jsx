@@ -123,16 +123,13 @@ const DashBoardHomeCMC = () => {
   };
 
   const options = [
-    { key: 1, option: "Label 1" },
+    { key: 1, option: "Finance" },
     { key: 2, option: "Label 2" },
     { key: 3, option: "Label 3" },
     { key: 4, option: "Label 4" },
   ];
 
-  const dummyUser = {
-    fName: "Condo",
-    lName: "Owner",
-  };
+  
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
@@ -163,15 +160,16 @@ const DashBoardHomeCMC = () => {
       <SideDrawerCMC
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
-        firstName={dummyUser.fName}
-        lastName={dummyUser.lName}
+       
       >
         <div className="link__holder">
           {options &&
             options.map((obj) => {
               return (
                 <div key={obj.key} className="link__option">
-                  <p>{obj.option}</p>
+                   <Link to={`/DashboardHomeCMC/Finance`} >
+                    {obj.option}
+                  </Link>
                 </div>
               );
             })}
