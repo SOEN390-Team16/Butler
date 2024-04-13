@@ -1,12 +1,8 @@
 import React from "react";
 
-const Dropdown = ({ options, defaultValue, onChange }) => {
+const Dropdown = ({ options, value, onChange }) => {
   return (
-    <select
-      defaultValue={defaultValue}
-      onChange={onChange}
-      className="dropdown"
-    >
+    <select value={value} onChange={onChange} className="dropdown">
       {options.map((option, index) => (
         <option key={index} value={option}>
           {option}
@@ -17,5 +13,3 @@ const Dropdown = ({ options, defaultValue, onChange }) => {
 };
 
 export default Dropdown;
-
-// to see how this component is used, check client/src/Components/ServiceRequestPageCMC/ServiceRequestCMC.jsx

@@ -94,9 +94,9 @@ const ServiceRequestCMC = () => {
                         <ModalContent
                           title="User Requests"
                           description=""
-                          onExit={() => console.log("exit")}
+                          onExit={() => console.log("exit", owner.ownerid)}
                         >
-                          <ViewRequestsForm userId={owner.ownerid} />
+                          <ViewRequestsForm userId={owner.userId} />
                         </ModalContent>
                       </Modal>
                     </td>
