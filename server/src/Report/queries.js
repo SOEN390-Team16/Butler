@@ -26,15 +26,14 @@ const getEverythingAtOnceByCompanyId = 'WITH total_costs AS (\n' +
     '\n' +
     'SELECT\n' +
     '    tc.property_id,\n' +
+    '    (SELECT p.property_name FROM property p WHERE p.property_id = tc.property_id AND p.companyid = $1),\n' +
     '    (COALESCE(tr.total_condo_fees, 0) - COALESCE(tc.total_costs, 0)) AS annual_report,\n' +
     '    COALESCE(tr.total_condo_fees, 0) AS total_condo_fees,\n' +
     '    COALESCE(tc.total_costs, 0) AS total_costs\n' +
     'FROM\n' +
     '    total_costs tc\n' +
-    'LEFT JOIN\n' +
-    '    total_condo_fees tr\n' +
-    'ON\n' +
-    '    tc.property_id = tr.property_id;'
+    'LEFT JOIN total_condo_fees tr\n' +
+    '    ON tc.property_id = tr.property_id'
 
 module.exports = {
   getTotalCondoFeesCollected,
