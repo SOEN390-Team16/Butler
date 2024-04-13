@@ -9,11 +9,13 @@ import EditAccount from "./Components/EditAccount/EditAccount";
 import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./config/axios.config.js"
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import ServicesDashBoard from "./Components/Dashboard/ServicesDashBoard";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
+
 function App() {
   return (
     <>
