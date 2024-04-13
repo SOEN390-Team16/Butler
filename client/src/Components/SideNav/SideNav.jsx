@@ -26,7 +26,6 @@ export default function SideNav({ isOpen, toggleDrawer }) {
   const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
   const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
 
-  console.log(userDataArray);
   const role = userDataArray.length > 1 ? userDataArray[3][1] : "";
   var url = "";
   if (role === "renter") {
