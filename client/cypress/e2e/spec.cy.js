@@ -144,17 +144,20 @@ describe("E2E Test for Use Case 7: Update Condo Owner/Rental User Profile", () =
 describe("E2E Test for Use Case 8: View The Dashboard Owner/Renter", () => {
   it("Should allow owners/renters to see the dashboard", () => {
     // Preconditions
+    loginRenter()
 
     // Test
+    cy.location("pathname").should('include', "/DashBoardHome")
   })
 })
 
 describe("E2E Test for Use Case 9: Display General Information Through the Dashboard", () => {
   it("Should allow owners/renters to see general information through the dashboard", () => {
     // Preconditions
-
+    loginRenter()
 
     // Test
+    cy.get(".dashboard__home").get("button[type='button']").click()
   })
 })
 
@@ -292,6 +295,7 @@ describe("E2E Test for Use Case 20: Read Property Profile", () => {
     loginCompany()
 
     // Test
+    cy.location("pathname").should('eq', "/DashboardHomeCMC")
   })
 })
 
