@@ -21,9 +21,8 @@ export function loginRenter() {
 }
 
 export function viewProfileRenter() {
-    cy.get(".dashboard__home").get(".patty__button").click()
-    cy.get(".dashboard__home").get(".sidedrawer__open").get(".drawer__buttons")
-        .get(".edit__profile").contains("button", "Edit Profile").click()
+    cy.get(".dashboard__home").get("button[type='button']").click()
+    cy.get(".chakra-ui-light").contains("button","Edit profile").click()
     cy.location("pathname").should('eq', "/DashboardHome/editUser")
 }
 
@@ -37,9 +36,8 @@ export function loginCompany() {
 }
 
 export function viewProfileCompany() {
-    cy.get(".dashboard__home").get(".patty__button").click()
-    cy.get(".dashboard__home").get(".sidedrawer__open").get(".drawer__buttons")
-        .get(".edit__profile").contains("button", "Edit Profile").click()
+    cy.get(".dashboard__home").get("button[type='button']").click()
+    cy.get(".chakra-ui-light").contains("button","Edit profile").click()
     cy.location("pathname").should('eq', "/DashboardHome/editUserCMC")
 }
 
@@ -55,31 +53,31 @@ export function resetProfileCompany() {
 
 export function resetProfileRenter() {
     cy.get("#root").get(".row").contains("button","Update Info").click()
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='firstName']").clear()
+    cy.get("#root").get("form")
+        .get("input[name='first_name']").clear()
         .type("CypressRenterF").should("have.value", "CypressRenterF")
-        .get("input[name='lastName']").clear()
+        .get("input[name='last_name']").clear()
         .type("CypressRenterL").should("have.value", "CypressRenterL")
         .get("input[name='email']").clear()
         .type("CypressRenter@email.com").should("have.value", "CypressRenter@email.com")
-    cy.get("#root").get(".container").get("form").contains("button","Done").click()
+    cy.get("#root").get("form").contains("button","Done").click()
 
 }
 
 export function resetProfilePublicUser() {
     cy.get("#root").get(".row").contains("button","Update Info").click()
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='firstName']").clear()
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='firstName']").type("CypressFirst").should("have.value", "CypressFirst")
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='lastName']").clear()
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='lastName']").type("CypressLast").should("have.value", "CypressLast")
-    cy.get("#root").get(".container").get("form")
+    cy.get("#root").get("form")
+        .get("input[name='first_name']").clear()
+    cy.get("#root").get("form")
+        .get("input[name='first_name']").type("CypressFirst").should("have.value", "CypressFirst")
+    cy.get("#root").get("form")
+        .get("input[name='last_name']").clear()
+    cy.get("#root").get("form")
+        .get("input[name='last_name']").type("CypressLast").should("have.value", "CypressLast")
+    cy.get("#root").get("form")
         .get("input[name='email']").clear()
-    cy.get("#root").get(".container").get("form")
-        .get("input[name='email']").type("Cypress@email.com").should("have.value", "Cypress@email.com")
-    cy.get("#root").get(".container").get("form").contains("button","Done").click()
+    cy.get("#root").get("form")
+        .get("input[name='email']").type("CypressTest@email.com").should("have.value", "CypressTest@email.com")
+    cy.get("#root").get("form").contains("button","Update Info").click()
 
 }
