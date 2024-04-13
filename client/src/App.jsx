@@ -13,7 +13,6 @@ import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import ServicesDashBoard from "./Components/Dashboard/ServicesDashBoard";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
-import RequestForm from "./Components/Dashboard/RequestForm";
 import { ChakraProvider } from "@chakra-ui/react";
 function App() {
   return (
@@ -34,7 +33,7 @@ function App() {
             <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
             <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
             <Route path="/ServicesDashBoard" element={<ServicesDashBoard />} />
-            <Route path="/RequestForm" element={<RequestForm />} />
+          
             <Route
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}
