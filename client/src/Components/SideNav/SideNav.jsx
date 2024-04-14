@@ -24,9 +24,8 @@ export default function SideNav({ isOpen, toggleDrawer }) {
   const userDataArray = userData ? Object.entries(userData) : [];
   const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
   const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
+  const role = userData.role;
 
-  console.log(userDataArray);
-  const role = userDataArray.length > 1 ? userDataArray[3][1] : "";
   var url = "";
   if (role === "renter") {
     url = "/DashBoardHomeCR";
