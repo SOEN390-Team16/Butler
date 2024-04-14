@@ -77,10 +77,9 @@ const removeFacility = (req, res) => {
     if (error) {
       console.log('Error finding facility:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
-    } else if( results.rowCount === 0){
+    } else if (results.rowCount === 0) {
       return res.status(400).json({ error: 'Facility doesn\'t exist' })
-    } 
-    else {
+    } else {
       pool.query(queries.removeFacility, [facilityid], (error, results) => {
         if (error) {
           console.log('Error removing facility:', error)
