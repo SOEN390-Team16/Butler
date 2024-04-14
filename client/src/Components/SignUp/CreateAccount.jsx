@@ -1,11 +1,10 @@
 import { useState } from "react";
 import ContinueButton from "../Buttons/ContinueButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./CreateAccount.css";
 import CompanySignUp from "./CompanySignUp";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import useAuthStore from "../../store/auth/auth.store.js";
 
 const CreateAccount = () => {
   const navigation = useNavigate();
@@ -19,6 +18,8 @@ const CreateAccount = () => {
     profile_picture: "",
   });
 
+  const registerPublicUser = useAuthStore(state => state.registerPublicUser)
+
   const handleChange = (e) => {
     setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     console.log(userInfo);
@@ -26,25 +27,18 @@ const CreateAccount = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    console.log(userInfo);
-    axios
-      .post("http://hortzcloud.com:3000/api/v1/pu/", userInfo)
-      .then((res) => {
-        console.log("res.data", res.data);
-        if (res.data) {
-          console.log("Account created successfully");
-          let userData = res.data;
-          console.log("User data:", userData);
-          toast.success("Successfully registered!")
-          navigation("/");
-        } else {
-          console.log("Incorrect email or password");
-        }
-      })
-      .catch((err) => {
-        console.log("Error logging in:", err);
-      });
-  };
+    const response = await registerPublicUser(userInfo)
+    if (response && response.status === 201) {
+      toast.success("Successfully registered!")
+      navigation("/");
+    } else if (response && response.status === 404) {
+      toast.error("Email already in use")
+    } else {
+      if (response.data.error) {
+        toast.error(`Something went wrong: ${response.data.error}`)
+      }
+    }
+  }
 
   // Create account holds the information records for when a client signs up.
   // 1. when a client signs up , there will be an axios post method to see whether the email/password combo already exists
@@ -123,10 +117,10 @@ const CreateAccount = () => {
               />
             </div>
           </div>
-          <ContinueButton onClick={handleSignup} name={"Create Account"} />
+          <ContinueButton onClick={handleSignup} name={"Create Account"}/>
         </div>
       ) : (
-        <CompanySignUp />
+        <CompanySignUp/>
       )}
       <div className="flex flex-col justify-center items-center">
         <p>Already have an account ?</p>
