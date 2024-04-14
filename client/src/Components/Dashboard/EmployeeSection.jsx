@@ -68,7 +68,7 @@ export default function EmployeeSection() {
   const onDelete = async (e, emp) => {
     e.preventDefault();
     await axios
-      .delete(`http://hortzcloud:3000/api/v1/emp/${emp.employeeid}`, {
+      .delete(`http://hortzcloud.com:3000/api/v1/emp/${emp.employeeid}`, {
         headers: {
           'authorization': `Bearer ${token}`,
         }
