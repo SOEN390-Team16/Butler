@@ -12,9 +12,9 @@ let baseURL = 'http://localhost:5173/'
 beforeEach(()=> {
   cy.visit(baseURL)
 })
-/*
+
 describe("E2E Test for Use Case 1: Public User Sign Up With Email", () => {
-  it.skip("Should let new user sign up with a username, name, email, and password", () => {
+  it("Should let new user sign up with a username, name, email, and password", () => {
     // Test
     cy.get("#root").get(".login__content").contains("a","New user, sign up!").click()
     cy.location("pathname").should('eq',"/SignUp")
@@ -220,7 +220,7 @@ describe("E2E Test for Use Case 15: Reserve Facility", () => {
 })
 
 describe("E2E Test for Use Case 16: Create Condo Management Company Login", () => {
-  it.skip("should be able to sign up as a condo management company.", () => {
+  it("should be able to sign up as a condo management company.", () => {
     // Test
     cy.get("#root").get(".login__content").contains("a","New user, sign up!").click()
     cy.location("pathname").should('eq',"/SignUp")
@@ -232,8 +232,8 @@ describe("E2E Test for Use Case 16: Create Condo Management Company Login", () =
         .should("have.value", "CypressCompany@email.com")
     cy.get("input[name='password']").type("CypressCompanyPassword")
         .should("have.value", "CypressCompanyPassword")
-    cy.get(".continue__button").click()
-    cy.location("pathname").should('eq', '/SignUp/userSignUp')
+    cy.get("button").click()
+    cy.location("pathname").should('eq', '/')
   })
 })
 
@@ -273,7 +273,7 @@ describe("E2E Test for Use Case 18: Update Condo Management Profile", () => {
 })
 
 describe("E2E Test for Use Case 19: Create Property Profile", () => {
-  it.skip("Should allow condo management companies to add new properties", () => {
+  it("Should allow condo management companies to add new properties", () => {
     // Preconditions
     loginCompany()
 
@@ -284,11 +284,11 @@ describe("E2E Test for Use Case 19: Create Property Profile", () => {
     cy.get("#root").contains('form').get("input[name='propertyAddress']")
         .type("CypressPropertyAddress").should("have.value", "CypressPropertyAddress")
     cy.get("#root").contains('form').get("input[name='numberOfCondoUnits']")
-        .type("2").should("have.value", "2")
+        .type("50").should("have.value", "50")
     cy.get("#root").contains('form').get("input[name='numberOfParkingUnits']")
-        .type("2").should("have.value", "2")
+        .type("50").should("have.value", "50")
     cy.get("#root").contains('form').get("input[name='numberOfLockers']")
-        .type("2").should("have.value", "2")
+        .type("50").should("have.value", "50")
     cy.get("#root").contains('form').parent().contains('a', 'Add Property').click({ force: true })
   })
 })
@@ -324,7 +324,6 @@ describe("E2E Test for Use Case 23: Upload Condo Files to Property", () => {
   })
 })
 
- */
 
 describe("E2E Test for Use Case 24: Enter Detailed Condo Unit Information", () => {
   it("Should allow condo management companies to enter condo unit number, unit size, occupant type, and fees", () => {
@@ -332,19 +331,20 @@ describe("E2E Test for Use Case 24: Enter Detailed Condo Unit Information", () =
     loginCompany()
 
     // Test
-    cy.wait(2000)
     cy.get(':nth-child(1) > .flex-col > :nth-child(2) > .rounded-lg > .w-full > .border > :nth-child(1)').children().click()
-    cy.wait(2000)
-        //.within(() => {
-      //cy.get("td").contains("CypressPropertyName").parent().within(() => {
-        //cy.get("td a").click()
-        //cy.location("pathname").should('include', "/DashboardHomeCMC/property/")
-      //})
-    //})
+    cy.wait(500)
+    cy.location("pathname").should("include", "/DashboardHomeCMC/property/")
+    cy.get(':nth-child(2) > .flex-col > div.flex-row.items-center > div.flex-row > .gap-4 > .flex').click()
+    cy.wait(500)
+    cy.get("#condoUnitNumber").select("2").select("1").should("have.value", "1")
+    cy.get("#condoUnitSize").type("650").should("have.value", "650")
+    cy.get("#condoUnitOccupantType").select("Renter").select("Owner")
+        .should("have.value", "Owner")
+    cy.get("#condoUnitTotalFees").type("2500").should("have.value", "2500")
+    cy.get('.fixed > .bg-white > .flex-row').click()
+
   })
 })
-
-/*
 
 describe("E2E Test for Use Case 25: Send Registration Key", () => {
   it.skip("Should allow condo management companies to send registration keys to public users", () => {
@@ -364,18 +364,42 @@ describe("E2E Test for Use Case 26: Revoke Registration Keys", () => {
 })
 
 describe("E2E Test for Use Case 27: Enter Detailed Parking Spot Information", () => {
-  it.skip("Should allow condo management companies to enter parking number, parking fee, parking owner, parking occupant",() => {
+  it("Should allow condo management companies to enter parking number, parking fee, parking owner, parking occupant",() => {
     // Preconditions
+    loginCompany()
 
     // Test
+    cy.get(':nth-child(1) > .flex-col > :nth-child(2) > .rounded-lg > .w-full > .border > :nth-child(1)').children().click()
+    cy.wait(500)
+    cy.location("pathname").should("include", "/DashboardHomeCMC/property/")
+    cy.get(':nth-child(3) > .flex-col > div.flex-row.items-center > div.flex-row > .gap-4 > .flex').click()
+    cy.wait(500)
+    cy.get("#parkingUnitNumber").type("1").should("have.value", "1")
+    cy.get("#parkingUnitFee").type("100").should("have.value", "100")
+    cy.get("#parkingUnitOwner").type("CypressOwnerF")
+        .should("have.value", "CypressOwnerF")
+    cy.get("#parkingUnitOccupant").type("CypressRenterF").should("have.value", "CypressRenterF")
+    cy.get('.fixed > .bg-white > .flex-row').click()
   })
 })
 
+
 describe("E2E Test for Use Case 28: Enter Detailed Locker Information", () => {
-  it.skip("Should allow condo management companies to enter locker number, locker fee, locker owner, locker occupant", () => {
-    // Preconditions
+  it("Should allow condo management companies to enter locker number, locker fee, locker owner, locker occupant", () => {
+    loginCompany()
 
     // Test
+    cy.get(':nth-child(1) > .flex-col > :nth-child(2) > .rounded-lg > .w-full > .border > :nth-child(1)').children().click()
+    cy.wait(500)
+    cy.location("pathname").should("include", "/DashboardHomeCMC/property/")
+    cy.get(':nth-child(4) > .flex-col > div.flex-row.items-center > div.flex-row > .gap-4 > .flex').click()
+    cy.wait(500)
+    cy.get("#lockerUnitNumber").type("1").should("have.value", "1")
+    cy.get("#lockerUnitFee").type("100").should("have.value", "100")
+    cy.get("#lockerUnitOwner").type("CypressOwnerF")
+        .should("have.value", "CypressOwnerF")
+    cy.get("#lockerUnitOccupant").type("CypressRenterF").should("have.value", "CypressRenterF")
+    cy.get('.fixed > .bg-white > .flex-row').click()
   })
 })
 
@@ -383,7 +407,7 @@ describe("E2E Test for Use Case 29: Enter Condo Fee Per Square Foot, Parking Spo
   it.skip("should allow condo management companies to enter condo fee per square foot, parking spot fee, and locker fee" +
       "for any properties that they own", () => {
     // Preconditions
-
+    // not implemented
 
     // Test
 
@@ -393,17 +417,19 @@ describe("E2E Test for Use Case 29: Enter Condo Fee Per Square Foot, Parking Spo
 describe("E2E test for Use Case 30: Calculate Total Condo Fees", () => {
   it.skip("Should calculate total condo fees based on cost per square feet, locker fee, and parking fee", () => {
     // Preconditions
-
+    // not implemented
     // Test
   })
 })
 
 describe("E2E Test for Use Case 31: Send Total Condo Fees to Condo Owners", () => {
-  it.skip("Should allow condo Owners to see all fees related to their condo unit", () => {
+  it("Should allow condo Owners to see all fees related to their condo unit", () => {
     // Preconditions
-
+    loginOwner()
 
     // Test
+    cy.contains("div","Payment Due")
+    cy.contains("div", "Upcoming Payment")
   })
 })
 
@@ -589,5 +615,4 @@ describe("E2E Test for Use Case 45: Assign Requests to Employees", () => {
     // Tear Down
   })
 })
- */
 
