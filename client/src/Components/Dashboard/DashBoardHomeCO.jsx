@@ -22,7 +22,6 @@ import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
-import CreateRequestForm from "./CreateRequestForm.jsx";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -47,12 +46,6 @@ const DashBoardHomeCO = () => {
       })
       .then((requestResponse) => {
         setRequest(requestResponse.data);
-        // console.log(parkingSpotsResponse.data[0]);
-        // console.log("requestResponse.data:");
-        // console.log(requestResponse.data);
-
-        // console.log("request:");
-        // console.log(request);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
@@ -75,7 +68,6 @@ const DashBoardHomeCO = () => {
       })
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
-        // console.log(parkingSpotsResponse.data[0]);
         console.log("parking:");
         console.log(parkingSpots);
       })
@@ -94,8 +86,6 @@ const DashBoardHomeCO = () => {
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
-        // console.log("locker id");
-        // console.log(lockers[0].lockerid);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
@@ -235,60 +225,6 @@ const DashBoardHomeCO = () => {
               </TableCard>
             </div>
           </div>
-          <div className="table-space"></div>
-          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Requests"}>
-              <div className="flex items-center gap-4">
-                <Modal>
-                  <ModalToggler>
-                    <AddButton>Create New Request</AddButton>
-                  </ModalToggler>
-                  <ModalContent
-                    title="Submit a Service Request"
-                    description="Fill the form to submit a service request"
-                    onExit={() => console.log("exit")}
-                  >
-                    <CreateRequestForm onAddProperty={addRequestToState} />
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
-            <div>
-              {request.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <th>Request ID</th>
-                    <th>Request Type</th>
-                    <th>Request Description</th>
-                    <th>Request Status</th>
-                  </TableHeader>
-                  {request.map((req, index) => (
-                    <TableRow key={index}>
-                      <td>{req.request_id}</td>
-                      <td>{req.type}</td>
-                      <td>{req.description}</td>
-                      <td>{req.status}</td>
-                    </TableRow>
-                  ))}
-                </Table>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <th>Request ID</th>
-                    <th>Request Type</th>
-                    <th>Request Description</th>
-                    <th>Request Status</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>{request.request_id}</td>
-                    <td>{request.type}</td>
-                    <td>{request.description}</td>
-                    <td>{request.status}</td>
-                  </TableRow>
-                </Table>
-              )}
-            </div>
-          </TableCard>
           <div className="table-space"></div>
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"My Condo Units"}>
