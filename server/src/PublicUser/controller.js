@@ -28,7 +28,7 @@ const getPublicUserById = (req, res) => {
     if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Public User not found' })
     } else {
-      res.status(200).json(results.rows)
+      res.status(200).json(results.rows[0])
     }
   })
 }
@@ -100,9 +100,11 @@ const updatePublicUser = async (req, res) => {
     values.push(profile_picture)
   }
 
-  const query = `UPDATE public_user SET ${setClauses.join(
-    ', '
-  )} WHERE userid = $${values.length + 1}`
+  const query = `UPDATE public_user
+                 SET ${setClauses.join(
+                         ', '
+                 )}
+                 WHERE userid = $${values.length + 1} RETURNING *`
 
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {
@@ -122,7 +124,7 @@ const updatePublicUser = async (req, res) => {
           return res.status(404).json({ error: 'Public User not found' })
         }
 
-        res.status(200).json({ message: 'Public User updated successfully' })
+        res.status(200).json(result.rows[0])
       })
     }
   })

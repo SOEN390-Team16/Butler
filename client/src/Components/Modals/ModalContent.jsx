@@ -31,7 +31,7 @@ export default function ModalContent(props) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center"
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-40"
          onClick={handleBackgroundClick}>
       <div className="bg-white p-16 rounded-lg relative flex flex-col gap-8 items-center">
         <button onClick={() => {
