@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import Table from "../Tables/Table.jsx";
@@ -17,7 +17,7 @@ import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
 import CreateRequestForm from "./CreateRequestForm.jsx";
 
-  const ServicesDashBoard = () => {
+const ServicesDashBoard = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
@@ -25,29 +25,23 @@ import CreateRequestForm from "./CreateRequestForm.jsx";
   const token = localStorage.getItem("token");
 
   const [request, setRequest] = useState([]);
-  
-  const getRequestByUserID = () => {
-  // const userIdToFetch = 19;
-    axios
-    .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-    .then((requestResponse) => {
-      setRequest(requestResponse.data);
-
-        // console.log("requestResponse.data:");
-        // console.log(requestResponse);
-        // console.log("request:");
-        // console.log(request);
-    })
-    .catch((error) => {
-      console.error("Error fetching requests:", error);
-    });
-  };
 
   useEffect(() => {
+    const getRequestByUserID = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((requestResponse) => {
+          setRequest(requestResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching requests:", error);
+        });
+    };
+
     getRequestByUserID();
   }, [token, userID]);
 
@@ -78,7 +72,8 @@ import CreateRequestForm from "./CreateRequestForm.jsx";
             <ModalToggler>
               <h2 style={{ marginBottom: "20px", fontSize: "20px" }}>
                 Having an issue or want to ask question? Submit a Request <br />
-                <span style={{ marginLeft: "60px" }}>and</span> one of our employees will get back to you
+                <span style={{ marginLeft: "60px" }}>and</span> one of our
+                employees will get back to you
               </h2>
             </ModalToggler>
             <ModalContent
@@ -134,4 +129,3 @@ import CreateRequestForm from "./CreateRequestForm.jsx";
 };
 
 export default ServicesDashBoard;
-

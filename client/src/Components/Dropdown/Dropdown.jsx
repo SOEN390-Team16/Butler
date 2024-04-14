@@ -1,5 +1,3 @@
-import React from "react";
-
 const Dropdown = ({ options, value, onChange }) => {
   return (
     <select value={value} onChange={onChange} className="dropdown">
