@@ -8,6 +8,8 @@ const getAllReservations = (req, res) => {
     if (error) {
       console.error('Error fetching reservations:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -17,12 +19,14 @@ const getAllReservations = (req, res) => {
 const getReservationsByUserId = (req, res) => {
   console.log('Get Reservations by User Id')
 
-  const userid = req.params.userid
+  const userid = parseInt(req.params.userid)
 
   pool.query(queries.getAllReservationsByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error fetching reservations:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -38,6 +42,8 @@ const getReservationsByDate = (req, res) => {
     if (error) {
       console.error('Error fetching reservations:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -53,6 +59,8 @@ const getReservationsByFacilityId = (req, res) => {
     if (error) {
       console.error('Error fetching reservations:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows)
     }
@@ -68,6 +76,8 @@ const getReservationsByPropertyId = (req, res) => {
     if (error) {
       console.error('Error fetching reservations:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows)
     }
