@@ -37,20 +37,6 @@ const DashBoardHomeCO = () => {
   const token = localStorage.getItem("token");
 
   const [request, setRequest] = useState([]);
-  const getRequestByUserID = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((requestResponse) => {
-        setRequest(requestResponse.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching requests:", error);
-      });
-  };
 
   useEffect(() => {
     if (request.length > 0) {
@@ -58,70 +44,79 @@ const DashBoardHomeCO = () => {
     }
   }, [request]);
 
-  // Fetch parking spots data
-  const fetchParkingSpots = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/aps/getByU/${userID}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((parkingSpotsResponse) => {
-        setParkingSpots(parkingSpotsResponse.data);
-        console.log("parking:");
-        console.log(parkingSpots);
-      })
-      .catch((error) => {
-        console.error("Error fetching parking spots:", error);
-      });
-  };
-
-  // Fetch lockers data
-  const fetchLockers = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((lockersResponse) => {
-        setLockers(lockersResponse.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching lockers:", error);
-      });
-  };
-
-  const fetchCondos = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/cu`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-      })
-      .catch((error) => {
-        console.error("Error fetching condo units:", error);
-      });
-  };
-
-  const fetchCondo = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/cu/${19}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setCondoUnit(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching condo unit:", error);
-      });
-  };
-
   useEffect(() => {
+    const fetchParkingSpots = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/aps/getByU/${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((parkingSpotsResponse) => {
+          setParkingSpots(parkingSpotsResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching parking spots:", error);
+        });
+    };
+
+    const fetchLockers = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((lockersResponse) => {
+          setLockers(lockersResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching lockers:", error);
+        });
+    };
+
+    const fetchCondos = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/cu`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .catch((error) => {
+          console.error("Error fetching condo units:", error);
+        });
+    };
+
+    const fetchCondo = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/cu/${19}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setCondoUnit(res.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching condo unit:", error);
+        });
+    };
+
+    const getRequestByUserID = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((requestResponse) => {
+          setRequest(requestResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching requests:", error);
+        });
+    };
+
     fetchParkingSpots();
     fetchLockers();
     fetchCondos();
@@ -131,10 +126,6 @@ const DashBoardHomeCO = () => {
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
-  };
-
-  const addRequestToState = (newRequest) => {
-    setRequest((prevRequest) => [...prevRequest, newRequest]);
   };
 
   const toggleDrawer = () => {
