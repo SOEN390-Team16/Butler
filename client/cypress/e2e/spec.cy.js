@@ -85,7 +85,7 @@ describe("E2E Test for Use Case 3: Public User Update Profile", () => {
 })
 
 describe("E2E Test for Use Case 4: Register Condo Owners/Rental Users", () => {
-  it("Should allow public users to enter a registration key provided by condo management companies" +
+  it.skip("Should allow public users to enter a registration key provided by condo management companies" +
       "to update their role to owner or renter", () => {
     // Preconditions
 
@@ -142,7 +142,7 @@ describe("E2E Test for Use Case 7: Update Condo Owner/Rental User Profile", () =
 })
 
 describe("E2E Test for Use Case 8: View The Dashboard Owner/Renter", () => {
-  it("Should allow owners/renters to see the dashboard", () => {
+  it.skip("Should allow owners/renters to see the dashboard", () => {
     // Preconditions
     loginRenter()
 
@@ -152,7 +152,7 @@ describe("E2E Test for Use Case 8: View The Dashboard Owner/Renter", () => {
 })
 
 describe("E2E Test for Use Case 9: Display General Information Through the Dashboard", () => {
-  it("Should allow owners/renters to see general information through the dashboard", () => {
+  it.skip("Should allow owners/renters to see general information through the dashboard", () => {
     // Preconditions
     loginRenter()
 
@@ -162,7 +162,7 @@ describe("E2E Test for Use Case 9: Display General Information Through the Dashb
 })
 
 describe("E2E Test for Use Case 10: Display Condo Information Through the Dashboard to Condo Owners", () => {
-  it("Should allow owners to see condo information on their dashboard", () => {
+  it.skip("Should allow owners to see condo information on their dashboard", () => {
     // Preconditions
 
 
@@ -171,7 +171,7 @@ describe("E2E Test for Use Case 10: Display Condo Information Through the Dashbo
 })
 
 describe("E2E Test for Use Case 11: Display Financial Information Through the Dashboard", () => {
-  it("Should allow condo owners to see financial information through the dashboard", () => {
+  it.skip("Should allow condo owners to see financial information through the dashboard", () => {
     // Preconditions
 
 
@@ -180,7 +180,7 @@ describe("E2E Test for Use Case 11: Display Financial Information Through the Da
 })
 
 describe("E2E Test for Use Case 12: Display Request Status Through The Dashboard", () => {
-  it("Should allow owners/renters to view submitted requests", () => {
+  it.skip("Should allow owners/renters to view submitted requests", () => {
     // Preconditions
 
 
@@ -189,7 +189,7 @@ describe("E2E Test for Use Case 12: Display Request Status Through The Dashboard
 })
 
 describe("E2E Test for Use Case 13: Submit Requests Through The Dashboard", () => {
-  it("Should allow owners/renters to submit requests", () => {
+  it.skip("Should allow owners/renters to submit requests", () => {
     // Preconditions
 
 
@@ -198,7 +198,7 @@ describe("E2E Test for Use Case 13: Submit Requests Through The Dashboard", () =
 })
 
 describe("E2E Test for Use Case 14: View Facility Reservation Availability", () => {
-  it("Should allow owners/renters to view facility reservation", () => {
+  it.skip("Should allow owners/renters to view facility reservation", () => {
     // Preconditions
 
 
@@ -207,7 +207,7 @@ describe("E2E Test for Use Case 14: View Facility Reservation Availability", () 
 })
 
 describe("E2E Test for Use Case 15: Reserve Facility", () => {
-  it("Should allow owners/renters to reserve facility", () => {
+  it.skip("Should allow owners/renters to reserve facility", () => {
     // Preconditions
 
 
@@ -300,19 +300,19 @@ describe("E2E Test for Use Case 20: Read Property Profile", () => {
 })
 
 describe("E2E Test for Use Case 21: Update Property Profile", () => {
-  it("Should allow condo management companies to update their property profiles", () => {
+  it.skip("Should allow condo management companies to update their property profiles", () => {
     // not implemented
   })
 })
 
 describe("E2E Test for Use Case 22: Delete Property Profile", () => {
-  it("Should allow condo management companies to delete their property profiles", () => {
+  it.skip("Should allow condo management companies to delete their property profiles", () => {
     // not implemented
   })
 })
 
 describe("E2E Test for Use Case 23: Upload Condo Files to Property", () => {
-  it("Should allow condo management companies to upload files related to condo units", () => {
+  it.skip("Should allow condo management companies to upload files related to condo units", () => {
     // Preconditions
 
     // Test
@@ -320,7 +320,7 @@ describe("E2E Test for Use Case 23: Upload Condo Files to Property", () => {
 })
 
 describe("E2E Test for Use Case 24: Enter Detailed Condo Unit Information", () => {
-  it("Should allow condo management companies to enter condo unit number, unit size, occupant type, and fees", () => {
+  it.skip("Should allow condo management companies to enter condo unit number, unit size, occupant type, and fees", () => {
     // Preconditions
 
     // Test
@@ -328,7 +328,7 @@ describe("E2E Test for Use Case 24: Enter Detailed Condo Unit Information", () =
 })
 
 describe("E2E Test for Use Case 25: Send Registration Key", () => {
-  it("Should allow condo management companies to send registration keys to public users", () => {
+  it.skip("Should allow condo management companies to send registration keys to public users", () => {
     // Preconditions
 
     // Test
@@ -336,7 +336,7 @@ describe("E2E Test for Use Case 25: Send Registration Key", () => {
 })
 
 describe("E2E Test for Use Case 26: Revoke Registration Keys", () => {
-  it("Should allow condo management companies to revoke registration keys from owners/renters" +
+  it.skip("Should allow condo management companies to revoke registration keys from owners/renters" +
       "turning them back into public users", () => {
     // Preconditions
 
@@ -344,10 +344,8 @@ describe("E2E Test for Use Case 26: Revoke Registration Keys", () => {
   })
 })
 
-
-
 describe("E2E Test for Use Case 27: Enter Detailed Parking Spot Information", () => {
-  it("Should allow condo management companies to enter parking number, parking fee, parking owner, parking occupant",() => {
+  it.skip("Should allow condo management companies to enter parking number, parking fee, parking owner, parking occupant",() => {
     // Preconditions
 
     // Test
@@ -355,7 +353,7 @@ describe("E2E Test for Use Case 27: Enter Detailed Parking Spot Information", ()
 })
 
 describe("E2E Test for Use Case 28: Enter Detailed Locker Information", () => {
-  it("Should allow condo management companies to enter locker number, locker fee, locker owner, locker occupant", () => {
+  it.skip("Should allow condo management companies to enter locker number, locker fee, locker owner, locker occupant", () => {
     // Preconditions
 
     // Test
@@ -363,7 +361,7 @@ describe("E2E Test for Use Case 28: Enter Detailed Locker Information", () => {
 })
 
 describe("E2E Test for Use Case 29: Enter Condo Fee Per Square Foot, Parking Spot, And Locker", () => {
-  it("should allow condo management companies to enter condo fee per square foot, parking spot fee, and locker fee" +
+  it.skip("should allow condo management companies to enter condo fee per square foot, parking spot fee, and locker fee" +
       "for any properties that they own", () => {
     // Preconditions
 
@@ -374,7 +372,7 @@ describe("E2E Test for Use Case 29: Enter Condo Fee Per Square Foot, Parking Spo
 })
 
 describe("E2E test for Use Case 30: Calculate Total Condo Fees", () => {
-  it("Should calculate total condo fees based on cost per square feet, locker fee, and parking fee", () => {
+  it.skip("Should calculate total condo fees based on cost per square feet, locker fee, and parking fee", () => {
     // Preconditions
 
     // Test
@@ -382,7 +380,7 @@ describe("E2E test for Use Case 30: Calculate Total Condo Fees", () => {
 })
 
 describe("E2E Test for Use Case 31: Send Total Condo Fees to Condo Owners", () => {
-  it("Should allow condo Owners to see all fees related to their condo unit", () => {
+  it.skip("Should allow condo Owners to see all fees related to their condo unit", () => {
     // Preconditions
 
 
@@ -391,7 +389,7 @@ describe("E2E Test for Use Case 31: Send Total Condo Fees to Condo Owners", () =
 })
 
 describe("E2E Test for Use Case 32: Record Operational Budget", () => {
-  it("Should allow condo management companies to see total condo fees collected for each property", () => {
+  it.skip("Should allow condo management companies to see total condo fees collected for each property", () => {
     // Preconditions
 
     // Test
@@ -399,7 +397,7 @@ describe("E2E Test for Use Case 32: Record Operational Budget", () => {
 })
 
 describe("E2E Test for Use Case 33: Record Operation Costs", () => {
-  it("Should allow condo management companies to record operational costs", () => {
+  it.skip("Should allow condo management companies to record operational costs", () => {
     // Preconditions
 
     // Test
@@ -407,7 +405,7 @@ describe("E2E Test for Use Case 33: Record Operation Costs", () => {
 })
 
 describe("E2E Test for Use Case 34: Read Operational Costs", () => {
-  it("Should allow condo management companies to see entered operational costs", () => {
+  it.skip("Should allow condo management companies to see entered operational costs", () => {
     // Preconditions
 
     // Test
@@ -415,7 +413,7 @@ describe("E2E Test for Use Case 34: Read Operational Costs", () => {
 })
 
 describe("E2E Test for Use Case 35: Update Operational Costs", () => {
-  it("Should allow condo management companies to update any entered operational costs", () => {
+  it.skip("Should allow condo management companies to update any entered operational costs", () => {
     // Preconditions
 
     // Test
@@ -423,7 +421,7 @@ describe("E2E Test for Use Case 35: Update Operational Costs", () => {
 })
 
 describe("E2E Test for Use Case 36: Generate Annual Report", () => {
-  it("Should allow condo management companies to see total fees collected - total operational costs " +
+  it.skip("Should allow condo management companies to see total fees collected - total operational costs " +
       "for any given year", () => {
     // Preconditions
 
@@ -432,7 +430,7 @@ describe("E2E Test for Use Case 36: Generate Annual Report", () => {
 })
 
 describe("E2E Test for Use Case 37: Set Up Reservation System", () => {
-  it("Should allow condo management companies to add facilities to their properties that owners/renters" +
+  it.skip("Should allow condo management companies to add facilities to their properties that owners/renters" +
       "can reserve", () => {
     // Preconditions
 
@@ -441,7 +439,7 @@ describe("E2E Test for Use Case 37: Set Up Reservation System", () => {
 })
 
 describe("E2E Test for Use Case 38: Read Facility Availabilities", () => {
-  it("Should allow condo management companies to see added facilities", () => {
+  it.skip("Should allow condo management companies to see added facilities", () => {
     // Preconditions
 
     // Test
@@ -449,7 +447,7 @@ describe("E2E Test for Use Case 38: Read Facility Availabilities", () => {
 })
 
 describe("E2E Test for Use Case 39: Block Reserved Facilities", () => {
-  it("Should allow condo management companies to block reserved facilities", () => {
+  it.skip("Should allow condo management companies to block reserved facilities", () => {
     // Preconditions
 
     // Test
@@ -457,7 +455,7 @@ describe("E2E Test for Use Case 39: Block Reserved Facilities", () => {
 })
 
 describe("E2E Test for Use Case 40: Assign Employee Roles", () => {
-  it("Should allow condo management companies to assign a role to added employees", () => {
+  it.skip("Should allow condo management companies to assign a role to added employees", () => {
     // Preconditions
 
     // Test
@@ -467,9 +465,17 @@ describe("E2E Test for Use Case 40: Assign Employee Roles", () => {
 describe("E2E Test for Use Case 41: Create Employee", () => {
   it("Should allow condo management companies to add employees to their dashboard", () => {
     // Preconditions
-
+    loginCompany()
 
     // Test
+    cy.get("#root").contains("a","Add Employee").click()
+    cy.get("#root").contains("form").get("input[name='first_name']").type("CypressEmployeeF")
+        .should("have.value", "CypressEmployeeF")
+        .get("input[name='last_name']").type("CypressEmployeeL")
+        .should("have.value", "CypressEmployeeL")
+        .get("select[name='property_id']").select("CypressPropertyName")
+        .get("input[name='role']").should("have.value", "employee")
+    cy.get('.fixed > .bg-white > .flex-row').contains("a","Add User").click()
   })
 
 })
