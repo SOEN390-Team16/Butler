@@ -522,7 +522,7 @@ describe('GET /everythingAtOnce/:property_id/:year', () => {
   
       expect(pool.query).toHaveBeenCalledWith(queries.checkIfCompanyExists, [mockCompanyId], expect.any(Function));
       expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Property not found' });
+      expect(res.json).toHaveBeenCalledWith({ error: 'Company not found' });
     });
   
     it('should return 500 when encountering internal server error', async () => {
