@@ -7,8 +7,9 @@ import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
 import Dropdown from "../Dropdown/Dropdown.jsx";
+import { toast } from "react-toastify";
 
-const ViewRequestsForm = ({ userId }) => {
+const ViewRequestsForm = ({ userId, onStatusChange }) => {
   const [request, setRequest] = useState([]);
   const token = localStorage.getItem("token");
   // userId = 48;
@@ -22,7 +23,7 @@ const ViewRequestsForm = ({ userId }) => {
         },
       })
       .then((req) => {
-        setRequest(req.data);
+        setRequest(req.data[0]);
       })
       .catch((error) => {
         console.error("Error fetching request:", error);
@@ -31,13 +32,37 @@ const ViewRequestsForm = ({ userId }) => {
 
   useEffect(() => {
     if (request.length > 0) {
-      console.log("request:", request);
     }
   }, [request]);
 
   useEffect(() => {
     fetchRequestById();
   }, [token, userId]);
+
+  const updateRequestStatus = (requestId, newStatus) => {
+    // Update request status locally
+    const updatedRequest = { ...request, status: newStatus };
+    setRequest(updatedRequest);
+
+    axios
+      .patch(
+        `http://hortzcloud.com:3000/api/v1/req/${requestId}/status`,
+        { status: newStatus },
+        {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        toast.success("Request status updated successfully!");
+        // call the callback function to update the parent component
+        onStatusChange(requestId, newStatus);
+      })
+      .catch((error) => {
+        console.error("Error updating request status:", error);
+      });
+  };
 
   return (
     <TableCard className={"gap-4"}>
@@ -46,9 +71,19 @@ const ViewRequestsForm = ({ userId }) => {
         <Table>
           <TableHeader>
             <th>Request Description</th>
+            <th>Set Status</th>
           </TableHeader>
           <TableRow>
             <td>{request.description}</td>
+            <td>
+              <Dropdown
+                value={request.status}
+                options={["Received", "Viewed", "Processed"]}
+                onChange={(e) =>
+                  updateRequestStatus(request.request_id, e.target.value)
+                }
+              />
+            </td>
           </TableRow>
         </Table>
       </div>
