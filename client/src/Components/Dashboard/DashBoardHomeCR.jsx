@@ -36,77 +36,67 @@ const DashBoardHomeCR = () => {
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
   const token = localStorage.getItem("token");
 
-  // Fetch parking spots data
-  const fetchParkingSpots = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/aps/getByU/${userID}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((parkingSpotsResponse) => {
-        setParkingSpots(parkingSpotsResponse.data);
-        // console.log(parkingSpotsResponse.data[0]);
-        // console.log("parking:");
-        console.log(parkingSpots[0]);
-      })
-      .catch((error) => {
-        console.error("Error fetching parking spots:", error);
-      });
-  };
-
-  // Fetch lockers data
-  const fetchLockers = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((lockersResponse) => {
-        setLockers(lockersResponse.data);
-        // console.log("locker id");
-        // console.log(lockers[0].lockerid);
-      })
-      .catch((error) => {
-        console.error("Error fetching lockers:", error);
-      });
-  };
-
-  const fetchCondos = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/cu`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-      })
-      .catch((error) => {
-        console.error("Error fetching condo units:", error);
-      });
-  };
-
-  const fetchCondo = () => {
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/cu/${17}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setCondoUnit(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching condo unit:", error);
-      });
-  };
-
   useEffect(() => {
+    const fetchParkingSpots = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/aps/getByU/${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((parkingSpotsResponse) => {
+          setParkingSpots(parkingSpotsResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching parking spots:", error);
+        });
+    };
+
+    const fetchLockers = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/al/getByU/${userID}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((lockersResponse) => {
+          setLockers(lockersResponse.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching lockers:", error);
+        });
+    };
+
+    const fetchCondos = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/cu`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then(() => {})
+        .catch((error) => {
+          console.error("Error fetching condo units:", error);
+        });
+    };
+
+    const fetchCondo = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/cu/${17}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setCondoUnit(res.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching condo unit:", error);
+        });
+    };
+
     fetchParkingSpots();
     fetchLockers();
-    fetchCondos();
-    fetchCondo();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
