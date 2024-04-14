@@ -1,41 +1,35 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
-import DeleteButton from "../Buttons/DeleteButton.jsx";
 import Dropdown from "../Dropdown/Dropdown.jsx";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
 const ViewRequestsForm = ({ userId, onStatusChange }) => {
   const [request, setRequest] = useState([]);
   const token = localStorage.getItem("token");
-  // userId = 48;
-
-  const fetchRequestById = async () => {
-    console.log("request id in the form: ", userId);
-    axios
-      .get(`http://hortzcloud.com:3000/api/v1/req?reqid=${userId}`, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((req) => {
-        setRequest(req.data[0]);
-      })
-      .catch((error) => {
-        console.error("Error fetching request:", error);
-      });
-  };
 
   useEffect(() => {
-    if (request.length > 0) {
-    }
-  }, [request]);
+    const fetchRequestById = async () => {
+      console.log("request id in the form: ", userId);
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/req?reqid=${userId}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((req) => {
+          setRequest(req.data[0]);
+        })
+        .catch((error) => {
+          console.error("Error fetching request:", error);
+        });
+    };
 
-  useEffect(() => {
     fetchRequestById();
   }, [token, userId]);
 
@@ -54,7 +48,7 @@ const ViewRequestsForm = ({ userId, onStatusChange }) => {
           },
         }
       )
-      .then((response) => {
+      .then(() => {
         toast.success("Request status updated successfully!");
         // call the callback function to update the parent component
         onStatusChange(requestId, newStatus);
@@ -92,3 +86,8 @@ const ViewRequestsForm = ({ userId, onStatusChange }) => {
 };
 
 export default ViewRequestsForm;
+
+ViewRequestsForm.propTypes = {
+  userId: PropTypes.number.isRequired,
+  onStatusChange: PropTypes.func.isRequired,
+};
