@@ -45,10 +45,10 @@ app.use("/api/v1/aps", assignedParkingSpotRoutes);
 app.use("/api/v1/emp", employeeRoutes);
 app.use("/api/v1/req", RequestRoutes);
 app.use("/api/v1/rep", ReportRoutes)
-
 app.use('/api/v1/fa', facilityRoutes)
 app.use('/api/v1/res', reservationRoutes)
 app.use('/api/v1/op', operationRoutes)
 app.use('/api/v1/image', imageRoutes)
 
 app.listen(port, () => console.log(`app listening on ${port}`))
+
