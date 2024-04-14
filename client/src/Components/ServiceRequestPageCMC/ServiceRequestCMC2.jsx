@@ -33,6 +33,7 @@ const ServiceRequestCMC2 = () => {
       })
       .then((response) => {
         setRequests(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
@@ -84,32 +85,12 @@ const ServiceRequestCMC2 = () => {
       });
   };
 
-  const updateRequestStatus = (requestId, newStatus) => {
-    // update request status locally
-    const updatedRequests = requests.map((req) => {
-      if (req.request_id === requestId) {
-        return { ...req, status: newStatus };
-      }
-      return req;
-    });
-    setRequests(updatedRequests);
-    axios
-      .patch(
-        `http://hortzcloud.com:3000/api/v1/req/${requestId}/status`,
-        { status: newStatus },
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
+  const handleStatusChange = (requestId, newStatus) => {
+    setRequests((prevRequests) =>
+      prevRequests.map((req) =>
+        req.request_id === requestId ? { ...req, status: newStatus } : req
       )
-      .then((response) => {
-        // console.log("Updated successfully:", response);
-        toast.success("Request status updated successfully!");
-      })
-      .catch((error) => {
-        console.error("Error updating request status:", error);
-      });
+    );
   };
 
   return (
@@ -132,7 +113,6 @@ const ServiceRequestCMC2 = () => {
                 <th>User ID</th>
                 <th>Request Type</th>
                 <th>Status</th>
-                <th>Set Status</th>
                 <th></th>
                 <th></th>
               </TableHeader>
@@ -142,40 +122,19 @@ const ServiceRequestCMC2 = () => {
                   <td>{request.type}</td>
                   <td>{request.status}</td>
                   <td>
-                    <Dropdown
-                      value={request.status}
-                      options={["Received", "Viewed", "Processed"]}
-                      onChange={(e) =>
-                        updateRequestStatus(request.request_id, e.target.value)
-                      }
-                    />
-                  </td>
-                  <td>
-                    {/* <Modal>
+                    <Modal>
                       <ModalToggler>
                         <RegisterButton>View Details</RegisterButton>
                       </ModalToggler>
-                      <ModalContent title="Request Details" description="">
-                        <div>
-                          <p>
-                            <strong>Description:</strong> {request.description}
-                          </p>
-                          <p>
-                            <strong>Status:</strong> {request.status}
-                          </p>
-                        </div>
-                      </ModalContent>
-                    </Modal> */}
-                    <Modal>
-                      <ModalToggler>
-                        <RegisterButton>View Requests</RegisterButton>
-                      </ModalToggler>
                       <ModalContent
-                        title="User Requests"
+                        title=""
                         description=""
                         onExit={() => console.log("exit")}
                       >
-                        <ViewRequestsForm userId={request.request_id} />
+                        <ViewRequestsForm
+                          userId={request.request_id}
+                          onStatusChange={handleStatusChange}
+                        />
                       </ModalContent>
                     </Modal>
                   </td>
