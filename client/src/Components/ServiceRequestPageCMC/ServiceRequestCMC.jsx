@@ -8,17 +8,12 @@ import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import ModalToggler from "../Modals/ModalToggler.jsx";
-import AddButton from "../Buttons/AddButton.jsx";
-import KeyButton from "../Buttons/KeyButton.jsx";
-import DeleteButton from "../Buttons/DeleteButton.jsx";
-import SearchButton from "../Buttons/SearchButton.jsx";
 import RegisterButton from "../Buttons/RegisterButton.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
 import axios from "axios";
 import SideNavCMC from "../SideNav/SideNavCMC.jsx";
 import { IconButton } from "@chakra-ui/react";
-import Dropdown from "../Dropdown/Dropdown.jsx";
 import ViewRequestsForm from "./ViewRequestsForm.jsx";
 
 const ServiceRequestCMC = () => {

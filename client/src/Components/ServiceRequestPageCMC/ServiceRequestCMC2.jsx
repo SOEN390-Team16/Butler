@@ -12,7 +12,6 @@ import ModalToggler from "../Modals/ModalToggler.jsx";
 import ModalContent from "../Modals/ModalContent.jsx";
 import RegisterButton from "../Buttons/RegisterButton.jsx";
 import SideNavCMC from "../SideNav/SideNavCMC.jsx";
-import Dropdown from "../Dropdown/Dropdown.jsx";
 import DeleteButton from "../Buttons/DeleteButton.jsx";
 import { toast } from "react-toastify";
 import ViewRequestsForm from "./ViewRequestsForm.jsx";
@@ -33,7 +32,7 @@ const ServiceRequestCMC2 = () => {
       })
       .then((response) => {
         setRequests(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
@@ -72,8 +71,7 @@ const ServiceRequestCMC2 = () => {
           authorization: `Bearer ${token}`,
         },
       })
-      .then((res) => {
-        // console.log("Request deleted:", res);
+      .then(() => {
         setRequests((prevRequests) =>
           prevRequests.filter((item) => item.request_id !== request.request_id)
         );

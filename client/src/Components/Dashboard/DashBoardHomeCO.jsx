@@ -99,8 +99,7 @@ const DashBoardHomeCO = () => {
           authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("Error fetching condo units:", error);
       });
@@ -131,10 +130,6 @@ const DashBoardHomeCO = () => {
 
   const addPropertyToState = (newProperty) => {
     setProperties((prevProperties) => [...prevProperties, newProperty]);
-  };
-
-  const addRequestToState = (newRequest) => {
-    setRequest((prevRequest) => [...prevRequest, newRequest]);
   };
 
   const toggleDrawer = () => {

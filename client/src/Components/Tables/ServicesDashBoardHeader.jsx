@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { IoNotifications } from "react-icons/io5";
-import { IoCalendarOutline } from "react-icons/io5"; 
+import { IoCalendarOutline } from "react-icons/io5";
 
 class ServicesDashBoardHeader extends Component {
   constructor(props) {
@@ -74,8 +74,8 @@ class ServicesDashBoardHeader extends Component {
               backgroundColor: "transparent",
               border: "none",
               cursor: "pointer",
-              width: "32px", 
-              height: "32px", 
+              width: "32px",
+              height: "32px",
             }}
           >
             <IoNotifications style={{ fontSize: "32px" }} />
@@ -92,7 +92,7 @@ class ServicesDashBoardHeader extends Component {
                 borderRadius: "4px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                 zIndex: 999,
-                marginTop: "5px", 
+                marginTop: "5px",
               }}
             >
               {notifications.map((notification) => (
@@ -127,4 +127,3 @@ class ServicesDashBoardHeader extends Component {
 }
 
 export default ServicesDashBoardHeader;
-
