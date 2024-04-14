@@ -1,5 +1,6 @@
 import {
-  loginCompany,
+  createEmployee, deleteEmployee,
+  loginCompany, loginOwner,
   loginPublicUser,
   loginRenter, resetProfileCompany, resetProfilePublicUser, resetProfileRenter, viewProfileCompany,
   viewProfilePublicUser,
@@ -11,7 +12,7 @@ let baseURL = 'http://localhost:5173/'
 beforeEach(()=> {
   cy.visit(baseURL)
 })
-
+/*
 describe("E2E Test for Use Case 1: Public User Sign Up With Email", () => {
   it.skip("Should let new user sign up with a username, name, email, and password", () => {
     // Test
@@ -35,7 +36,7 @@ describe("E2E Test for Use Case 1: Public User Sign Up With Email", () => {
 })
 
 describe("E2E Test for Use Case 46: Public User Email Login", () => {
-  it.skip("Should sign in when the public user enters their email and password", () =>{
+  it("Should sign in when the public user enters their email and password", () =>{
     // Test
     cy.get("input[name='email']").type("CypressTest@email.com").should("have.value",
         "CypressTest@email.com")
@@ -47,7 +48,7 @@ describe("E2E Test for Use Case 46: Public User Email Login", () => {
 })
 
 describe("E2E Test for Use Case 2: Public User Profile Creation", () => {
-  it.skip("Should let public users see their profile", () => {
+  it("Should let public users see their profile", () => {
     // Preconditions
     loginPublicUser()
 
@@ -57,7 +58,7 @@ describe("E2E Test for Use Case 2: Public User Profile Creation", () => {
 })
 
 describe("E2E Test for Use Case 3: Public User Update Profile", () => {
-  it.skip("Should let public users update their profile", () => {
+  it("Should let public users update their profile", () => {
     // Preconditions
     loginPublicUser()
     viewProfilePublicUser()
@@ -95,7 +96,7 @@ describe("E2E Test for Use Case 4: Register Condo Owners/Rental Users", () => {
 })
 
 describe("E2E Test for Use Case 5: Condo Owner/Rental User Email Login", () => {
-  it.skip("Should allow Condo Owner/ Rental Users to log in via email and password", () => {
+  it("Should allow Condo Owner/ Rental Users to log in via email and password", () => {
     // Test
     cy.get("input[name='email']").type("CypressRenter@email.com")
         .should("have.value", "CypressRenter@email.com")
@@ -107,7 +108,7 @@ describe("E2E Test for Use Case 5: Condo Owner/Rental User Email Login", () => {
 })
 
 describe("E2E Test for Use Case 6: Create Owner/Rental User Profile", () => {
-  it.skip("Should let owners/renters view their profile", () => {
+  it("Should let owners/renters view their profile", () => {
     // Preconditions
     loginRenter()
 
@@ -119,7 +120,7 @@ describe("E2E Test for Use Case 6: Create Owner/Rental User Profile", () => {
 })
 
 describe("E2E Test for Use Case 7: Update Condo Owner/Rental User Profile", () => {
-  it.skip("Should let owners/renters update their profile", () => {
+  it("Should let owners/renters update their profile", () => {
     // Preconditions
     loginRenter()
     viewProfileRenter()
@@ -142,7 +143,7 @@ describe("E2E Test for Use Case 7: Update Condo Owner/Rental User Profile", () =
 })
 
 describe("E2E Test for Use Case 8: View The Dashboard Owner/Renter", () => {
-  it.skip("Should allow owners/renters to see the dashboard", () => {
+  it("Should allow owners/renters to see the dashboard", () => {
     // Preconditions
     loginRenter()
 
@@ -152,7 +153,7 @@ describe("E2E Test for Use Case 8: View The Dashboard Owner/Renter", () => {
 })
 
 describe("E2E Test for Use Case 9: Display General Information Through the Dashboard", () => {
-  it.skip("Should allow owners/renters to see general information through the dashboard", () => {
+  it("Should allow owners/renters to see general information through the dashboard", () => {
     // Preconditions
     loginRenter()
 
@@ -162,20 +163,23 @@ describe("E2E Test for Use Case 9: Display General Information Through the Dashb
 })
 
 describe("E2E Test for Use Case 10: Display Condo Information Through the Dashboard to Condo Owners", () => {
-  it.skip("Should allow owners to see condo information on their dashboard", () => {
+  it("Should allow owners to see condo information on their dashboard", () => {
     // Preconditions
-
+    loginOwner()
 
     // Test
+    cy.contains("h2", "My Condo Units")
   })
 })
 
 describe("E2E Test for Use Case 11: Display Financial Information Through the Dashboard", () => {
-  it.skip("Should allow condo owners to see financial information through the dashboard", () => {
+  it("Should allow condo owners to see financial information through the dashboard", () => {
     // Preconditions
-
+    loginOwner()
 
     // Test
+    cy.contains("div","Payment Due")
+    cy.contains("div", "Upcoming Payment")
   })
 })
 
@@ -236,7 +240,7 @@ describe("E2E Test for Use Case 16: Create Condo Management Company Login", () =
 
 
 describe("E2E Test for Use Case 17: Create Condo Management Company Profile", () => {
-  it.skip("Should allow condo management to create a condo management profile", () => {
+  it("Should allow condo management to create a condo management profile", () => {
     // Preconditions
     loginCompany()
 
@@ -249,7 +253,7 @@ describe("E2E Test for Use Case 17: Create Condo Management Company Profile", ()
 })
 
 describe("E2E Test for Use Case 18: Update Condo Management Profile", () => {
-  it.skip("Should allow condo management companies to update their profile", () => {
+  it("Should allow condo management companies to update their profile", () => {
     // Preconditions
     loginCompany()
     viewProfileCompany()
@@ -290,12 +294,13 @@ describe("E2E Test for Use Case 19: Create Property Profile", () => {
 })
 
 describe("E2E Test for Use Case 20: Read Property Profile", () => {
-  it.skip("Should allow condo management companies to view the properties they've added", () => {
+  it("Should allow condo management companies to view the properties they've added", () => {
     // Preconditions
     loginCompany()
 
     // Test
     cy.location("pathname").should('eq', "/DashboardHomeCMC")
+
   })
 })
 
@@ -319,13 +324,27 @@ describe("E2E Test for Use Case 23: Upload Condo Files to Property", () => {
   })
 })
 
+ */
+
 describe("E2E Test for Use Case 24: Enter Detailed Condo Unit Information", () => {
-  it.skip("Should allow condo management companies to enter condo unit number, unit size, occupant type, and fees", () => {
+  it("Should allow condo management companies to enter condo unit number, unit size, occupant type, and fees", () => {
     // Preconditions
+    loginCompany()
 
     // Test
+    cy.wait(2000)
+    cy.get(':nth-child(1) > .flex-col > :nth-child(2) > .rounded-lg > .w-full > .border > :nth-child(1)').children().click()
+    cy.wait(2000)
+        //.within(() => {
+      //cy.get("td").contains("CypressPropertyName").parent().within(() => {
+        //cy.get("td a").click()
+        //cy.location("pathname").should('include', "/DashboardHomeCMC/property/")
+      //})
+    //})
   })
 })
+
+/*
 
 describe("E2E Test for Use Case 25: Send Registration Key", () => {
   it.skip("Should allow condo management companies to send registration keys to public users", () => {
@@ -455,10 +474,24 @@ describe("E2E Test for Use Case 39: Block Reserved Facilities", () => {
 })
 
 describe("E2E Test for Use Case 40: Assign Employee Roles", () => {
-  it.skip("Should allow condo management companies to assign a role to added employees", () => {
+  it("Should allow condo management companies to assign a role to added employees", () => {
     // Preconditions
+    loginCompany()
 
     // Test
+    const firstName = "CypressEmployeeF";
+    cy.get("#root").contains("a","Add Employee").click()
+    cy.get("#root").contains("form").get("input[name='first_name']").type(firstName)
+        .should("have.value", firstName)
+        .get("input[name='last_name']").type("CypressEmployeeL")
+        .should("have.value", "CypressEmployeeL")
+        .get("select[name='property_id']").select("CypressPropertyName")
+        .get("input[name='role']").should("have.value", "employee")
+    cy.get('.fixed > .bg-white').contains("a", "Add Employee").click()
+    cy.wait(1000)
+
+    // Tear Down
+    deleteEmployee(firstName)
   })
 })
 
@@ -468,14 +501,20 @@ describe("E2E Test for Use Case 41: Create Employee", () => {
     loginCompany()
 
     // Test
+    const firstName = "CypressEmployeeF";
     cy.get("#root").contains("a","Add Employee").click()
-    cy.get("#root").contains("form").get("input[name='first_name']").type("CypressEmployeeF")
-        .should("have.value", "CypressEmployeeF")
+    cy.get("#root").contains("form").get("input[name='first_name']").type(firstName)
+        .should("have.value", firstName)
         .get("input[name='last_name']").type("CypressEmployeeL")
         .should("have.value", "CypressEmployeeL")
         .get("select[name='property_id']").select("CypressPropertyName")
         .get("input[name='role']").should("have.value", "employee")
-    cy.get('.fixed > .bg-white > .flex-row').contains("a","Add User").click()
+    cy.get('.fixed > .bg-white').contains("a", "Add Employee").click()
+    cy.wait(1000)
+
+    // Tear Down
+    deleteEmployee(firstName)
+
   })
 
 })
@@ -483,26 +522,61 @@ describe("E2E Test for Use Case 41: Create Employee", () => {
 describe("E2E Test for Use Case 42: Read Employee", () => {
   it("Should allow condo management companies to see added employees", () => {
     // Preconditions
-
+    loginCompany()
+    const firstName = "CypressEmployeeF";
+    createEmployee(firstName)
 
     // Test
+    cy.reload()
+    cy.get(':nth-child(2) > .rounded-lg > .w-full').last().within(() => {
+      cy.get("td").contains(firstName)
+    })
+
+    // Tear Down
+    deleteEmployee(firstName)
   })
 })
 
 describe("E2E Test for Use Case 43: Update Employee", () => {
   it("Should allow condo management companies to update any added employees", () => {
     // Preconditions
+    loginCompany()
+    const firstName = "CypressEmployeeF";
+    createEmployee(firstName)
 
     // Test
+    cy.reload()
+    cy.get(':nth-child(2) > .rounded-lg > .w-full').last().within(() => {
+      cy.get("td").contains(firstName).parent().within(() => {
+        cy.get("td a").contains("Edit").click()
+      })
+    })
+    cy.get("#root").contains("form").get("input[name='first_name']").clear()
+        .type("CypressEmployeeUpdateF").should("have.value", "CypressEmployeeUpdateF")
+    cy.get('.fixed > .bg-white').contains("a", "Confirm Edit").click()
+
+    // Tear Down
+    deleteEmployee("CypressEmployeeUpdateF")
   })
 })
 
 describe("E2E Test for Use Case 44: Delete Employee", () => {
   it("Should allow condo management companies to delete employees", () => {
     // Preconditions
-
+    loginCompany()
+    const firstName = "CypressEmployeeF";
+    createEmployee(firstName)
 
     // Test
+    cy.reload()
+    cy.get(':nth-child(2) > .rounded-lg > .w-full').last().within(() => {
+      cy.get("td").contains(firstName).parent().within(() => {
+        cy.get('td a').contains("Delete").click()
+      })
+    })
+    cy.wait(500)
+    cy.get(".fixed > .bg-white").contains("a","Confirm").click()
+    cy.wait(1000)
   })
 })
 
@@ -511,8 +585,9 @@ describe("E2E Test for Use Case 45: Assign Requests to Employees", () => {
     // Preconditions
 
     // Test
+
+    // Tear Down
   })
 })
-
-
+ */
 

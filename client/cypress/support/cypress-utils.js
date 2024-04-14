@@ -26,6 +26,15 @@ export function viewProfileRenter() {
     cy.location("pathname").should('eq', "/DashboardHome/editUser")
 }
 
+export function loginOwner() {
+    cy.get("input[name='email']").type("CypressOwner@email.com")
+        .should("have.value", "CypressOwner@email.com")
+    cy.get("input[name='password']").type("CypressOwnerPassword")
+        .should("have.value","CypressOwnerPassword")
+    cy.get(".continue__button").click()
+    cy.location("pathname").should('include', "/DashBoardHomeCO")
+}
+
 export function loginCompany() {
     cy.get("input[name='email']").type("CypressCompany@email.com")
         .should("have.value", "CypressCompany@email.com")
@@ -79,5 +88,28 @@ export function resetProfilePublicUser() {
     cy.get("#root").get("form")
         .get("input[name='email']").type("CypressTest@email.com").should("have.value", "CypressTest@email.com")
     cy.get("#root").get("form").contains("button","Update Info").click()
+}
 
+export function createEmployee(firstName) {
+    cy.get("#root").contains("a","Add Employee").click()
+    cy.get("#root").contains("form").get("input[name='first_name']").type(firstName)
+        .should("have.value", firstName)
+        .get("input[name='last_name']").type("CypressEmployeeL")
+        .should("have.value", "CypressEmployeeL")
+        .get("select[name='property_id']").select("CypressPropertyName")
+        .get("input[name='role']").should("have.value", "employee")
+    cy.get('.fixed > .bg-white').contains("a", "Add Employee").click()
+    cy.wait(1000)
+}
+
+export function deleteEmployee(firstName) {
+    cy.reload()
+    cy.get(':nth-child(2) > .rounded-lg > .w-full').last().within(() => {
+        cy.get("td").contains(firstName).parent().within(() => {
+            cy.get('td a').contains("Delete").click()
+        })
+    })
+    cy.wait(500)
+    cy.get(".fixed > .bg-white").contains("a","Confirm").click()
+    cy.wait(1000)
 }
