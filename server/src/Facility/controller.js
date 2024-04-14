@@ -8,11 +8,14 @@ const getAllFacilities = (req, res) => {
     if (error) {
       console.error('Error finding facilities:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Facility not found' })
     } else {
       res.status(200).json(results.rows)
     }
   })
 }
+
 
 const getFacilityById = (req, res) => {
   console.log('Get Facility by Id')
@@ -75,13 +78,22 @@ const removeFacility = (req, res) => {
   console.log('Remove a Facility')
 
   const facilityid = parseInt(req.params.facilityid)
-
-  pool.query(queries.removeFacility, [facilityid], (error, results) => {
+  pool.query(queries.checkIfFacilityExists, [facilityid], (error, results) => {
     if (error) {
-      console.error('Error removing facility:', error)
+      console.error('Error finding facility:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json({ message: 'Facility removed successfully' })
+    } else if( results.rowCount === 0){
+      return res.status(400).json({ error: 'Facility doesn\'t exist' })
+    } 
+    else {
+      pool.query(queries.removeFacility, [facilityid], (error, results) => {
+        if (error) {
+          console.error('Error removing facility:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
+        } else {
+          res.status(200).json({ message: 'Facility removed successfully' })
+        }
+      })
     }
   })
 }
