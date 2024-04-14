@@ -16,12 +16,9 @@ const getAllFacilities = (req, res) => {
   })
 }
 
-
 const getFacilityById = (req, res) => {
   console.log('Get Facility by Id')
-
   const facilityid = parseInt(req.params.facilityid)
-
   pool.query(queries.getFacilityById, [facilityid], (error, results) => {
     if (error) {
       console.error('Error fetching facility:', error)
@@ -36,9 +33,7 @@ const getFacilityById = (req, res) => {
 
 const getFacilityByPropertyId = (req, res) => {
   console.log('Get Facility by Property Id')
-
   const propertyid = parseInt(req.params.propertyid)
-
   pool.query(queries.getFacilityByPropertyId, [propertyid], (error, results) => {
     if (error) {
       console.error('Error fetching facility:', error)
@@ -100,10 +95,8 @@ const removeFacility = (req, res) => {
 
 const updateFacility = (req, res) => {
   console.log('Update a Facility')
-
   const facilityid = parseInt(req.params.facilityid)
   const { property_id, name, description } = req.body
-
   pool.query(queries.checkIfFacilityExists, [facilityid], (error, results) => {
     if (error) {
       console.error('Error checking facility existence:', error)
