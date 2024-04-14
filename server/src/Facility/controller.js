@@ -6,7 +6,7 @@ const getAllFacilities = (req, res) => {
 
   pool.query(queries.getAllFacilities, (error, results) => {
     if (error) {
-      console.error('Error finding facilities:', error)
+      console.log('Error finding facilities:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Facility not found' })
@@ -21,7 +21,7 @@ const getFacilityById = (req, res) => {
   const facilityid = parseInt(req.params.facilityid)
   pool.query(queries.getFacilityById, [facilityid], (error, results) => {
     if (error) {
-      console.error('Error fetching facility:', error)
+      console.log('Error fetching facility:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Facility not found' })
@@ -36,7 +36,7 @@ const getFacilityByPropertyId = (req, res) => {
   const propertyid = parseInt(req.params.propertyid)
   pool.query(queries.getFacilityByPropertyId, [propertyid], (error, results) => {
     if (error) {
-      console.error('Error fetching facility:', error)
+      console.log('Error fetching facility:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Facility not found' })
@@ -52,14 +52,14 @@ const addFacility = (req, res) => {
 
   pool.query(queries.checkIfFacilityExistsByDetails, [property_id, name, description], (error, results) => {
     if (error) {
-      console.error('Error checking facility existence:', error)
+      console.log('Error checking facility existence:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rowCount > 0) {
       return res.status(400).json({ error: 'Facility already exists' })
     } else {
       pool.query(queries.addFacility, [property_id, name, description], (error, results) => {
         if (error) {
-          console.error('Error adding facility:', error)
+          console.log('Error adding facility:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         } else {
           res.status(201).json({ message: 'Facility added successfully' })
@@ -75,7 +75,7 @@ const removeFacility = (req, res) => {
   const facilityid = parseInt(req.params.facilityid)
   pool.query(queries.checkIfFacilityExists, [facilityid], (error, results) => {
     if (error) {
-      console.error('Error finding facility:', error)
+      console.log('Error finding facility:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if( results.rowCount === 0){
       return res.status(400).json({ error: 'Facility doesn\'t exist' })
@@ -83,7 +83,7 @@ const removeFacility = (req, res) => {
     else {
       pool.query(queries.removeFacility, [facilityid], (error, results) => {
         if (error) {
-          console.error('Error removing facility:', error)
+          console.log('Error removing facility:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         } else {
           res.status(200).json({ message: 'Facility removed successfully' })
@@ -99,14 +99,14 @@ const updateFacility = (req, res) => {
   const { property_id, name, description } = req.body
   pool.query(queries.checkIfFacilityExists, [facilityid], (error, results) => {
     if (error) {
-      console.error('Error checking facility existence:', error)
+      console.log('Error checking facility existence:', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if (results.rowCount === 0) {
       return res.status(404).json({ error: 'Facility not found' })
     } else {
       pool.query(queries.updateFacility, [property_id, name, description, facilityid], (error, results) => {
         if (error) {
-          console.error('Error updating facility:', error)
+          console.log('Error updating facility:', error)
           return res.status(500).json({ error: 'Internal Server Error' })
         } else {
           res.status(200).json({ message: 'Facility updated successfully' })
