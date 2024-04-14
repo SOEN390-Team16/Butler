@@ -6,14 +6,16 @@ import { object, string } from "yup";
 import AddButton from "../Buttons/AddButton.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
+import PropTypes from "prop-types";
 
-export default function CreateRequestForm() {
+export default function CreateRequestForm({ requestList }) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
+  console.log("requests: ", requestList);
   let requestSchema = object({
     description: string().required("A description is required"),
     type: string().required("A request type is required"),
@@ -41,7 +43,7 @@ export default function CreateRequestForm() {
   const handleSubmit = async (values) => {
     console.log(values);
     await axios
-      .post("http://localhost:3000/api/v1/req", values, {
+      .post("http://hortzcloud.com:3000/api/v1/req", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -66,7 +68,7 @@ export default function CreateRequestForm() {
           <Input onChange={formik.handleChange} id="type" name="type" />
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="description">Information about the request</Label>
+          <Label htmlFor="description">Description</Label>
           {errorMessage("description")}
           <Input
             onChange={formik.handleChange}
@@ -81,5 +83,11 @@ export default function CreateRequestForm() {
   );
 }
 
-
-
+CreateRequestForm.propTypes = {
+  requestList: PropTypes.arrayOf(
+    PropTypes.shape({
+      description: PropTypes.string.isRequired,
+      type: PropTypes.string.isRequired,
+    })
+  ),
+};

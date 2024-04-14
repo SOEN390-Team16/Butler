@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { IoNotifications } from "react-icons/io5";
 import { IoCalendarOutline } from "react-icons/io5"; 
 
