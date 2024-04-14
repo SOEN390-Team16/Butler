@@ -10,6 +10,7 @@ import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
+import ServicesDashBoard from "./Components/Dashboard/ServicesDashBoard";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
@@ -33,6 +34,8 @@ function App() {
             />
             <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
             <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
+            <Route path="/ServicesDashBoard" element={<ServicesDashBoard />} />
+
             <Route
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}

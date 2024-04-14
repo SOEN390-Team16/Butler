@@ -6,16 +6,14 @@ import { object, string } from "yup";
 import AddButton from "../Buttons/AddButton.jsx";
 import { toast } from "react-toastify";
 import axios from "axios";
-import PropTypes from "prop-types";
 
-export default function CreateRequestForm({ requestList }) {
+export default function CreateRequestForm() {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
-  console.log("requests: ", requestList);
   let requestSchema = object({
     description: string().required("A description is required"),
     type: string().required("A request type is required"),
@@ -68,7 +66,7 @@ export default function CreateRequestForm({ requestList }) {
           <Input onChange={formik.handleChange} id="type" name="type" />
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Information about the request</Label>
           {errorMessage("description")}
           <Input
             onChange={formik.handleChange}
@@ -82,12 +80,3 @@ export default function CreateRequestForm({ requestList }) {
     </>
   );
 }
-
-CreateRequestForm.propTypes = {
-  propertyList: PropTypes.arrayOf(
-    PropTypes.shape({
-      description: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
