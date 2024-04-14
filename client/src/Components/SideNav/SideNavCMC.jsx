@@ -90,7 +90,7 @@ export default function SideNavCMC({ isOpen, toggleDrawer }) {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("/ServiceRequestCMC2")}
+                onClick={() => navigate("/ServiceRequestCMC")}
               >
                 Service Requests
               </Button>

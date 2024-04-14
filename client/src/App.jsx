@@ -16,7 +16,6 @@ import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
 import ServiceRequestCMC from "./Components/ServiceRequestPageCMC/ServiceRequestCMC";
-import ServiceRequestCMC2 from "./Components/ServiceRequestPageCMC/ServiceRequestCMC2";
 function App() {
   return (
     <>
@@ -42,10 +41,6 @@ function App() {
               element={<PropertyPage />}
             />
             <Route path="/ServiceRequestCMC" element={<ServiceRequestCMC />} />
-            <Route
-              path="/ServiceRequestCMC2"
-              element={<ServiceRequestCMC2 />}
-            />
           </Routes>
         </BrowserRouter>
         <ToastContainer />
