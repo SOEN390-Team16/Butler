@@ -113,7 +113,7 @@ const getEverythingAtOnceByCompanyId = (req, res) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     } else if( results.rowCount < 1){
-      return res.status(404).json({ error: 'Property not found' })
+      return res.status(404).json({ error: 'Company not found' })
     }
     else {
       pool.query(queries.getEverythingAtOnceByCompanyId, [companyid, year], (error, results) => {
