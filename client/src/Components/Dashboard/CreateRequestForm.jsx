@@ -43,7 +43,7 @@ export default function CreateRequestForm({ requestList }) {
   const handleSubmit = async (values) => {
     console.log(values);
     await axios
-      .post("http://localhost:3000/api/v1/req", values, {
+      .post("http://hortzcloud.com:3000/api/v1/req", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -84,10 +84,10 @@ export default function CreateRequestForm({ requestList }) {
 }
 
 CreateRequestForm.propTypes = {
-  propertyList: PropTypes.arrayOf(
+  requestList: PropTypes.arrayOf(
     PropTypes.shape({
       description: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
     })
-  ).isRequired,
+  ),
 };
