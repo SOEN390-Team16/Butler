@@ -122,6 +122,7 @@ const DashBoardHomeCO = () => {
     fetchCondos();
     fetchCondo();
     getRequestByUserID();
+    getRequestByUserID();
   }, [token, userID]);
 
   const addPropertyToState = (newProperty) => {
