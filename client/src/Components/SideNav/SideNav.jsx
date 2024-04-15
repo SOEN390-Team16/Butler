@@ -85,7 +85,7 @@ export default function SideNav({ isOpen, toggleDrawer }) {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/Reservation")}
               >
                 Your Reservations
               </Button>
