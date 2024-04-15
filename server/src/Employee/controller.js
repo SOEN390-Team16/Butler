@@ -9,7 +9,7 @@ const getEmployees = (req, res) => {
       // console.error('Error finding Employees: ', error)
       return res.status(500).json({ error: 'Internal Server Error' })
     }
-      res.status(200).json(results.rows)
+    res.status(200).json(results.rows)
   })
 }
 
