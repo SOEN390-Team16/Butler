@@ -1,7 +1,7 @@
 const pool = require('../../db')
 const queries = require('./queries')
 
-async function addDetails(property_id, companyid, parking_count, unit_count, locker_count) {
+async function addDetails (property_id, companyid, parking_count, unit_count, locker_count) {
   try {
     for (let index = 1; index <= unit_count; index++) {
       await pool.query(queries.updateCondoDetails, [property_id, companyid, index])
