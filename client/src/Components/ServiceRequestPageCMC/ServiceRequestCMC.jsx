@@ -32,8 +32,6 @@ const ServiceRequestCMC = () => {
       })
       .then((owners) => {
         setAllOwners(owners.data);
-        // console.log("all owners:");
-        // console.log(owners.data);
       })
       .catch((error) => {
         console.error("Error fetching condo owners:", error);

@@ -27,7 +27,6 @@ const ServicesDashBoard = () => {
   const [request, setRequest] = useState([]);
 
   const getRequestByUserID = () => {
-    // const userIdToFetch = 19;
     axios
       .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
         headers: {
@@ -36,11 +35,6 @@ const ServicesDashBoard = () => {
       })
       .then((requestResponse) => {
         setRequest(requestResponse.data);
-
-        // console.log("requestResponse.data:");
-        // console.log(requestResponse);
-        // console.log("request:");
-        // console.log(request);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
@@ -50,15 +44,6 @@ const ServicesDashBoard = () => {
   useEffect(() => {
     getRequestByUserID();
   }, [token, userID]);
-
-  // const addRequestToState = (newRequest) => {
-  //   const requestWithAllFields = {
-  //     ...newRequest,
-  //     request_id: newRequest.request_id, // Mocking an ID, should be replaced with actual ID from backend
-  //     status: "Received",
-  //   };
-  //   setRequest((prevRequest) => [...prevRequest, requestWithAllFields]);
-  // };
 
   const addRequestToState = (newRequest) => {
     setRequest((prevRequest) => {
