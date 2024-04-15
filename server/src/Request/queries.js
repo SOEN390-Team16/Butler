@@ -3,7 +3,7 @@ const getRequestByID = 'SELECT * FROM request  WHERE request_id = $1'
 const getRequestsByEmpID = 'SELECT * FROM request WHERE employee_id = $1'
 const getRequestsByUserID = 'SELECT * FROM request WHERE user_id = $1'
 const addRequest =
-  'INSERT INTO request(employee_id, user_id, description, type, status) VALUES ($1, $2, $3, $4, $5)'
+  'INSERT INTO request(employee_id, user_id, description, type, status) VALUES ($1, $2, $3, $4, $5) RETURNING *'
 const assignRequestToEmployee =
   'UPDATE request SET employee_id = $1 WHERE request_id = $2'
 const updateRequestStatus =

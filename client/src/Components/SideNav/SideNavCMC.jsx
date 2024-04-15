@@ -76,14 +76,14 @@ export default function SideNavCMC({ isOpen, toggleDrawer }) {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/DashboardHomeCMC/Finance")}
               >
                 Finance
               </Button>
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/ReservationCMC")}
               >
                 Reservations
               </Button>

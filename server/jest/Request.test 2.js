@@ -177,9 +177,9 @@ describe('getRequestsByEmpID function', () => {
       expect(mockResponse.json).toHaveBeenCalledWith({ error: 'Employee not found' })
     })
   
-    it('should return 200 with an empty array when the employee exists but has no requests associated with them', async () => {
+    it('should return 404 error when the employee exists but has no requests', async () => {
       const mockEmployeeID = 123
-      const mockResults = { rows: []  }
+      const mockResults = { rowCount: 0 }
       pool.query.mockImplementation((query, params, callback) => {
         if (query === queries.checkIfEmployeeExists) {
           callback(null, { rowCount: 1 }) // Employee exists
@@ -196,8 +196,8 @@ describe('getRequestsByEmpID function', () => {
       await getRequestsByEmpID(mockRequest, mockResponse)
   
       expect(pool.query).toHaveBeenCalledTimes(2)
-      expect(mockResponse.status).toHaveBeenCalledWith(200)
-      expect(mockResponse.json).toHaveBeenCalledWith([])
+      expect(mockResponse.status).toHaveBeenCalledWith(404)
+      expect(mockResponse.json).toHaveBeenCalledWith({ error: 'No Requests Assigned To This Employee' })
     })
   
     it('should return 500 error when there is an internal server error', async () => {
@@ -266,9 +266,9 @@ describe('getRequestsByEmpID function', () => {
       expect(mockResponse.json).toHaveBeenCalledWith({ error: 'User not found' })
     })
   
-    it('should return 200 with an empty array when the user exists but has no requests associated with them', async () => {
+    it('should return 404 error when the user exists but has no requests associated with them', async () => {
       const mockUserID = 123
-      const mockResults = { rows: []  }
+      const mockResults = { rowCount: 0 }
       pool.query.mockImplementation((query, params, callback) => {
         if (query === queries.checkIfUserExists) {
           callback(null, { rowCount: 1 }) // User exists
@@ -276,19 +276,18 @@ describe('getRequestsByEmpID function', () => {
           callback(null, mockResults) // User has no requests
         }
       })
-    
+  
       const mockRequest = { query: { userid: mockUserID } }
       const mockResponse = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       }
       await getRequestsByUserID(mockRequest, mockResponse)
-    
+  
       expect(pool.query).toHaveBeenCalledTimes(2)
-      expect(mockResponse.status).toHaveBeenCalledWith(200)
-      expect(mockResponse.json).toHaveBeenCalledWith([])
+      expect(mockResponse.status).toHaveBeenCalledWith(404)
+      expect(mockResponse.json).toHaveBeenCalledWith({ error: 'This User Has No Requests' })
     })
-    
   
     it('should return 500 error when there is an internal server error', async () => {
       const mockUserID = 123

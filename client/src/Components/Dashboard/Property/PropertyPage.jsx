@@ -152,7 +152,7 @@ export default function PropertyPage() {
             })
           );
         })
-        .error((err) => {
+        .catch((err) => {
           console.error("Error fetching locker units:", err);
         });
     };
