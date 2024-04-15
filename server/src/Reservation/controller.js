@@ -16,6 +16,31 @@ const getAllReservations = (req, res) => {
   })
 }
 
+const getFacilityStatus = (req, res) => {
+  console.log('Get Facility Status')
+  const facilityId = parseInt(req.params.facilityid)
+  const currentDate = new Date() // get the current date and time
+  currentDate.setHours(0, 0, 0, 0) // set time to 00:00:00.000 to truncate time component
+
+  pool.query(
+    queries.getAllReservationsByFacilityId,
+    [facilityId],
+    (error, results) => {
+      if (error) {
+        console.error('Error fetching reservations:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        const hasReservations = results.rows.some(reservation => {
+          const reservationDate = new Date(reservation.date)
+          reservationDate.setHours(0, 0, 0, 0) // adjust reservation date similarly
+          return reservationDate.getTime() === currentDate.getTime() // strictly compare the dates
+        })
+        res.status(200).json({ hasReservations })
+      }
+    }
+  )
+}
+
 const getReservationsByUserId = (req, res) => {
   console.log('Get Reservations by User Id')
 
@@ -106,23 +131,33 @@ const createReservation = (req, res) => {
 
   const { user_id, facility_id, date } = req.body
 
-  pool.query(queries.checkIfReservationExistsByDetails, [facility_id, date], (error, results) => {
-    if (error) {
-      console.error('Error checking reservation existence:', error)
-      return res.status(500).json({ error: 'Internal Server Error' })
-    } else if (results.rowCount > 0) {
-      return res.status(400).json({ error: 'Reservation already exists' })
-    } else {
-      pool.query(queries.createReservation, [user_id, facility_id, date], (error, results) => {
-        if (error) {
-          console.error('Error creating reservation:', error)
-          return res.status(500).json({ error: 'Internal Server Error' })
-        } else {
-          res.status(201).json({ message: 'Reservation created successfully' })
-        }
-      })
+  pool.query(
+    queries.checkIfReservationExistsByDetails,
+    [facility_id, date],
+    (error, results) => {
+      if (error) {
+        console.error('Error checking reservation existence:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else if (results.rowCount > 0) {
+        return res.status(400).json({ error: 'Reservation already exists' })
+      } else {
+        pool.query(
+          queries.createReservation,
+          [user_id, facility_id, date],
+          (error, results) => {
+            if (error) {
+              console.error('Error creating reservation:', error)
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              res
+                .status(201)
+                .json({ message: 'Reservation created successfully' })
+            }
+          }
+        )
+      }
     }
-  })
+  )
 }
 
 const deleteReservation = (req, res) => {
@@ -146,23 +181,33 @@ const updateReservation = (req, res) => {
   const reservationid = parseInt(req.params.reservationid)
   const { user_id, facility_id, date } = req.body
 
-  pool.query(queries.checkIfReservationExists, [reservationid], (error, results) => {
-    if (error) {
-      console.error('Error checking reservation existence:', error)
-      return res.status(500).json({ error: 'Internal Server Error' })
-    } else if (results.rowCount === 0) {
-      return res.status(404).json({ error: 'Reservation not found' })
-    } else {
-      pool.query(queries.updateReservation, [user_id, facility_id, date, reservationid], (error, results) => {
-        if (error) {
-          console.error('Error updating reservation:', error)
-          return res.status(500).json({ error: 'Internal Server Error' })
-        } else {
-          res.status(200).json({ message: 'Reservation updated successfully' })
-        }
-      })
+  pool.query(
+    queries.checkIfReservationExists,
+    [reservationid],
+    (error, results) => {
+      if (error) {
+        console.error('Error checking reservation existence:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else if (results.rowCount === 0) {
+        return res.status(404).json({ error: 'Reservation not found' })
+      } else {
+        pool.query(
+          queries.updateReservation,
+          [user_id, facility_id, date, reservationid],
+          (error, results) => {
+            if (error) {
+              console.error('Error updating reservation:', error)
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              res
+                .status(200)
+                .json({ message: 'Reservation updated successfully' })
+            }
+          }
+        )
+      }
     }
-  })
+  )
 }
 
 module.exports = {
@@ -172,6 +217,7 @@ module.exports = {
   getReservationsByFacilityId,
   getReservationsByPropertyId,
   getReservationById,
+  getFacilityStatus,
   createReservation,
   deleteReservation,
   updateReservation

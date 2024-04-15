@@ -46,6 +46,23 @@ const getFacilityByPropertyId = (req, res) => {
   })
 }
 
+const getFacilityByUserId = (req, res) => {
+  console.log('Get Facility by User Id')
+
+  const userid = parseInt(req.params.userid)
+
+  pool.query(queries.getFacilityByUserId, [userid], (error, results) => {
+    if (error) {
+      console.error('Error fetching facility:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Facility not found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 const addFacility = (req, res) => {
   console.log('Add a Facility')
   const { property_id, name, description } = req.body
@@ -119,6 +136,7 @@ module.exports = {
   getAllFacilities,
   getFacilityById,
   getFacilityByPropertyId,
+  getFacilityByUserId,
   addFacility,
   removeFacility,
   updateFacility
