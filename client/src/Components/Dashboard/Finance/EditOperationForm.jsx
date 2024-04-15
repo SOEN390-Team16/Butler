@@ -3,10 +3,12 @@ import Input from "../../Forms/Input.jsx";
 import Label from "../../Forms/Label.jsx";
 import { useFormik } from "formik";
 import { useModal } from "../../Modals/Modal.jsx";
-import { number, object, string } from "yup";
+import { object, string } from "yup";
 import EditButton from "../../Buttons/AddButton.jsx";
+import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 
 export default function EditOperationForm({operation, propertyList, type}) {
   //const userData = JSON.parse(localStorage.getItem('userData'));
@@ -64,7 +66,7 @@ export default function EditOperationForm({operation, propertyList, type}) {
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id)
     console.log(operation.operation_id)
-    await axios.patch(`http://localhost:3000/api/v1/op/${operation.operation_id}`, values,{
+    await axios.patch(`http://hortzcloud.com:3000/api/v1/op/${operation.operation_id}`, values,{
       headers: {
         'authorization': `Bearer ${token}`,
       }
@@ -157,4 +159,20 @@ export default function EditOperationForm({operation, propertyList, type}) {
     </>
   );
 }
+
+EditOperationForm.propTypes = {
+  propertyList: PropTypes.arrayOf(
+    PropTypes.shape({
+      property_id: PropTypes.number.isRequired,
+      property_name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  operation: PropTypes.arrayOf(
+    PropTypes.shape({
+      property_id: PropTypes.number.isRequired,
+      property_name: PropTypes.string.isRequired,
+    })
+  ),
+  type: PropTypes.string.isRequired
+};
 

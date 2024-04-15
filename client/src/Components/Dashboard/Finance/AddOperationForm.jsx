@@ -46,7 +46,7 @@ export default function AddOperationForm({ propertyList, onClick }) {
     values.date = date.toISOString().split('T')[0];
 
     await axios
-      .post("http://localhost:3000/api/v1/op", values, {
+      .post("http://hortzcloud.com:3000/api/v1/op", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },

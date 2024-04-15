@@ -50,7 +50,7 @@ export default function EmployeeSection() {
   // CHange this to localhost later
   useEffect(() => {
     axios
-      .get("http://hortzcloud.com:3000/api/v1/emp", {
+      .get(`http://hortzcloud.com/api/v1/emp/${userData.cmcId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -65,6 +65,7 @@ export default function EmployeeSection() {
       });
   }, [token]);
 
+  
   const onDelete = async (e, emp) => {
     e.preventDefault();
     await axios
@@ -81,7 +82,7 @@ export default function EmployeeSection() {
         toast.error("Couldn't delete the employee.");
       });
     }
-
+console.log(employees)
   return (
     <div
       className="flex flex-col justify-center items-center w-full"
@@ -133,7 +134,7 @@ export default function EmployeeSection() {
                     <td>
                       {emp.first_name} {emp.last_name}
                     </td>
-                    <td>{emp.property_id}</td>
+                    <td>{emp.property_name}</td>
                     <td>{emp.role}</td>
                     <td>
                       <Modal>

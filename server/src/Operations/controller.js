@@ -3,8 +3,8 @@ const queries = require('./queries')
 
 const getAllOperations = (req, res) => {
   console.log('Get All Operations')
-
-  pool.query(queries.getAllOperations, (error, results) => {
+const company_id = parseInt(req.params.company_id);
+  pool.query(queries.getAllOperations,[company_id], (error, results) => {
     if (error) {
       console.error('Error getting all operations', error)
       return res.status(500).json({ error: 'Internal Server Error' })
@@ -95,11 +95,10 @@ const updateOperation = (req, res) => {
 }
 
 const readOperationalCosts = (req, res) => {
-  console.log('Calculate Operational Budget')
-
-  const currentYear = new Date().getFullYear()
-
-  pool.query(queries.calculateTotalCostPerPropertyWithinYear, [currentYear], (error, results) => {
+console.log('Calculate Operational Budget')
+const currentYear = new Date().getFullYear()
+const company_id = (req.params.company_id)
+  pool.query(queries.calculateTotalCostPerPropertyWithinYear, [company_id,currentYear], (error, results) => {
     if (error) {
       console.error('Error calculating operational budget', error)
       return res.status(500).json({ error: 'Internal Server Error' })

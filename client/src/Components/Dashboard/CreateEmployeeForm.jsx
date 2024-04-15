@@ -18,14 +18,14 @@ export default function CreateEmployeeForm({ propertyList }) {
     last_name: string().required("A last name is required"),
     role: string().required("A role is required."),
   });
-
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const formik = useFormik({
     initialValues: {
       first_name: "",
       last_name: "",
-      companyid: 16,
+      companyid: userData.cmcId,
       role: "employee",
-      property_id: 0,
+      property_id: '',
     },
     validationSchema: employeeSchema,
     onSubmit: (values) => handleSubmit(values),
@@ -44,7 +44,7 @@ export default function CreateEmployeeForm({ propertyList }) {
     values.property_id = parseInt(values.property_id);
     console.log(values);
     await axios
-      .post("http://localhost:3000/api/v1/emp", values, {
+      .post("http://hortzcloud.com:3000/api/v1/emp", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -57,7 +57,6 @@ export default function CreateEmployeeForm({ propertyList }) {
         console.log(err);
       });
     toggle();
-    // alert(JSON.stringify(values, null, 2));
   };
 
   return (
@@ -91,6 +90,7 @@ export default function CreateEmployeeForm({ propertyList }) {
             value={formik.values.property_id}
             className="border border-gray-400 rounded-lg px-4 py-3"
           >
+          <option>--</option>
             {propertyList.map((p) => {
               return (
                 <option key={p.property_id} value={p.property_id}>

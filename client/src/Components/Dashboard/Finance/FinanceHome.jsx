@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import Table from "../../Tables/Table.jsx";
 import TableHeader from "../../Tables/TableHeader.jsx";
 import TableRow from "../../Tables/TableRow.jsx";
-import { GoArrowUpRight, GoPerson } from "react-icons/go";
+import { GoArrowUpRight } from "react-icons/go";
 import ModalToggler from "../../Modals/ModalToggler.jsx";
 import AddButton from "../../Buttons/AddButton.jsx";
 import SearchButton from "../../Buttons/SearchButton.jsx";
@@ -16,7 +16,7 @@ import ModalContent from "../../Modals/ModalContent.jsx";
 import Modal from "../../Modals/Modal.jsx";
 import EditButton from "../../Buttons/EditButton.jsx";
 import EditOperationForm from "./EditOperationForm.jsx";
-
+import { toast } from 'react-toastify'
 
 import axios from "axios";
 import AddOperationForm from "./AddOperationForm.jsx";
@@ -27,7 +27,6 @@ import AddOperationForm from "./AddOperationForm.jsx";
 const FinanceHome = () => {
   // test table
  
-  const [selectedHeading, setSelectedHeading] = useState("allUsers");
   const [operations, setOperations] = useState([])
 
   const handleHeadingClick = (heading) => {
@@ -38,7 +37,6 @@ const FinanceHome = () => {
   // toggles the drawer between being open and closed
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
-  const [publicUsers, setPublicUsers] = useState([]);
   const [totalOperationCost, setTotalOperationCost] = useState([])
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
@@ -80,11 +78,11 @@ const FinanceHome = () => {
     fetchProperties();
   }, [token, userData.cmcId]);
 
-
+console.log(userData)
 // REMEMBER TO CHANGE THIS TO HORTZCLOUD
 useEffect(() => {
   const fetchOperations = () => {
-    axios.get('http://localhost:3000/api/v1/op', {
+    axios.get(`http://hortzcloud.com:3000/api/v1/op/${userData.cmcId}`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
@@ -125,8 +123,8 @@ useEffect(() => {
 
 // REMEMBER TO CHANGE THIS TO HORTZCLOUD
   useEffect(()=> {
-    const fetchOperations= () => {
-      axios.get('http://localhost:3000/api/v1/op/total-cost',{
+    const fetchTotalOperations= () => {
+      axios.get(`http://hortzcloud.com3000/api/v1/op/total-cost/${userData.cmcId}`,{
         headers: {
           authorization: `Bearer ${token}`,
         }
@@ -136,10 +134,14 @@ useEffect(() => {
         console.log(err)
   })
 } 
-      fetchOperations()
+      fetchTotalOperations()
   },[token])
 
-console.log('total: ',totalOperationCost)
+
+ 
+
+
+
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
