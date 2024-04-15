@@ -46,8 +46,8 @@ const getRequestsByEmpID = (req, res) => {
         }
         if (results.rowCount === 0) {
           return res
-            .status(404)
-            .json({ error: 'No Requests Assigned To This Employee' })
+            .status(200)
+            .json([])
         } else {
           res.status(200).json(results.rows)
         }
@@ -71,7 +71,7 @@ const getRequestsByUserID = (req, res) => {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
         if (results.rowCount === 0) {
-          return res.status(404).json({ error: 'This User Has No Requests' })
+          return res.status(200).json([])
         } else {
           res.status(200).json(results.rows)
         }
