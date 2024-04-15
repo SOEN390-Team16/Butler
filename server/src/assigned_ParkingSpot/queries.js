@@ -8,6 +8,13 @@ const assignParkingSpotByUserId = 'INSERT INTO assigned_parking_spot (userid, pr
 const unassignParkingSpotByUserId = 'DELETE FROM assigned_parking_spot WHERE userid = $1'
 
 const getAssignedParkingSpots = 'SELECT * FROM assigned_parking_spot'
+const getAssignedParkingSpotsByPropertyId = 'SELECT * FROM assigned_parking_spot WHERE property_id = $1;'
+const getAssignedParkingSpotsByCompanyId = 'SELECT aps.*\n' +
+    'FROM assigned_parking_spot aps\n' +
+    'JOIN property p ON aps.property_id = p.property_id\n' +
+    'JOIN condo_management_company cmc ON p.companyid = cmc.companyid\n' +
+    'WHERE cmc.companyid = $1\n' +
+    'ORDER BY aps.property_id DESC\n'
 
 const getAssignedParkingSpotByUserId = 'SELECT * FROM assigned_parking_spot WHERE userid = $1'
 
@@ -15,5 +22,7 @@ module.exports = {
   assignParkingSpotByUserId,
   unassignParkingSpotByUserId,
   getAssignedParkingSpotByUserId,
-  getAssignedParkingSpots
+  getAssignedParkingSpots,
+  getAssignedParkingSpotsByPropertyId,
+  getAssignedParkingSpotsByCompanyId
 }
