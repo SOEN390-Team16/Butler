@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
-
 import image from "../../pictures/loginHero.jpg";
 
 SideNav.propTypes = {
@@ -25,8 +24,8 @@ export default function SideNav({ isOpen, toggleDrawer }) {
   const userDataArray = userData ? Object.entries(userData) : [];
   const firstName = userDataArray.length > 1 ? userDataArray[1][1] : ""; // Assuming user name is the second item
   const lastName = userDataArray.length > 1 ? userDataArray[2][1] : "";
+  const role = userData.role;
 
-  const role = userDataArray.length > 1 ? userDataArray[3][1] : "";
   var url = "";
   if (role === "renter") {
     url = "/DashBoardHomeCR";
@@ -91,7 +90,7 @@ export default function SideNav({ isOpen, toggleDrawer }) {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => navigate("")}
+                onClick={() => navigate("/ServicesDashBoard")}
               >
                 Your Requests
               </Button>
