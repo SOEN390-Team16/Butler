@@ -13,6 +13,8 @@ import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
+import ReservationCMC from "./Components/Reservation/ReservationCMC";
+import ReservationPage from "./Components/Reservation/ReservationPage";
 function App() {
   return (
     <>
@@ -35,6 +37,8 @@ function App() {
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}
             />
+            <Route path="/ReservationCMC" element={<ReservationCMC />} />
+            <Route path="/Reservation" element={<ReservationPage />} />
           </Routes>
         </BrowserRouter>
         <ToastContainer />
