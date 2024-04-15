@@ -1,7 +1,7 @@
 const pool = require('../../db')
 const queries = require('./queries')
 
-async function addDetails (property_id, companyid, parking_count, unit_count, locker_count) {
+async function addDetails(property_id, companyid, parking_count, unit_count, locker_count) {
   try {
     for (let index = 1; index <= unit_count; index++) {
       await pool.query(queries.updateCondoDetails, [property_id, companyid, index])
@@ -90,6 +90,23 @@ const getPropertyByCompanyId = (req, res) => {
   const companyid = parseInt(req.params.companyid)
 
   pool.query(queries.getPropertyByCompanyId, [companyid], (error, results) => {
+    if (error) {
+      console.error('Error getting property: ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Property Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
+const getPropertyByUserId = (req, res) => {
+  console.log('Get Property By User ID')
+
+  const userid = parseInt(req.params.userid)
+
+  pool.query(queries.getPropertyByUserId, [userid], (error, results) => {
     if (error) {
       console.error('Error getting property: ', error)
       return res.status(500).json({ error: 'Internal Server Error' })
@@ -278,6 +295,7 @@ module.exports = {
   getPropertyByCondoId,
   getPropertyByLockerId,
   getPropertyByParkingId,
+  getPropertyByUserId,
   addProperty,
   updateProperty,
   removeProperty
