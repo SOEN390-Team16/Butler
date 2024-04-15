@@ -52,11 +52,10 @@ export default function CreateRequestForm({ onAddProperty }) {
         toast.success("Request created successfully!");
         console.log("res in create request form: ", res.data.request);
         onAddProperty({
-          // Include all properties needed by the TableRow
-          request_id: res.data.request.request_id, // Mocking an ID, should be replaced with actual ID from backend
+          request_id: res.data.request.request_id,
           type: res.data.request.type,
           description: res.data.request.description,
-          status: res.data.request.status, // Assuming 'Pending' as the default status
+          status: res.data.request.status,
         });
       })
       .catch((err) => {
@@ -90,6 +89,7 @@ export default function CreateRequestForm({ onAddProperty }) {
 }
 
 CreateRequestForm.propTypes = {
+  onAddProperty: PropTypes.func.isRequired,
   requestList: PropTypes.arrayOf(
     PropTypes.shape({
       description: PropTypes.string.isRequired,
