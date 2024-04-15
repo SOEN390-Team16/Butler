@@ -179,7 +179,7 @@ describe('getRequestsByEmpID function', () => {
   
     it('should return 200 with an empty array when the employee exists but has no requests associated with them', async () => {
       const mockEmployeeID = 123
-      const mockResults = { rowCount: 0 }
+      const mockResults = { rows: []  }
       pool.query.mockImplementation((query, params, callback) => {
         if (query === queries.checkIfEmployeeExists) {
           callback(null, { rowCount: 1 }) // Employee exists
@@ -268,7 +268,7 @@ describe('getRequestsByEmpID function', () => {
   
     it('should return 200 with an empty array when the user exists but has no requests associated with them', async () => {
       const mockUserID = 123
-      const mockResults = { rowCount: 0 }
+      const mockResults = { rows: []  }
       pool.query.mockImplementation((query, params, callback) => {
         if (query === queries.checkIfUserExists) {
           callback(null, { rowCount: 1 }) // User exists

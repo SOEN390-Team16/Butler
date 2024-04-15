@@ -44,13 +44,7 @@ const getRequestsByEmpID = (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
-        if (results.rowCount === 0) {
-          return res
-            .status(200)
-            .json([])
-        } else {
-          res.status(200).json(results.rows)
-        }
+        res.status(200).json(results.rows)
       })
     }
   })
@@ -70,11 +64,7 @@ const getRequestsByUserID = (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
-        if (results.rowCount === 0) {
-          return res.status(200).json([])
-        } else {
-          res.status(200).json(results.rows)
-        }
+        res.status(200).json(results.rows)
       })
     }
   })
