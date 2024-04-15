@@ -125,7 +125,7 @@ describe("getPublicUserById", () => {
     await getPublicUserById(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.json).toHaveBeenCalledWith([mockPublicUser]);
+    expect(res.json).toHaveBeenCalledWith(mockPublicUser);
   });
 
   it("should return a 404 error if public user is not found", async () => {
@@ -334,7 +334,17 @@ describe("updatePublicUser", () => {
       callback(null, { rowCount: 1, rows: [{ userid: 1 }] }); // Mock user exists
     });
     pool.query.mockImplementationOnce((query, params, callback) => {
-      callback(null, { rowCount: 1 }); // Mock updatePublicUser
+      callback(null, {
+        rowCount: 1,
+        rows: [{
+          userid: 1, first_name: "John",
+          last_name: "Doe",
+          email: "john.doe@example.com",
+          password: "newpassword123",
+          role: "public",
+          profile_picture: "new_profile.jpg",
+        }]
+      }); // Mock updatePublicUser
     });
 
     const req = {
@@ -357,7 +367,12 @@ describe("updatePublicUser", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Public User updated successfully",
+      userid: 1, first_name: "John",
+      last_name: "Doe",
+      email: "john.doe@example.com",
+      password: "newpassword123",
+      role: "public",
+      profile_picture: "new_profile.jpg",
     });
   });
 

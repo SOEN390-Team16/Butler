@@ -7,6 +7,8 @@ import "./LoginCard.css";
 import ContinueButton from "../Buttons/ContinueButton";
 import useAuthStore from "../../store/auth/auth.store.js";
 import { UserRoles } from "../../models/user-roles.enum.js";
+import usePublicUserStore from "../../store/user/public-user.store.js";
+import useCondoManagementCompany from "../../store/user/condo-management-company.store.js";
 
 const LoginCard = () => {
   const navigation = useNavigate();
@@ -19,37 +21,42 @@ const LoginCard = () => {
   const [incorrectInfo, setIncorrectInfo] = useState(false);
   const [error, setError] = useState(false);
   const login = useAuthStore(state => state.login)
+  const publicUserStore = usePublicUserStore()
+  const condoManagementCompanyStore = useCondoManagementCompany()
 
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
     // This is where the user will be logged in and redirected to their profile
     try {
-      const data = await login(userInfo.email, userInfo.password);
-      if (data) {
-        console.log("Logged in successfully");
-        let userData = jwtDecode(data.token);
-        localStorage.setItem("userData", JSON.stringify(userData));
+      const response = await login(userInfo.email, userInfo.password);
+      if (response.status === 200) {
+        const userData = jwtDecode(response.data.token)
+        localStorage.setItem("userData", JSON.stringify(userData))
+
         switch (String(userData.role)) {
           case UserRoles.CONDO_MANAGEMENT_COMPANY:
+            await condoManagementCompanyStore.fetchCondoManagementCompany(userData.cmcId)
             navigation("/DashboardHomeCMC");
             break;
           case UserRoles.CONDO_OWNER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashBoardHomeCO");
             break;
           case UserRoles.CONDO_RENTER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashBoardHomeCR");
             break;
           case UserRoles.PUBLIC_USER:
+            await publicUserStore.fetchPublicUser(userData.userId)
             navigation("/DashboardHome/editUser")
         }
       }
     } catch (err) {
-      if (err.response.date.message === "Invalid email or password") {
-        console.log("Incorrect email or password");
+      console.log(err)
+      if (err.response.data.message === "Invalid email or password") {
         setIncorrectInfo(true);
       } else {
-        console.log("Error logging in:", err.message);
         setError(true);
       }
     }
@@ -68,7 +75,7 @@ const LoginCard = () => {
             to="/googleSignin"
             className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
           >
-            <FcGoogle size={25} />
+            <FcGoogle size={25}/>
             <p className="text font-semibold">Sign in With Google</p>
           </Link>
 
@@ -106,7 +113,7 @@ const LoginCard = () => {
             </div>
           </div>
         </div>
-        <ContinueButton onClick={handleClick} name={"Sign In"} />
+        <ContinueButton onClick={handleClick} name={"Sign In"}/>
       </div>
     </div>
   );

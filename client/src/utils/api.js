@@ -123,3 +123,19 @@ export const addPublicUser = async (data) => {
 };
 
  
+// Get all operational costs
+export const getTotalOperationCost = async () => {
+  try{
+    const response = await api.get('/v1/api/v1/op', {
+      timeout: 10 * 1000,
+    });
+    if(response.status === 400 || response.status === 500){
+      throw response.data
+    }
+    return response.data
+  }catch(err){
+    toast.error("error getting the Operational costs")
+    throw err;
+  }
+}
+

@@ -6,8 +6,10 @@ const getAllReservations = (req, res) => {
 
   pool.query(queries.getAllReservations, (error, results) => {
     if (error) {
-      console.error("Error fetching reservations:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows);
     }
@@ -17,12 +19,14 @@ const getAllReservations = (req, res) => {
 const getReservationsByUserId = (req, res) => {
   console.log("Get Reservations by User Id");
 
-  const userid = req.params.userid;
+  const userid = parseInt(req.params.userid)
 
   pool.query(queries.getAllReservationsByUserId, [userid], (error, results) => {
     if (error) {
-      console.error("Error fetching reservations:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows);
     }
@@ -36,8 +40,10 @@ const getReservationsByDate = (req, res) => {
 
   pool.query(queries.getAllReservationsByDate, [date], (error, results) => {
     if (error) {
-      console.error("Error fetching reservations:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
     } else {
       res.status(200).json(results.rows);
     }
@@ -49,60 +55,31 @@ const getReservationsByFacilityId = (req, res) => {
 
   const facilityid = parseInt(req.params.facilityid);
 
-  pool.query(
-    queries.getAllReservationsByFacilityId,
-    [facilityid],
-    (error, results) => {
-      if (error) {
-        console.error("Error fetching reservations:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(200).json(results.rows);
-      }
+  pool.query(queries.getAllReservationsByFacilityId, [facilityid], (error, results) => {
+    if (error) {
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
+    } else {
+      res.status(200).json(results.rows)
     }
-  );
-};
-const getFacilityStatus = (req, res) => {
-  console.log("Get Facility Status");
-  const facilityId = parseInt(req.params.facilityid);
-  const currentDate = new Date();  // get the current date and time
-  currentDate.setHours(0, 0, 0, 0);  // set time to 00:00:00.000 to truncate time component
-
-  pool.query(
-    queries.getAllReservationsByFacilityId,
-    [facilityId],
-    (error, results) => {
-      if (error) {
-        console.error("Error fetching reservations:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        const hasReservations = results.rows.some(reservation => {
-          const reservationDate = new Date(reservation.date);
-          reservationDate.setHours(0, 0, 0, 0);  // adjust reservation date similarly
-          return reservationDate.getTime() === currentDate.getTime(); // strictly compare the dates
-        });
-        res.status(200).json({ hasReservations });
-      }
-    }
-  );
-};
-
+  })
+}
 
 const getReservationsByPropertyId = (req, res) => {
   console.log("Get Reservations by Property Id");
 
   const propertyid = parseInt(req.params.propertyid);
 
-  pool.query(
-    queries.getAllReservationsByPropertyId,
-    [propertyid],
-    (error, results) => {
-      if (error) {
-        console.error("Error fetching reservations:", error);
-        return res.status(500).json({ error: "Internal Server Error" });
-      } else {
-        res.status(200).json(results.rows);
-      }
+  pool.query(queries.getAllReservationsByPropertyId, [propertyid], (error, results) => {
+    if (error) {
+      console.error('Error fetching reservations:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Reservations not found' })
+    } else {
+      res.status(200).json(results.rows)
     }
   );
 };
