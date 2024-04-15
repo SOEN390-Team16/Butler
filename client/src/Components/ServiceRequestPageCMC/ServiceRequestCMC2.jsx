@@ -79,7 +79,6 @@ const ServiceRequestCMC2 = () => {
       })
       .catch((error) => {
         console.error("Error deleting request:", error);
-        toast.error("Failed to delete request.");
       });
   };
 

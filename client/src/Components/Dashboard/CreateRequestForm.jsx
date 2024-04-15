@@ -8,14 +8,14 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function CreateRequestForm({ requestList }) {
+export default function CreateRequestForm({ onAddProperty }) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
-  console.log("requests: ", requestList);
+  // console.log("requests: ", requestList);
   let requestSchema = object({
     description: string().required("A description is required"),
     type: string().required("A request type is required"),
@@ -50,13 +50,19 @@ export default function CreateRequestForm({ requestList }) {
       })
       .then((res) => {
         toast.success("Request created successfully!");
-        console.log(res.data);
+        console.log("res in create request form: ", res.config.data);
+        onAddProperty({
+          // Include all properties needed by the TableRow
+          request_id: res.data.request_id, // Mocking an ID, should be replaced with actual ID from backend
+          type: res.data.type,
+          description: res.data.description,
+          status: "Received", // Assuming 'Pending' as the default status
+        });
       })
       .catch((err) => {
         console.log(err);
       });
     toggle();
-    // alert(JSON.stringify(values, null, 2));
   };
 
   return (

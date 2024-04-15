@@ -51,8 +51,21 @@ const ServicesDashBoard = () => {
     getRequestByUserID();
   }, [token, userID]);
 
+  // const addRequestToState = (newRequest) => {
+  //   const requestWithAllFields = {
+  //     ...newRequest,
+  //     request_id: newRequest.request_id, // Mocking an ID, should be replaced with actual ID from backend
+  //     status: "Received",
+  //   };
+  //   setRequest((prevRequest) => [...prevRequest, requestWithAllFields]);
+  // };
+
   const addRequestToState = (newRequest) => {
-    setRequest((prevRequest) => [...prevRequest, newRequest]);
+    setRequest((prevRequest) => {
+      const updatedRequests = [...prevRequest, newRequest];
+      console.log("Updated requests:", updatedRequests); // Debugging purposes
+      return updatedRequests;
+    });
   };
 
   const toggleDrawer = () => {
