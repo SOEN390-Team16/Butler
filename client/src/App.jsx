@@ -14,6 +14,7 @@ import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
+import FinanceHome from "./Components/Dashboard/Finance/FinanceHome";
 
 function App() {
   return (
@@ -37,7 +38,8 @@ function App() {
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}
             />
-          </Routes>
+            <Route path="/DashBoardHomeCMC/Finance" element={<FinanceHome />} />
+        </Routes>
         </BrowserRouter>
         <ToastContainer />
       </ChakraProvider>
