@@ -3,18 +3,60 @@ const queries = require('./queries')
 const bcrypt = require('bcrypt')
 
 const getCondoOwners = (req, res) => {
-  console.log('get all condo owners')
-  pool.query(queries.getCondoOwners, (error, results) => {
-    if (error) {
-      console.error('Error finding condo owners:', error)
-      return res.status(500).json({ error: 'Internal Server Error' })
-    }
-    if (results.rows.length === 0) {
-      return res.status(404).json({ error: 'Condo Owners Not Found' })
-    } else {
-      res.status(200).json(results.rows)
-    }
-  })
+  const property_id = parseInt(req.params.property_id)
+  const companyid = parseInt(req.params.companyid)
+
+  if (!isNaN(property_id)) {
+    console.log('getting all condo owners by property_id')
+    pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {
+      if (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'Property not found' })
+        }
+      }
+    })
+    pool.query(queries.getCondoOwnersByPropertyId, [property_id], (error, results) => {
+      if (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  }
+  if (!isNaN(companyid)) {
+    console.log('getting all condo owners by companyid')
+    pool.query(queries.checkIfCompanyExists, [companyid], (error, results) => {
+      if (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'Company not found' })
+        }
+      }
+    })
+    pool.query(queries.getCondoOwnersByCompanyId, [companyid], (error, results) => {
+      if (error) {
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else {
+    console.log('get all condo owners')
+    pool.query(queries.getCondoOwners, (error, results) => {
+      if (error) {
+        console.error('Error finding condo owners:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      }
+      if (results.rows.length === 0) {
+        return res.status(404).json({ error: 'Condo Owners Not Found' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  }
 }
 
 const getCondoOwnerById = (req, res) => {

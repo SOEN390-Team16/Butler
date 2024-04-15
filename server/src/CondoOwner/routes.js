@@ -3,7 +3,7 @@ const controller = require('./controller')
 const authenticateToken = require('../auth/tokenValidator')
 const router = Router()
 
-router.get('/', authenticateToken, controller.getCondoOwners)
+router.get('/:property_id?/:companyid?', authenticateToken, controller.getCondoOwners)
 router.get('/:ownerid', authenticateToken, controller.getCondoOwnerById)
 router.post('/', controller.addCondoOwner)
 router.patch('/:ownerid', authenticateToken, controller.updateCondoOwner)
