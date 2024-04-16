@@ -44,13 +44,7 @@ const getRequestsByEmpID = (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
-        if (results.rowCount === 0) {
-          return res
-            .status(404)
-            .json({ error: 'No Requests Assigned To This Employee' })
-        } else {
-          res.status(200).json(results.rows)
-        }
+        res.status(200).json(results.rows)
       })
     }
   })
@@ -70,11 +64,7 @@ const getRequestsByUserID = (req, res) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
         }
-        if (results.rowCount === 0) {
-          return res.status(404).json({ error: 'This User Has No Requests' })
-        } else {
-          res.status(200).json(results.rows)
-        }
+        res.status(200).json(results.rows)
       })
     }
   })
@@ -259,15 +249,12 @@ const updateRequest = async (req, res) => {
     if (error) {
       return res.status(500).json({ error: 'Internal Server Error' })
     }
-    if (results.rowCount === 0) {
+    if (results.rows.length === 0) {
       return res.status(404).json({ error: 'Request not found' })
     } else {
       pool.query(query, [...values, request_id], (error, result) => {
         if (error) {
           return res.status(500).json({ error: 'Internal Server Error' })
-        }
-        if (result.rowCount === 0) {
-          return res.status(404).json({ error: 'request not found' })
         }
         pool.query(queries.getRequestByID, [request_id], (error, results) => {
           if (error) {

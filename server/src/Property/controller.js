@@ -101,6 +101,23 @@ const getPropertyByCompanyId = (req, res) => {
   })
 }
 
+const getPropertyByUserId = (req, res) => {
+  console.log('Get Property By User ID')
+
+  const userid = parseInt(req.params.userid)
+
+  pool.query(queries.getPropertyByUserId, [userid], (error, results) => {
+    if (error) {
+      console.error('Error getting property: ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Property Not Found' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 const getPropertyByCondoId = (req, res) => {
   console.log('Get Property By Condo ID')
   const condoid = parseInt(req.params.condoid)
@@ -278,6 +295,7 @@ module.exports = {
   getPropertyByCondoId,
   getPropertyByLockerId,
   getPropertyByParkingId,
+  getPropertyByUserId,
   addProperty,
   updateProperty,
   removeProperty
