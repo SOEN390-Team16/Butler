@@ -3,18 +3,42 @@ const queries = require('./queries')
 const bcrypt = require('bcrypt')
 
 const getCMCs = (req, res) => {
-  console.log('get all Condo Management Companies')
-  pool.query(queries.getCMCs, (error, results) => {
-    if (error) {
-      console.error('Error finding cmc users:', error)
-      return res.status(500).json({ error: 'Internal Server Error' })
-    }
-    if (results.rows.length === 0) {
-      return res.status(404).json({ error: 'CMC User Not Found' })
-    } else {
-      res.status(200).json(results.rows)
-    }
-  })
+  let property_id
+  try {
+    property_id = parseInt(req.query.property_id)
+  } catch (e) {}
+  if (!isNaN(property_id)) {
+    console.log('getting condo management company by property_id')
+    pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'Property not found' })
+        }
+      }
+    })
+    pool.query(queries.getCMCByPropertyId, [property_id], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else {
+    console.log('get all Condo Management Companies')
+    pool.query(queries.getCMCs, (error, results) => {
+      if (error) {
+        console.error('Error finding cmc users:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      }
+      if (results.rows.length === 0) {
+        return res.status(404).json({ error: 'CMC User Not Found' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  }
 }
 
 const getCMCById = (req, res) => {
