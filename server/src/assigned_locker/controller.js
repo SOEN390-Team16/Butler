@@ -27,15 +27,38 @@ const unassignLockerByUserId = (req, res) => {
 }
 
 const getAssignedLockers = (req, res) => {
-  console.log('Get All Assigned Lockers')
-  pool.query(queries.getAssignedLockers, (error, results) => {
-    if (error) {
-      console.error('Error getting assigned lockers: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json(results.rows)
-    }
-  })
+  const property_id = parseInt(req.params.property_id)
+  const companyid = parseInt(req.params.companyid)
+
+  if (!isNaN(property_id)) {
+    console.log('getting assigned lockers by property_id')
+    pool.query(queries.getAssignedLockersByPropertyId, [property_id], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else if (!isNaN(companyid)) {
+    console.log('getting assigned lockers by companyid')
+    pool.query(queries.getAssignedLockersByCompanyId, [companyid], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else {
+    console.log('Getting All Assigned Lockers')
+    pool.query(queries.getAssignedLockers, (error, results) => {
+      if (error) {
+        console.error('Error getting assigned lockers: ', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  }
 }
 
 const getAssignedLockerByUserId = (req, res) => {
