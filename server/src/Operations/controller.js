@@ -112,11 +112,89 @@ const readOperationalCosts = (req, res) => {
   })
 }
 
+const getCostByOperationId = (req, res) => {
+  console.log('Get Cost By Operation Id')
+
+  const operationId = parseInt(req.params.operation_id)
+
+  pool.query(queries.getCostByOperationId, [operationId], (error, results) => {
+    if (error) {
+      console.error('Error getting cost by operation id ', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Cost not found' })
+    } else {
+      res.status(200).json(results.rows.at(0))
+    }
+  })
+}
+
+const setCostByOperationId = (req, res) => {
+  console.log('Set Cost By Operation ID')
+
+  const operationId = parseInt(req.params.operation_id)
+  const { cost } = req.body
+
+  pool.query(queries.checkIfOperationExistsById, [operationId], (error, results) => {
+    if (error) {
+      console.error('Error checking operation existence:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount === 0) {
+      return res.status(404).json({ error: 'Operation not found' })
+    } else {
+      pool.query(queries.setCostByOperationId, [cost, operationId], (error, results) => {
+        if (error) {
+          console.error('Error setting cost for operation:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
+        } else {
+          res.status(200).json({ message: 'Cost for operation updated successfully' })
+        }
+      })
+    }
+  })
+}
+
+const calculateOperationalBudget = (req, res) => {
+  console.log('Calculate Operational Budget')
+
+  let totalOperationalCosts = 0
+  let totalCondoFees = 0
+
+  pool.query(queries.getTotalOperationalCost, (error, operationalCostsResult) => {
+    if (error) {
+      console.error('Error calculating operational costs:', error)
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      totalOperationalCosts = parseFloat(operationalCostsResult.rows[0].total_cost || 0)
+
+      pool.query(queries.getTotalCondoFees, (error, condoFeesResult) => {
+        if (error) {
+          console.error('Error calculating condo fees:', error)
+          return res.status(500).json({ error: 'Internal Server Error' })
+        } else {
+          totalCondoFees = parseFloat(condoFeesResult.rows[0].total_fees || 0)
+
+          const totalOperationalBudget = totalCondoFees - totalOperationalCosts
+          const response = {
+            'Total Operational Costs': totalOperationalCosts,
+            'Total Condo Fees': totalCondoFees,
+            'Total Operational Budget': totalOperationalBudget
+          }
+          res.status(200).json(response)
+        }
+      })
+    }
+  })
+}
+
 module.exports = {
   getAllOperations,
   getOperationById,
   createOperation,
   deleteOperation,
   updateOperation,
-  readOperationalCosts
+  readOperationalCosts,
+  getCostByOperationId,
+  setCostByOperationId,
+  calculateOperationalBudget
 }
