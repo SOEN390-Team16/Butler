@@ -2,8 +2,8 @@ const pool = require('../../db')
 const queries = require('./queries')
 
 const getCondoUnits = (req, res) => {
-  const property_id = parseInt(req.params.property_id)
-  const companyid = parseInt(req.params.companyid)
+  const property_id = parseInt(req.query.property_id)
+  const companyid = parseInt(req.query.companyid)
   if (!isNaN(property_id)) {
     console.log('Getting condo units by property_id')
     pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {

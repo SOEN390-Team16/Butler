@@ -27,8 +27,8 @@ const unassignLockerByUserId = (req, res) => {
 }
 
 const getAssignedLockers = (req, res) => {
-  const property_id = parseInt(req.params.property_id)
-  const companyid = parseInt(req.params.companyid)
+  const property_id = parseInt(req.query.property_id)
+  const companyid = parseInt(req.query.companyid)
 
   if (!isNaN(property_id)) {
     console.log('getting assigned lockers by property_id')
