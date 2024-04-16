@@ -16,8 +16,12 @@ const getAllOperations = (req, res) => {
 
 const getOperationById = (req, res) => {
   console.log('Get Operation By Id')
-
-  const operationId = parseInt(req.params.operation_id)
+  let operation_id
+try{
+  operationId = parseInt(req.params.operation_id)
+}catch(err){
+    console.log(err)
+  }
 
   pool.query(queries.getOperationById, [operationId], (error, results) => {
     if (error) {
@@ -72,7 +76,12 @@ const deleteOperation = (req, res) => {
 const updateOperation = (req, res) => {
   console.log('Update Operation')
 
-  const operationId = parseInt(req.params.operation_id)
+  try{
+    operationId = parseInt(req.params.operation_id)
+  }catch(err){
+    console.log(err)
+  }
+
   const { property_id, cost, date, type } = req.body
 
   pool.query(queries.checkIfOperationExistsById, [operationId], (error, results) => {
@@ -97,7 +106,12 @@ const updateOperation = (req, res) => {
 const readOperationalCosts = (req, res) => {
   console.log('Calculate Operational Budget')
   const currentYear = new Date().getFullYear()
-  const company_id = (req.params.company_id)
+  let company_id;
+  try{
+    company_id = (req.params.company_id)
+  }catch(err){
+    console.log(err)
+  }
   pool.query(queries.calculateTotalCostPerPropertyWithinYear, [company_id, currentYear], (error, results) => {
     if (error) {
       console.error('Error calculating operational budget', error)

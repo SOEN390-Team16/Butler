@@ -19,7 +19,13 @@ const getPublicUsers = (req, res) => {
 
 const getPublicUserById = (req, res) => {
   console.log('get a specific Public User')
-  const userid = parseInt(req.params.userid)
+  let userid;
+  try{
+    userid = parseInt(req.params.userid)
+  }catch(err){
+    console.log(err)
+  }
+ 
   pool.query(queries.getPublicUserById, [userid], (error, results) => {
     if (error) {
       // console.error('Error getting user:', error)

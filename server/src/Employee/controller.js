@@ -3,10 +3,15 @@ const queries = require('./queries')
 
 const getEmployees = (req, res) => {
   console.log('Get All Employees')
-  const company_id = parseInt(req.params.company_id)
+  let company_id;
+  try{
+    company_id = parseInt(req.params.company_id)
+  }catch(err){
+    return res.status(500).json({ error: 'Internal Server Error' })
+  }
   pool.query(queries.getEmployees, [company_id], (error, results) => {
     if (error) {
-      // console.error('Error finding Employees: ', error)
+      
       return res.status(500).json({ error: 'Internal Server Error' })
     }
     res.status(200).json(results.rows)
