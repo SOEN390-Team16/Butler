@@ -19,7 +19,6 @@ const calculateTotalCostPerPropertyWithinYear = `
   ORDER BY total_cost DESC;
 `
 
-
 const getCostByOperationId = 'SELECT op.cost FROM operation op WHERE op.operation_id = $1'
 const setCostByOperationId = 'UPDATE operation SET cost = $1 WHERE operation_id = $2'
 const getTotalOperationalCost = 'SELECT SUM(cost) AS total_cost from operation'

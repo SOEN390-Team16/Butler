@@ -3,7 +3,6 @@ const controller = require('./controller')
 const authenticateToken = require('../auth/tokenValidator')
 const router = Router()
 
-
 router.get('/total-cost/:company_id', authenticateToken, controller.readOperationalCosts)
 router.get('/:company_id', authenticateToken, controller.getAllOperations)
 router.get('/operational-budget', authenticateToken, controller.calculateOperationalBudget)
