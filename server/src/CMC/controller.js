@@ -3,7 +3,10 @@ const queries = require('./queries')
 const bcrypt = require('bcrypt')
 
 const getCMCs = (req, res) => {
-  const property_id = parseInt(req.query.property_id)
+  let property_id
+  try {
+    property_id = parseInt(req.query.property_id)
+  } catch (e) {}
   if (!isNaN(property_id)) {
     console.log('getting condo management company by property_id')
     pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {
