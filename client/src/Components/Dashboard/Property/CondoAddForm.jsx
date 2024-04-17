@@ -7,6 +7,7 @@ import { number, object, string } from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { Select } from "@chakra-ui/react";
 
 export default function CondoAddForm(props) {
   const { toggle } = useModal();
@@ -15,8 +16,10 @@ export default function CondoAddForm(props) {
     condoUnitNumber: number()
       .required("A condo unit number is required")
       .integer("Condo unit number must be an integer")
-      .min(1, "Condo unit number must be a positive integer and greater than 0")
-      .default(props.condoUnitsUncompleted[0].condo_number),
+      .min(
+        1,
+        "Condo unit number must be a positive integer and greater than 0"
+      ),
     condoUnitSize: number()
       .required("A condo unit size is required")
       .integer("Condo unit size must be an integer"),
@@ -100,12 +103,13 @@ export default function CondoAddForm(props) {
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitNumber">Condo Unit Number</Label>
           {errorMessage("condoUnitNumber")}
-          <select
+          <Select
+            placeholder="Select Condo Unit Number"
             id="condoUnitNumber"
             name="condoUnitNumber"
             value={formik.values.condoUnitNumber}
             onChange={formik.handleChange}
-            className="border border-gray-400 rounded-lg px-4 py-3"
+            size={"lg"}
           >
             {props.condoUnitsUncompleted.map((condoUnit) => (
               <option
@@ -115,7 +119,25 @@ export default function CondoAddForm(props) {
                 {condoUnit.condo_number}
               </option>
             ))}
-          </select>
+          </Select>
+        </div>
+
+        <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
+          <Label htmlFor="condoUnitOccupantType">
+            Condo Unit Occupant Type
+          </Label>
+          {errorMessage("condoUnitOccupantType")}
+          <Select
+            placeholder="Select Occupant Type"
+            onChange={formik.handleChange}
+            id="condoUnitOccupantType"
+            name="condoUnitOccupantType"
+            value={formik.values.condoUnitOccupantType}
+            size={"lg"}
+          >
+            <option value="Owner">Owner</option>
+            <option value="Renter">Renter</option>
+          </Select>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitSize">Condo Unit Size</Label>
@@ -127,22 +149,7 @@ export default function CondoAddForm(props) {
             value={formik.values.condoUnitSize}
           />
         </div>
-        <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
-          <Label htmlFor="condoUnitOccupantType">
-            Condo Unit Occupant Type
-          </Label>
-          {errorMessage("condoUnitOccupantType")}
-          <select
-            onChange={formik.handleChange}
-            id="condoUnitOccupantType"
-            name="condoUnitOccupantType"
-            value={formik.values.condoUnitOccupantType}
-            className="border border-gray-400 rounded-lg px-4 py-3"
-          >
-            <option value="Owner">Owner</option>
-            <option value="Renter">Renter</option>
-          </select>
-        </div>
+
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit">
           <Label htmlFor="condoUnitTotalFees">Condo Unit Total Fees</Label>
           {errorMessage("condoUnitTotalFees")}
