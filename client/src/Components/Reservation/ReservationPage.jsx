@@ -19,7 +19,6 @@ import ReservationService from "../../service/reservation/reservation.service.js
 import ReservationCalendar from "./ReservationCalendar.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import ReservationAddForm from "./ReservationAddForm.jsx";
-import DeleteButton from "../Buttons/DeleteButton.jsx";
 import { toast } from "react-toastify";
 
 export default function ReservationPage() {

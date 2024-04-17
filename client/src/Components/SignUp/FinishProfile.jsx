@@ -1,13 +1,10 @@
-import React, {useState} from "react";
-import { Link, useLocation } from "react-router-dom";
-
 import './FinishProfile.css'
 import SidePicture from "../Login/SidePicture";
 import InformationHolder from "./InformationHolder";
 import PersonalInfo from "./PersonalInfo";
 
 
-const FinishProfile = props => {
+const FinishProfile = () => {
 
     return(
         <div className="finished__profile__main">

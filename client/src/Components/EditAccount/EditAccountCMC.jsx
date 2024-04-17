@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import "./EditAccount.css";
 
-const EditAccountCMC = (props) => {
+const EditAccountCMC = () => {
   // Retrieve userData from localStorage
   const userData = JSON.parse(localStorage.getItem("userData"));
   // Convert userData object to array of entries

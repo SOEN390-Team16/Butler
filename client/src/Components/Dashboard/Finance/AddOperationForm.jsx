@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function AddOperationForm({ propertyList, onClick }) {
+export default function AddOperationForm({ propertyList}) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
 
@@ -59,7 +59,6 @@ export default function AddOperationForm({ propertyList, onClick }) {
         console.log(err);
       });
     toggle();
-    // alert(JSON.stringify(values, null, 2));
   };
 
   console.log(formik.values)

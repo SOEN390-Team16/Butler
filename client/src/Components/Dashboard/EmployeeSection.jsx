@@ -46,18 +46,17 @@ export default function EmployeeSection() {
     };
     fetchProperties();
   }, [token, userData.cmcId]);
-
+console.log(employees)
   // CHange this to localhost later
   useEffect(() => {
     axios
-      .get(`http://hortzcloud.com/api/v1/emp/${userData.cmcId}`, {
+      .get(`http://hortzcloud.com:3000/api/v1/emp/${userData.cmcId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         setEmployees(res.data);
-        // toast.success('Employees set successfully');
       })
       .catch((err) => {
         toast.error(`Something went wrong: ${err.message}`);
@@ -82,7 +81,7 @@ export default function EmployeeSection() {
         toast.error("Couldn't delete the employee.");
       });
     }
-console.log(employees)
+
   return (
     <div
       className="flex flex-col justify-center items-center w-full"

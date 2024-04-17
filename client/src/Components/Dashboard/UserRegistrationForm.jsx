@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AddButton from "../Buttons/AddButton.jsx";
-import Input from "../Forms/Input.jsx";
 import Label from "../Forms/Label.jsx";
 import { useFormik } from "formik";
 import { useModal } from "../Modals/Modal.jsx";
@@ -25,15 +24,6 @@ export default function UserRegistrationForm() {
     validationSchema: propertySchema,
     onSubmit: (values) => handleSubmit(values),
   });
-
-  const errorMessage = (fieldName) => {
-    if (formik.touched[fieldName] && formik.errors[fieldName]) {
-      return (
-        <span className="text-red-400 text-sm">{formik.errors[fieldName]}</span>
-      );
-    }
-    return null;
-  };
 
   const handleUserRoleChange = (event) => {
     setUserRole(event.target.value);
@@ -61,15 +51,15 @@ export default function UserRegistrationForm() {
           </h4>
         )}
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="propertyName">User's Name</Label>
+          <Label htmlFor="propertyName">Users Name</Label>
           <h2>John Doe</h2>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="propertyAddress">User's Registration Token</Label>
+          <Label htmlFor="propertyAddress">Users Registration Token</Label>
           <h2>DFLKJG-FGKCNGJTO-F4H9</h2>
         </div>
         <div className="flex flex-col gap-2 w-[360px] font-inter h-fit place-items-center">
-          <Label htmlFor="userRole">User's Role</Label>
+          <Label htmlFor="userRole">Users Role</Label>
           <div>
             <input
               type="radio"

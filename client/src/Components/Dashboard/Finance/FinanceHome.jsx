@@ -17,7 +17,6 @@ import Modal from "../../Modals/Modal.jsx";
 import EditButton from "../../Buttons/EditButton.jsx";
 import EditOperationForm from "./EditOperationForm.jsx";
 import { toast } from 'react-toastify'
-
 import axios from "axios";
 import AddOperationForm from "./AddOperationForm.jsx";
 
@@ -29,9 +28,6 @@ const FinanceHome = () => {
  
   const [operations, setOperations] = useState([])
 
-  const handleHeadingClick = (heading) => {
-    setSelectedHeading(heading);
-  };
   // test table ends
 
   // toggles the drawer between being open and closed
@@ -101,7 +97,7 @@ useEffect(() => {
     values.property_id = parseInt(values.property_id);
     setOperations((prevOperations) => [...prevOperations, values])
     await axios
-      .post("http://hortzcloud:3000/api/v1/op", values, {
+      .post("http://hortzcloud.com:3000/api/v1/op", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -113,7 +109,7 @@ useEffect(() => {
       .catch((err) => {
         console.log(err);
       });
-    toggle();
+    // toggle();
     // alert(JSON.stringify(values, null, 2));
   };
 
@@ -124,7 +120,7 @@ useEffect(() => {
 // REMEMBER TO CHANGE THIS TO HORTZCLOUD
   useEffect(()=> {
     const fetchTotalOperations= () => {
-      axios.get(`http://hortzcloud.com3000/api/v1/op/total-cost/${userData.cmcId}`,{
+      axios.get(`http://hortzcloud.com:3000/api/v1/op/total-cost/${userData.cmcId}`,{
         headers: {
           authorization: `Bearer ${token}`,
         }
@@ -222,7 +218,7 @@ useEffect(() => {
                   <TableHeader>
                     <th></th>                 
                     <th>Property</th>
-                    <th>Revenue Generated</th>
+                    <th>Operational Costs</th>
                   </TableHeader>
                   {visibleTotal.map((property, index) => (
                     <TableRow key={index}>

@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { useEffect } from "react";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import ReservationService from "../../service/reservation/reservation.service";
+
 
 // Setup the localizer by providing the moment (or globalize, or Luxon) Object
 // to the correct localizer.
