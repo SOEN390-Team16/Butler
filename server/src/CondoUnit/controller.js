@@ -12,14 +12,15 @@ const getCondoUnits = (req, res) => {
       } else {
         if (results.rowCount < 1) {
           return res.status(404).json({ error: 'Property not found' })
+        } else {
+          pool.query(queries.getCondoUnitsByPropertyId, [property_id], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              return res.status(200).json(results.rows)
+            }
+          })
         }
-      }
-    })
-    pool.query(queries.getCondoUnitsByPropertyId, [property_id], (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: 'Internal Server Error' })
-      } else {
-        return res.status(200).json(results.rows)
       }
     })
   } else if (!isNaN(companyid)) {
@@ -30,14 +31,15 @@ const getCondoUnits = (req, res) => {
       } else {
         if (results.rowCount < 1) {
           return res.status(404).json({ error: 'Property not found' })
+        } else {
+          pool.query(queries.getCondoUnitsByCompanyId, [companyid], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              return res.status(200).json(results.rows)
+            }
+          })
         }
-      }
-    })
-    pool.query(queries.getCondoUnitsByCompanyId, [companyid], (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: 'Internal Server Error' })
-      } else {
-        return res.status(200).json(results.rows)
       }
     })
   } else {

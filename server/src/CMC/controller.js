@@ -15,14 +15,15 @@ const getCMCs = (req, res) => {
       } else {
         if (results.rowCount < 1) {
           return res.status(404).json({ error: 'Property not found' })
+        } else {
+          pool.query(queries.getCMCByPropertyId, [property_id], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              return res.status(200).json(results.rows)
+            }
+          })
         }
-      }
-    })
-    pool.query(queries.getCMCByPropertyId, [property_id], (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: 'Internal Server Error' })
-      } else {
-        return res.status(200).json(results.rows)
       }
     })
   } else {
