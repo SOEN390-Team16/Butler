@@ -30,7 +30,7 @@ const getCondoUnits = (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' })
       } else {
         if (results.rowCount < 1) {
-          return res.status(404).json({ error: 'Property not found' })
+          return res.status(404).json({ error: 'Company not found' })
         } else {
           pool.query(queries.getCondoUnitsByCompanyId, [companyid], (error, results) => {
             if (error) {
