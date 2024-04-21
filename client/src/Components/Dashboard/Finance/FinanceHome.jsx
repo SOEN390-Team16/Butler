@@ -16,26 +16,26 @@ import ModalContent from "../../Modals/ModalContent.jsx";
 import Modal from "../../Modals/Modal.jsx";
 import EditButton from "../../Buttons/EditButton.jsx";
 import EditOperationForm from "./EditOperationForm.jsx";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 import axios from "axios";
 import AddOperationForm from "./AddOperationForm.jsx";
-
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
 const FinanceHome = () => {
   // test table
- 
-  const [operations, setOperations] = useState([])
+
+  const [operations, setOperations] = useState([]);
 
   // test table ends
 
   // toggles the drawer between being open and closed
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
-  const [totalOperationCost, setTotalOperationCost] = useState([])
+  const [totalOperationCost, setTotalOperationCost] = useState([]);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
+  const [annualReport, setAnnualReport] = useState([]);
 
   // const deletePublicUser = (user) => {
   //   axios
@@ -74,28 +74,30 @@ const FinanceHome = () => {
     fetchProperties();
   }, [token, userData.cmcId]);
 
-console.log(userData)
-// REMEMBER TO CHANGE THIS TO HORTZCLOUD
-useEffect(() => {
-  const fetchOperations = () => {
-    axios.get(`http://hortzcloud.com:3000/api/v1/op/${userData.cmcId}`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    })
-    .then(res => {
-      setOperations(res.data)
-    }).catch(err => {
-      toast.error(err)
-    })
-  }
-  fetchOperations()
-}, [token])
+  console.log(userData);
+  // REMEMBER TO CHANGE THIS TO HORTZCLOUD
+  useEffect(() => {
+    const fetchOperations = () => {
+      axios
+        .get(`http://hortzcloud.com:3000/api/v1/op/${userData.cmcId}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setOperations(res.data);
+        })
+        .catch((err) => {
+          toast.error(err);
+        });
+    };
+    fetchOperations();
+  }, [token]);
 
   // TODO: Add the property to the database
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id);
-    setOperations((prevOperations) => [...prevOperations, values])
+    setOperations((prevOperations) => [...prevOperations, values]);
     await axios
       .post("http://hortzcloud.com:3000/api/v1/op", values, {
         headers: {
@@ -117,36 +119,59 @@ useEffect(() => {
     setDrawerOpen(!isDrawerOpen);
   };
 
-// REMEMBER TO CHANGE THIS TO HORTZCLOUD
-  useEffect(()=> {
-    const fetchTotalOperations= () => {
-      axios.get(`http://hortzcloud.com:3000/api/v1/op/total-cost/${userData.cmcId}`,{
-        headers: {
-          authorization: `Bearer ${token}`,
-        }
-      }).then(res => {
-        setTotalOperationCost(res.data.Operations)
-      }).catch(err=>{
-        console.log(err)
-  })
-} 
-      fetchTotalOperations()
-  },[token])
+  // REMEMBER TO CHANGE THIS TO HORTZCLOUD
+  useEffect(() => {
+    const fetchTotalOperations = () => {
+      axios
+        .get(
+          `http://hortzcloud.com:3000/api/v1/op/total-cost/${userData.cmcId}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          setTotalOperationCost(res.data.Operations);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchTotalOperations();
+  }, [token]);
 
+  useEffect(() => {
+    const fetchAnnualReport = () => {
+      axios
+        .get(
+          `http://localhost:3000/api/v1/rep/getEverythingByC/${userData.cmcId}/2024`,
 
- 
-
-
-
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          setAnnualReport(res.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching annual report:", err);
+        });
+    };
+    fetchAnnualReport();
+  }, [token, userData.cmcId]);
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalCurrentPage, setTotalCurrentPage] = useState(1)
+  const [totalCurrentPage, setTotalCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-
   const totalPages = Math.ceil(operations.length / itemsPerPage);
-  const totalCurrentPageCount = Math.ceil(totalOperationCost.length / itemsPerPage);
+  const totalCurrentPageCount = Math.ceil(
+    totalOperationCost.length / itemsPerPage
+  );
   const handleClickNext = () => {
     setCurrentPage((prevPage) => prevPage + 1);
   };
@@ -164,7 +189,10 @@ useEffect(() => {
   };
 
   const totalStartIndex = (totalCurrentPage - 1) * itemsPerPage;
-  const totalEndIndex = Math.min(totalStartIndex + itemsPerPage, totalOperationCost.length);
+  const totalEndIndex = Math.min(
+    totalStartIndex + itemsPerPage,
+    totalOperationCost.length
+  );
   const visibleTotal = totalOperationCost.slice(totalStartIndex, totalEndIndex);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -182,10 +210,7 @@ useEffect(() => {
       <SideDrawerCMC
         isOpen={isDrawerOpen}
         onClose={toggleDrawer}
-      
-      >
-    
-      </SideDrawerCMC>
+      ></SideDrawerCMC>
       {/* Your main content goes here */}
       <div className="container flex flex-col items-center px-24 pb-16">
         <div className="flex flex-col justify-center items-center w-full">
@@ -197,15 +222,15 @@ useEffect(() => {
                 {/* <Link className="underline" to={""}>
                   See more
                 </Link> */}
-                
+
                 {/* This is the modal that display once a button is interacted with */}
                 <Modal>
-                <p className="font-bold">Current Operational Budget: </p>
+                  <p className="font-bold">Current Operational Budget: </p>
                   <ModalContent
                     title="Want to add a Transaction?"
                     description="Add the information associated to the transaction to add it to your account."
                   >
-                    <AddOperationForm onClick={handleSubmit}/>
+                    <AddOperationForm onClick={handleSubmit} />
                   </ModalContent>
                 </Modal>
               </div>
@@ -214,28 +239,27 @@ useEffect(() => {
             <div>
               {operations.length > 0 ? (
                 <div>
-                <Table>
-                  <TableHeader>
-                    <th></th>                 
-                    <th>Property</th>
-                    <th>Operational Costs</th>
-                  </TableHeader>
-                  {visibleTotal.map((property, index) => (
-                    <TableRow key={index}>
-                      <td>
-                        <Link
-                          to={`/DashboardHomeCMC/property/${property.property_id}`}
-                        >
-                          <GoArrowUpRight size={24} />
-                        </Link>
-                      </td>
-                      <td>{property.property_name}</td>
-                      <td> ${property.total_cost}</td>
-                      
-                    </TableRow>
-                  ))}
-                </Table>
-                    <div
+                  <Table>
+                    <TableHeader>
+                      <th></th>
+                      <th>Property</th>
+                      <th>Operational Costs</th>
+                    </TableHeader>
+                    {visibleTotal.map((property, index) => (
+                      <TableRow key={index}>
+                        <td>
+                          <Link
+                            to={`/DashboardHomeCMC/property/${property.property_id}`}
+                          >
+                            <GoArrowUpRight size={24} />
+                          </Link>
+                        </td>
+                        <td>{property.property_name}</td>
+                        <td> ${property.total_cost}</td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                  <div
                     style={{
                       display: "flex",
                       justifyContent: "center",
@@ -260,7 +284,7 @@ useEffect(() => {
                       Next
                     </SearchButton>
                   </div>
-                  </div>
+                </div>
               ) : (
                 <div className={"text-black text-base font-medium font-inter"}>
                   <h3>No fees collected yet.</h3>
@@ -269,9 +293,48 @@ useEffect(() => {
             </div>
           </TableCard>
         </div>
-       
-        
+
+        <div
+          className="flex flex-col justify-center items-center w-full"
+          style={{ paddingTop: 48, paddingBottom: 0 }}
+        >
+          {/* Properties card goes here */}
+          <TableCard className={"gap-4"}>
+            <TableCardHeader title={"Property Report🏦"}>
+              <div className="flex items-center gap-4">
+                {/* See more button should appear when a certain threshold is exceeded */}
+                <Link className="underline" to={""}>
+                  See more
+                </Link>
+              </div>
+            </TableCardHeader>
+            {/* Body of properties card */}
+            <div>
+              <Table>
+                <TableHeader>
+                  <th></th>
+                  <th>Property Name</th>
+                  <th>Total Condo Fees</th>
+                  <th>Total Costs</th>
+                  <th>Net Revenue</th>
+                </TableHeader>
+                {annualReport.map((report) => (
+                  <TableRow key={report.property_id}>
+                    <td>
+                      <GoArrowUpRight size={24} />
+                    </td>
+                    <td>{report.property_name}</td>
+                    <td>{report.total_condo_fees}</td>
+                    <td>{report.total_costs}</td>
+                    <td>{report.annual_report}</td>
+                  </TableRow>
+                ))}
+              </Table>
+            </div>
+          </TableCard>
+        </div>
       </div>
+
       <div className="container flex flex-col items-center px-24 pb-16">
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties card goes here */}
@@ -292,9 +355,9 @@ useEffect(() => {
                     title="Want to add a Transaction?"
                     description="Add the information associated to the transaction to add it to your account."
                   >
-                    <AddOperationForm 
-                    propertyList={properties}
-                    onClick={handleSubmit}
+                    <AddOperationForm
+                      propertyList={properties}
+                      onClick={handleSubmit}
                     />
                   </ModalContent>
                 </Modal>
@@ -304,68 +367,67 @@ useEffect(() => {
             <div>
               {operations.length > 0 ? (
                 <div>
-                <Table>
-                  <TableHeader>
-                    <th>Property</th>
-                    <th>Operation Type</th>
-                    <th>Cost</th>
-                    <th>Date</th>
-                    <th></th>
-                   
-                  </TableHeader>
-                  {visibleOperations.map((operation, index) => (
-                    <TableRow key={index}>
-                      <td>{operation.property_name}</td>
-                      <td>{operation.type}</td>
-                      <td>${operation.cost}</td>
-                      <td>{operation.date.substring(0,10)}</td>
-                      <td>
-                      <Modal>
-                        <ModalToggler>
-                          <EditButton>Edit</EditButton>
-                        </ModalToggler>
-                        <ModalContent
-                          title="Edit Transaction "
-                          description="Edit the information associated with the operation. We will generate the rest for you!"
-                          onExit={() => console.log("exit")}
-                        >
-                          <EditOperationForm
-                            operation={operation} // CHANGE PROPERTY TO THE OPERATION
-                            type={operation.type}
-                            propertyList={properties}
-                          />
-                        </ModalContent>
-                      </Modal>
-                      </td>
-                    </TableRow>
-                  ))}
-                </Table>
-                   <div
-                   style={{
-                     display: "flex",
-                     justifyContent: "center",
-                     gap: "1rem",
-                     alignItems: "center",
-                     paddingTop: "2%",
-                   }}
-                 >
-                   <SearchButton
-                     onClick={handleClickPrevious}
-                     disabled={currentPage === 1}
-                   >
-                     Previous
-                   </SearchButton>
-                   <span
-                     style={{ fontSize: "1.2rem" }}
-                   >{`Page ${currentPage} of ${totalPages}`}</span>
-                   <SearchButton
-                     onClick={handleClickNext}
-                     disabled={currentPage === totalPages}
-                   >
-                     Next
-                   </SearchButton>
-                 </div>
-                 </div>
+                  <Table>
+                    <TableHeader>
+                      <th>Property</th>
+                      <th>Operation Type</th>
+                      <th>Cost</th>
+                      <th>Date</th>
+                      <th></th>
+                    </TableHeader>
+                    {visibleOperations.map((operation, index) => (
+                      <TableRow key={index}>
+                        <td>{operation.property_name}</td>
+                        <td>{operation.type}</td>
+                        <td>${operation.cost}</td>
+                        <td>{operation.date.substring(0, 10)}</td>
+                        <td>
+                          <Modal>
+                            <ModalToggler>
+                              <EditButton>Edit</EditButton>
+                            </ModalToggler>
+                            <ModalContent
+                              title="Edit Transaction "
+                              description="Edit the information associated with the operation. We will generate the rest for you!"
+                              onExit={() => console.log("exit")}
+                            >
+                              <EditOperationForm
+                                operation={operation} // CHANGE PROPERTY TO THE OPERATION
+                                type={operation.type}
+                                propertyList={properties}
+                              />
+                            </ModalContent>
+                          </Modal>
+                        </td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: "1rem",
+                      alignItems: "center",
+                      paddingTop: "2%",
+                    }}
+                  >
+                    <SearchButton
+                      onClick={handleClickPrevious}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </SearchButton>
+                    <span
+                      style={{ fontSize: "1.2rem" }}
+                    >{`Page ${currentPage} of ${totalPages}`}</span>
+                    <SearchButton
+                      onClick={handleClickNext}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                    </SearchButton>
+                  </div>
+                </div>
               ) : (
                 <div className={"text-black text-base font-medium font-inter"}>
                   <h3>Click on the add operation button to start!</h3>
@@ -374,13 +436,9 @@ useEffect(() => {
             </div>
           </TableCard>
         </div>
-       
-        
       </div>
     </div>
   );
 };
 
 export default FinanceHome;
-
-    
