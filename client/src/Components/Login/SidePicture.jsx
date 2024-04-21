@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import './SidePicture.css'
 
 // This is the Component that renders the side building in the Login. 
@@ -11,5 +11,9 @@ const SidePicture = props => {
            </div>
     )
 }
+
+SidePicture.propTypes = {
+    children: PropTypes.node.isRequired,
+  }; 
 
 export default SidePicture;

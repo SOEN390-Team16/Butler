@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Input from "../Forms/Input.jsx";
 import Label from "../Forms/Label.jsx";
 import { useFormik } from "formik";
@@ -7,10 +7,10 @@ import { number, object, string } from "yup";
 import EditButton from "../Buttons/AddButton.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
 export default function EditEmployeeForm({employee, propertyList}) {
-  const userData = JSON.parse(localStorage.getItem('userData'));
-    const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token')
   const { toggle } = useModal();
   const [employeeProperty, setEmployeeProperty] = useState()
 
@@ -22,7 +22,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
   
   });
 
-  
+  console.log(employee)
   const formik = useFormik({
     initialValues: {
       employeeid: employee.employeeid,
@@ -49,7 +49,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
   useEffect(() => {
     const fetchPropertyById = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/pp/${employee.property_id}`, {
+        const res = await axios.get(`http://hortzcloud.com:3000/api/v1/pp/${employee.property_id}`, {
           headers: {
             'authorization': `Bearer ${token}`,
           }
@@ -67,8 +67,8 @@ export default function EditEmployeeForm({employee, propertyList}) {
   
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id)
-    console.log(employee.employeeid)
-    await axios.patch(`http://localhost:3000/api/v1/emp/${employee.employeeid}`, values,{
+    console.log(values)
+    await axios.patch(`http://hortzcloud.com:3000/api/v1/emp/${employee.employeeid}`, values,{
       headers: {
         'authorization': `Bearer ${token}`,
       }
@@ -79,9 +79,7 @@ export default function EditEmployeeForm({employee, propertyList}) {
       console.log(err)
     })
     console.log(values)
-
     toggle();
-    // alert(JSON.stringify(values, null, 2));
   };
 
 
@@ -160,3 +158,24 @@ export default function EditEmployeeForm({employee, propertyList}) {
     </>
   );
 }
+EditEmployeeForm.propTypes = {
+  employee: PropTypes.shape({
+    employeeid: PropTypes.number.isRequired,
+    first_name: PropTypes.string.isRequired,
+    last_name: PropTypes.string.isRequired,
+    companyid: PropTypes.number.isRequired,
+    role: PropTypes.string.isRequired,
+    property_id: PropTypes.number.isRequired,
+  }).isRequired,
+  propertyList: PropTypes.arrayOf(
+    PropTypes.shape({
+      property_id: PropTypes.number.isRequired,
+      property_name: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+
+};
+
+
+
+

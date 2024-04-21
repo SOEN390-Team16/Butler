@@ -17,6 +17,9 @@ import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
 import { ChakraProvider } from "@chakra-ui/react";
 import ServiceRequestCMC from "./Components/ServiceRequestPageCMC/ServiceRequestCMC";
 import ServiceRequestCMC2 from "./Components/ServiceRequestPageCMC/ServiceRequestCMC2";
+import FinanceHome from "./Components/Dashboard/Finance/FinanceHome.jsx";
+import ReservationPage from "./Components/Reservation/ReservationPage.jsx";
+import ReservationCMC from "./Components/Reservation/ReservationCMC.jsx";
 function App() {
   return (
     <>
@@ -46,6 +49,9 @@ function App() {
               path="/ServiceRequestCMC2"
               element={<ServiceRequestCMC2 />}
             />
+            <Route path="/Reservation" element={<ReservationPage />} />
+            <Route path="/ReservationCMC" element={<ReservationCMC />} />
+            <Route path="/DashBoardHomeCMC/Finance" element={<FinanceHome />} />
           </Routes>
         </BrowserRouter>
         <ToastContainer />

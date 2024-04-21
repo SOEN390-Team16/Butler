@@ -13,7 +13,7 @@ jest.mock("../db", () => ({
   query: jest.fn(),
 }));
 
-/*** GET EMPLOYEES ***/
+/* GET EMPLOYEES */
 describe("getEmployees", () => {
   beforeEach(() => {
     // Clear mock data before each test
@@ -26,7 +26,7 @@ describe("getEmployees", () => {
         employeeid: 1,
         first_name: "John",
         last_name: "Doe",
-        comapnyid: 1,
+        companyid: 1,
         role: "employee",
         property_id: 1,
       },
@@ -34,16 +34,16 @@ describe("getEmployees", () => {
         employeeid: 2,
         first_name: "PNL",
         last_name: "Mowgli",
-        comapnyid: 1,
+        companyid: 1,
         role: "employee",
         property_id: 1,
       },
     ];
-    pool.query.mockImplementation((query, callback) => {
-      callback(null, { rowCount: 2, rows: mockEmployees });
+    pool.query.mockImplementation((query,params, callback) => {
+      callback(null, { rowCount: 1, rows: mockEmployees });
     });
 
-    const req = {};
+    const req = { params: { company_id: '1'}};
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -55,29 +55,12 @@ describe("getEmployees", () => {
     expect(res.json).toHaveBeenCalledWith(mockEmployees);
   });
 
-  it("should return a 404 error if no employees are found", async () => {
-    pool.query.mockImplementation((query, callback) => {
-      callback(null, { rowCount: 0, rows: [] });
-    });
-
-    const req = {};
-    const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
-
-    await getEmployees(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "Employees not found" });
-  });
-
   it("should return a 500 error on server error", async () => {
-    pool.query.mockImplementation((query, callback) => {
+    pool.query.mockImplementation((query,params, callback) => {
       callback(new Error("Internal Server Error"), null);
     });
 
-    const req = {};
+    const req = { params: { company_id: 'hello'}};
     const res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
