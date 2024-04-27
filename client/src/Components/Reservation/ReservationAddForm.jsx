@@ -13,7 +13,7 @@ import { Select } from "@chakra-ui/react";
 
 import ReservationDatePicker from "./ReservationDatePicker.jsx";
 
-export default function ReservationAddForm(props) {
+export default function ReservationAddForm() {
   const { toggle } = useModal();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [properties, setProperties] = useState([]); // Use this to handle property data

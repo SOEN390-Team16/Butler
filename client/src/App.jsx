@@ -9,11 +9,11 @@ import EditAccount from "./Components/EditAccount/EditAccount";
 import EditAccountCMC from "./Components/EditAccount/EditAccountCMC";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./config/axios.config.js";
 import DashBoardHomeCO from "./Components/Dashboard/DashBoardHomeCO";
 import ServicesDashBoard from "./Components/Dashboard/ServicesDashBoard";
 import DashBoardHomeCR from "./Components/Dashboard/DashBoardHomeCR";
 import PropertyPage from "./Components/Dashboard/Property/PropertyPage";
+import RequestForm from "./Components/Dashboard/RequestForm";
 import { ChakraProvider } from "@chakra-ui/react";
 import ServiceRequestCMC from "./Components/ServiceRequestPageCMC/ServiceRequestCMC";
 import ServiceRequestCMC2 from "./Components/ServiceRequestPageCMC/ServiceRequestCMC2";
@@ -36,10 +36,15 @@ function App() {
             <Route path="/DashBoardHomeCO" element={<DashBoardHomeCO />} />
             <Route path="/DashBoardHomeCR" element={<DashBoardHomeCR />} />
             <Route path="/ServicesDashBoard" element={<ServicesDashBoard />} />
-
+            <Route path="/RequestForm" element={<RequestForm />} />
             <Route
               path="/DashBoardHomeCMC/property/:id"
               element={<PropertyPage />}
+            />
+            <Route path="/ServiceRequestCMC" element={<ServiceRequestCMC />} />
+            <Route
+              path="/ServiceRequestCMC2"
+              element={<ServiceRequestCMC2 />}
             />
             <Route path="/ServiceRequestCMC" element={<ServiceRequestCMC />} />
             <Route

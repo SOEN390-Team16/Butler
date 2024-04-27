@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../../Forms/Input.jsx";
 import Label from "../../Forms/Label.jsx";
 import { useFormik } from "formik";
 import { useModal } from "../../Modals/Modal.jsx";
-import { number, object, string } from "yup";
+import { object, string } from "yup";
 import EditButton from "../../Buttons/AddButton.jsx";
+import PropTypes from "prop-types";
 import axios from "axios";
 import { toast } from "react-toastify";
+
 
 export default function EditOperationForm({operation, propertyList, type}) {
   //const userData = JSON.parse(localStorage.getItem('userData'));
@@ -45,7 +47,7 @@ export default function EditOperationForm({operation, propertyList, type}) {
   useEffect(() => {
     const fetchPropertyById = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/v1/pp/${employee.property_id}`, {
+        const res = await axios.get(`http://hortzcloud.com:3000/api/v1/pp/${operation.property_id}`, {
           headers: {
             'authorization': `Bearer ${token}`,
           }
@@ -64,7 +66,7 @@ export default function EditOperationForm({operation, propertyList, type}) {
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id)
     console.log(operation.operation_id)
-    await axios.patch(`http://localhost:3000/api/v1/op/${operation.operation_id}`, values,{
+    await axios.patch(`http://hortzcloud.com:3000/api/v1/op/${operation.operation_id}`, values,{
       headers: {
         'authorization': `Bearer ${token}`,
       }
@@ -79,7 +81,6 @@ export default function EditOperationForm({operation, propertyList, type}) {
     toggle();
     
   };
-
 
   return (
     <>
@@ -118,15 +119,7 @@ export default function EditOperationForm({operation, propertyList, type}) {
             value={formik.values.property_id}
             className="border border-gray-400 rounded-lg px-4 py-3"
             >
-              
-           {employeeProperty && (
-              <>
-              <option key={employeeProperty.property_id} value={employeeProperty.property_id}>
-                {employeeProperty.property_name}
-              </option>
-            
-              </>
-           )}
+
            
                {( propertyList.map((p) => {
                 return (
@@ -158,3 +151,22 @@ export default function EditOperationForm({operation, propertyList, type}) {
   );
 }
 
+
+
+EditOperationForm.propTypes = {
+  operation: PropTypes.shape({
+    operation_id: PropTypes.number.isRequired,
+    cost: PropTypes.string.isRequired,
+    property_id: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    // Add other properties as needed
+  }).isRequired,
+  propertyList: PropTypes.arrayOf(
+    PropTypes.shape({
+      property_id: PropTypes.number.isRequired,
+      property_name: PropTypes.string.isRequired,
+      // Add other properties as needed
+    })
+  ).isRequired,
+  type: PropTypes.string.isRequired,
+};

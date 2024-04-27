@@ -1,4 +1,4 @@
-import React from "react";
+import PropTypes from "prop-types";
 import './InformationHolder.css';
 
 
@@ -14,5 +14,8 @@ const InformationHolder = props => {
         </div>
     )
 }
+InformationHolder.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
 
 export default InformationHolder;

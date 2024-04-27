@@ -2,16 +2,57 @@ const pool = require('../../db')
 const queries = require('./queries')
 
 const getCondoUnits = (req, res) => {
-  console.log('Get All Condo Units')
-
-  pool.query(queries.getCondoUnits, (error, results) => {
-    if (error) {
-      console.error('Error finding condo units:', error)
-      return res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json(results.rows)
-    }
-  })
+  const property_id = parseInt(req.query.property_id)
+  const companyid = parseInt(req.query.companyid)
+  if (!isNaN(property_id)) {
+    console.log('Getting condo units by property_id')
+    pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'Property not found' })
+        } else {
+          pool.query(queries.getCondoUnitsByPropertyId, [property_id], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              return res.status(200).json(results.rows)
+            }
+          })
+        }
+      }
+    })
+  } else if (!isNaN(companyid)) {
+    console.log('Getting condo units by companyid')
+    pool.query(queries.checkIfCompanyExists, [companyid], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'Company not found' })
+        } else {
+          pool.query(queries.getCondoUnitsByCompanyId, [companyid], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else {
+              return res.status(200).json(results.rows)
+            }
+          })
+        }
+      }
+    })
+  } else {
+    console.log('Get All Condo Units')
+    pool.query(queries.getCondoUnits, (error, results) => {
+      if (error) {
+        console.error('Error finding condo units:', error)
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  }
 }
 
 const getCondoUnitById = (req, res) => {

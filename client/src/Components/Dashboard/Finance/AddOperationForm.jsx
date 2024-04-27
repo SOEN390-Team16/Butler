@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import PropTypes from "prop-types";
 
-export default function AddOperationForm({ propertyList, onClick }) {
+export default function AddOperationForm({ propertyList}) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
 
@@ -46,7 +46,7 @@ export default function AddOperationForm({ propertyList, onClick }) {
     values.date = date.toISOString().split('T')[0];
 
     await axios
-      .post("http://localhost:3000/api/v1/op", values, {
+      .post("http://hortzcloud.com:3000/api/v1/op", values, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -59,7 +59,6 @@ export default function AddOperationForm({ propertyList, onClick }) {
         console.log(err);
       });
     toggle();
-    // alert(JSON.stringify(values, null, 2));
   };
 
   console.log(formik.values)

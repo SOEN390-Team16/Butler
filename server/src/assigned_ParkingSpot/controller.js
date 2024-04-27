@@ -27,15 +27,38 @@ const unassignParkingSpotByUserId = (req, res) => {
 }
 
 const getAssignedParkingSpots = (req, res) => {
-  console.log('Get All Assigned Parking Spots')
-  pool.query(queries.getAssignedParkingSpots, (error, results) => {
-    if (error) {
-      console.error('Error getting assigned parking spots: ', error)
-      res.status(500).json({ error: 'Internal Server Error' })
-    } else {
-      res.status(200).json(results.rows)
-    }
-  })
+  const property_id = parseInt(req.query.property_id)
+  const companyid = parseInt(req.query.companyid)
+
+  if (!isNaN(property_id)) {
+    console.log('getting assigned parking spots by property_id')
+    pool.query(queries.getAssignedParkingSpotsByPropertyId, [property_id], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else if (!isNaN(companyid)) {
+    console.log('getting assigned parking spots by company_id')
+    pool.query(queries.getAssignedParkingSpotsByCompanyId, [companyid], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        return res.status(200).json(results.rows)
+      }
+    })
+  } else {
+    console.log('Get All Assigned Parking Spots')
+    pool.query(queries.getAssignedParkingSpots, (error, results) => {
+      if (error) {
+        console.error('Error getting assigned parking spots: ', error)
+        res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  }
 }
 
 const getAssignedParkingSpotByUserId = (req, res) => {
