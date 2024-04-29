@@ -5,7 +5,8 @@ const router = Router()
 
 router.get('/', authenticateToken, controller.getAssignedLockers)
 router.get('/getByU/:userid', authenticateToken, controller.getAssignedLockerByUserId)
-router.post('/:userid', authenticateToken, controller.assignLockerByUserId)
+router.post('/byU/:userid', authenticateToken, controller.assignLockerByUserId)
+router.post('/byC/:condoid', authenticateToken, controller.assignLockerByCondoId)
 router.delete('/:userid', authenticateToken, controller.unassignLockerByUserId)
 
 module.exports = router

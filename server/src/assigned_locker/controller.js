@@ -1,9 +1,22 @@
 const pool = require('../../db')
 const queries = require('../assigned_locker/queries')
 const assignLockerByUserId = (req, res) => {
-  console.log('Assigning a locker')
+  console.log('Assigning a locker by user id')
   const userid = parseInt(req.params.userid)
   pool.query(queries.assignLockerByUserId, [userid], (error, results) => {
+    if (error) {
+      console.error('Error assigning locker: ', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json({ message: 'Locker successfully assigned.' })
+    }
+  })
+}
+
+const assignLockerByCondoId = (req, res) => {
+  console.log('Assigning a locker by condo id')
+  const condoid = parseInt(req.params.condoid)
+  pool.query(queries.assignLockerByCondoId, [condoid], (error, results) => {
     if (error) {
       console.error('Error assigning locker: ', error)
       res.status(500).json({ error: 'Internal Server Error' })
@@ -29,8 +42,28 @@ const unassignLockerByUserId = (req, res) => {
 const getAssignedLockers = (req, res) => {
   const property_id = parseInt(req.query.property_id)
   const companyid = parseInt(req.query.companyid)
+  const lockerid = parseInt(req.query.lockerid)
+  const condoid = parseInt(req.query.condoid)
 
-  if (!isNaN(property_id)) {
+  if (!isNaN(lockerid)) {
+    console.log('getting assigned lockers by lockerid')
+    pool.query(queries.getAssignedLockersByLockerId, [lockerid], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  } else if (!isNaN(condoid)) {
+    console.log('getting assigned lockers by condoid')
+    pool.query(queries.getAssignedLockersByCondoId, [condoid], (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: 'Internal Server Error' })
+      } else {
+        res.status(200).json(results.rows)
+      }
+    })
+  } else if (!isNaN(property_id)) {
     console.log('getting assigned lockers by property_id')
     pool.query(queries.getAssignedLockersByPropertyId, [property_id], (error, results) => {
       if (error) {
@@ -78,5 +111,6 @@ module.exports = {
   assignLockerByUserId,
   unassignLockerByUserId,
   getAssignedLockerByUserId,
-  getAssignedLockers
+  getAssignedLockers,
+  assignLockerByCondoId
 }
