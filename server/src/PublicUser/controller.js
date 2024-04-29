@@ -1,46 +1,6 @@
 const pool = require('../../db')
 const queries = require('./queries')
 const bcrypt = require('bcrypt')
-const passport = require('passport')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
-
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL
-},
-(accessToken, refreshToken, profile, done) => {
-  done(null, profile)
-}
-))
-
-const googleSignUp = passport.authenticate('google', { scope: ['profile', 'email'] })
-
-const googleSignUpCallback = (req, res, next) => {
-  passport.authenticate('google', async (err, profile) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal Server Error' })
-    }
-    // Check if the user already exists in your database based on Google profile data
-    const email = profile.emails[0].value
-    try {
-      const userExists = await pool.query(queries.checkIfPUEmailExists, [email])
-      if (userExists.rows.length !== 0) {
-        return res.status(409).json({ error: 'User already exists' })
-      } else {
-        // If the user doesn't exist, add them to the database
-        const hashedPassword = await bcrypt.hash(profile.id, 5); // Using Google profile ID as password
-        const { displayName, emails } = profile;
-        const firstName = displayName.split(' ')[0]
-        const lastName = displayName.split(' ')[1]
-        await pool.query(queries.addPublicUser, [firstName, lastName, email, hashedPassword])
-        return res.status(201).json({ message: 'User signed up successfully' })
-      }
-    } catch (error) {
-      return res.status(500).json({ error: 'Internal Server Error' })
-    }
-  })(req, res, next)
-}
 
 const getPublicUsers = (req, res) => {
   console.log('Get All Public Users')
@@ -195,7 +155,5 @@ module.exports = {
   getPublicUserById,
   addPublicUser,
   removePublicUser,
-  updatePublicUser,
-  googleSignUp,
-  googleSignUpCallback
+  updatePublicUser
 }
