@@ -19,6 +19,7 @@ const facilityRoutes = require('./src/Facility/routes')
 const reservationRoutes = require('./src/Reservation/routes')
 const operationRoutes = require('./src/Operations/routes')
 const imageRoutes = require('./src/image/routes')
+const googleRoutes = require("./src/GoogleAuth/routes")
 
 const cors = require('cors')
 
@@ -49,5 +50,6 @@ app.use('/api/v1/fa', facilityRoutes)
 app.use('/api/v1/res', reservationRoutes)
 app.use('/api/v1/op', operationRoutes)
 app.use('/api/v1/image', imageRoutes)
+app.use("/api/v1/google", googleRoutes);
 
 app.listen(port, () => console.log(`app listening on ${port}`))
