@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heading, Input, Button } from "@chakra-ui/react";
+import { Input, Button } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -8,6 +8,7 @@ import { UserRoles } from "../../models/user-roles.enum.js";
 import usePublicUserStore from "../../store/user/public-user.store.js";
 import useCondoManagementCompany from "../../store/user/condo-management-company.store.js";
 import { toast } from "react-toastify";
+import SignCard from "../Cards/SignCard.jsx";
 
 const LoginPage = () => {
   const navigation = useNavigate();
@@ -72,86 +73,68 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="h-screen relative">
-      <img
-        src="src/pictures/loginHero.jpg"
-        className="absolute -z-10 h-full w-full object-cover"
-      />
-      <div className="flex h-full items-center justify-center">
-        <div className="bg-white w-[80%] pb-8 rounded-lg shadow px-4 max-w-96">
-          {/* Card Header */}
-          <Heading size="lg" textAlign="center" className="my-10">
-            Sign in to Butler.
-          </Heading>
-          {/* Card Body */}
-          <div className="w-full flex flex-col justify-center items-center gap-6">
-            {/* Google Sign in */}
-            <Link
-              to="/googleSignin"
-              className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
-            >
-              <FcGoogle size={25} />
-              <p className="text font-semibold">Sign in With Google</p>
-            </Link>
+    <SignCard title={"Sign in to Butler."}>
+      {/* Google Sign in */}
+      <Link
+        to="/googleSignin"
+        className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
+      >
+        <FcGoogle size={25} />
+        <p className="text font-semibold">Sign in With Google</p>
+      </Link>
 
-            <p className="text-gray-500"> Or sign in with email</p>
+      <p className="text-gray-500"> Or sign in with email</p>
 
-            {/* Email Sign in */}
-            <div className="w-full">
-              {/* Inputs */}
-              <div className="border-1 border-gray-300 rounded overflow-hidden">
-                <Input
-                  type="email"
-                  name="email"
-                  placeholder="Email"
-                  className="w-full"
-                  size={"lg"}
-                  rounded={"none"}
-                  border={"none"}
-                  onChange={handleChange}
-                />
-                <div className="h-[1px] w-full border border-gray-300"></div>
-                <Input
-                  type="password"
-                  name="password"
-                  placeholder="Password"
-                  className="w-full"
-                  size={"lg"}
-                  rounded={"none"}
-                  border={"none"}
-                  onChange={handleChange}
-                />
-              </div>
+      {/* Email Sign in */}
+      <div className="w-full">
+        {/* Inputs */}
+        <div className="border-1 border-gray-300 rounded overflow-hidden">
+          <Input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="w-full"
+            size={"lg"}
+            rounded={"none"}
+            border={"none"}
+            onChange={handleChange}
+          />
+          <div className="h-[1px] w-full border border-gray-300"></div>
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full"
+            size={"lg"}
+            rounded={"none"}
+            border={"none"}
+            onChange={handleChange}
+          />
+        </div>
 
-              {/* Forgot password */}
-              <div className="flex flex-row-reverse justify-between my-2">
-                <Link className="underline" to="/">
-                  Forgot Password?
-                </Link>
-              </div>
-            </div>
-
-            {/* Buttons */}
-            <div className="w-full">
-              <Button
-                colorScheme="blue"
-                size="lg"
-                w="full"
-                onClick={handleClick}
-              >
-                Sign In
-              </Button>
-
-              {/* Sign up */}
-              <div className="flex justify-center mt-4">
-                <p>New user? </p>
-                <Link className="underline">Sign up!</Link>
-              </div>
-            </div>
-          </div>
+        {/* Forgot password */}
+        <div className="flex flex-row-reverse justify-between my-2">
+          <Link className="underline" to="/">
+            Forgot Password?
+          </Link>
         </div>
       </div>
-    </div>
+
+      {/* Buttons */}
+      <div className="w-full">
+        <Button colorScheme="blue" size="lg" w="full" onClick={handleClick}>
+          Sign In
+        </Button>
+
+        {/* Sign up */}
+        <div className="flex justify-center mt-4">
+          <p>New user? </p>
+          <Link className="underline" to="/SignUp">
+            Sign up!
+          </Link>
+        </div>
+      </div>
+    </SignCard>
   );
 };
 
