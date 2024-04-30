@@ -1,6 +1,5 @@
 const pool = require('../../db')
 const queries = require('./queries')
-const result = require('pg/lib/query')
 
 const getCondoUnits = (req, res) => {
   const property_id = parseInt(req.query.property_id)
