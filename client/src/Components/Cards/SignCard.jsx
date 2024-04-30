@@ -9,10 +9,15 @@ export default function SignCard({ title, children }) {
         src={loginHero}
         className="absolute -z-10 h-full w-full object-cover"
       />
-      <div className="flex h-full items-center justify-center">
-        <div className="bg-white w-[80%] pb-8 rounded-lg shadow px-4 max-w-96">
+      <div className="flex h-full justify-center items-center">
+        <div className="bg-white w-[80%]  pb-8 rounded-lg shadow px-4 max-w-96">
           {/* Card Header */}
-          <Heading size="lg" textAlign="center" className="my-10">
+          <Heading
+            size="lg"
+            textAlign="center"
+            className="mt-10 mb-8"
+            style={{ fontFamily: "Raleway" }}
+          >
             {title}
           </Heading>
           {/* Card Body */}
