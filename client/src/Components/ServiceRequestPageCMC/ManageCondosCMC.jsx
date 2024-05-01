@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { GoPerson } from "react-icons/go";
 import CondoAddForm from "../Dashboard/CondoAddForm.jsx";
 import AddButton from "../Buttons/AddButton.jsx";
+import AssignCondoForm from "../Dashboard/AssignCondoForm.jsx";
 
 const ManageCondosCMC = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -321,9 +322,20 @@ const ManageCondosCMC = () => {
                         </td>
                         <td>{user.first_name + " " + user.last_name}</td>
                         <td>
-                          <RegisterButton onClick={() => assignCondo(user)}>
-                            Assign Condo
-                          </RegisterButton>
+                          <div className="flex items-center gap-4">
+                            {/* This is the modal that display once a button is interacted with */}
+                            <Modal>
+                              <ModalToggler>
+                                <RegisterButton>Assign Condo</RegisterButton>
+                              </ModalToggler>
+                              <ModalContent
+                                title="Want to assign a condo?"
+                                description="Please select property ID."
+                              >
+                                <AssignCondoForm user={user} />
+                              </ModalContent>
+                            </Modal>
+                          </div>
                         </td>
                         <td>
                           <RegisterButton onClick={() => assignParking(user)}>
