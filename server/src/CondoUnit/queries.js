@@ -1,6 +1,8 @@
 const getCondoUnits = 'SELECT * FROM condo_unit'
 const getCondoUnitById = 'SELECT cu.condoid, cu.companyid, cu.property_id, cu.condo_number, cu.size, cu.occupant_type, cu.total_fees FROM condo_unit cu WHERE cu.condoid = $1'
+const getCondoUnitByUserId = 'SELECT * FROM condo_unit WHERE userid = $1'
 const checkIfCondoUnitExists = 'SELECT * FROM condo_unit cu WHERE cu.condoid = $1'
+const checkIfUserExists = 'SELECT * FROM public_user pu WHERE pu.userid = $1'
 const checkIfCondoUnitExistsByDetails = 'SELECT * FROM condo_unit WHERE companyid = $1 AND property_id = $2 AND condo_number = $3'
 const addCondoUnit = 'INSERT INTO condo_unit (companyid, property_id, condo_number, size, occupant_type, total_fees) VALUES ($1, $2, $3, $4, $5, $6)'
 const removeCondoUnit = 'DELETE FROM condo_unit WHERE condoid = $1'
@@ -12,10 +14,18 @@ const checkIfPropertyExists = 'SELECT * FROM property p WHERE p.property_id = $1
 const checkIfCompanyExists = 'SELECT * FROM condo_management_company cmc WHERE cmc.companyid = $1'
 const getCondoUnitsByPropertyId = 'SELECT * FROM condo_unit cu WHERE cu.property_id = $1 ORDER BY condo_number DESC'
 const getCondoUnitsByCompanyId = 'SELECT * FROM condo_unit cu WHERE cu.companyid = $1 ORDER BY condo_number, property_id DESC'
+const assignCondoUnitToUser = 'UPDATE condo_unit SET\n' +
+    '                      occupant_type = (SELECT pu.role FROM public_user pu WHERE pu.userid = $1),\n' +
+    '                      userid =$1\n' +
+    'WHERE condoid = $2;'
+
+const getUnassignedCondoUnit = 'SELECT cu.condoid FROM condo_unit cu WHERE cu.property_id = $1 AND cu.userid IS NULL\n' +
+    'LIMIT 1;'
 
 module.exports = {
   getCondoUnits,
   getCondoUnitById,
+  getCondoUnitByUserId,
   checkIfCondoUnitExists,
   checkIfCondoUnitExistsByDetails,
   addCondoUnit,
@@ -25,7 +35,10 @@ module.exports = {
   getCondoParkingFee,
   getCondoLockerFee,
   checkIfPropertyExists,
+  checkIfUserExists,
   checkIfCompanyExists,
   getCondoUnitsByPropertyId,
-  getCondoUnitsByCompanyId
+  getCondoUnitsByCompanyId,
+  getUnassignedCondoUnit,
+  assignCondoUnitToUser
 }

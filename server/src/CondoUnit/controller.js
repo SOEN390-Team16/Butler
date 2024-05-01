@@ -55,6 +55,57 @@ const getCondoUnits = (req, res) => {
   }
 }
 
+const assignCondoUnitToUser = (req, res) => {
+  console.log('Assigning Condo Unit')
+  const property_id = parseInt(req.params.property_id)
+  const userid = parseInt(req.params.userid)
+
+  pool.query(queries.checkIfPropertyExists, [property_id], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: 'Internal Server Error' })
+    } else if (results.rowCount < 1) {
+      return res.status(404).json({ error: 'Property not found' })
+    } else {
+      pool.query(queries.checkIfUserExists, [userid], (error, results) => {
+        if (error) {
+          return res.status(500).json({ error: 'Internal Server Error' })
+        } else if (results.rowCount < 1) {
+          return res.status(404).json({ error: 'User not found' })
+        } else {
+          pool.query(queries.getUnassignedCondoUnit, [property_id], (error, results) => {
+            if (error) {
+              return res.status(500).json({ error: 'Internal Server Error' })
+            } else if (results.rowCount < 1) {
+              return res.status(404).json({ error: 'Unassigned condo unit for this property not found' })
+            } else {
+              const unassignedCondoUnit = results.rows[0].condoid
+              pool.query(queries.assignCondoUnitToUser, [userid, unassignedCondoUnit], (error, results) => {
+                if (error) {
+                  return res.status(500).json({ error: 'Internal Server Error' })
+                } else {
+                  return res.status(201).json({ message: 'Condo Unit Assigned Successfully' })
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+  })
+}
+
+const getCondoUnitByUserId = (req, res) => {
+  console.log('Getting Condo Unit By User Id')
+  const userid = parseInt(req.params.userid)
+  pool.query(queries.getCondoUnitByUserId, [userid], (error, results) => {
+    if (error) {
+      res.status(500).json({ error: 'Internal Server Error' })
+    } else {
+      res.status(200).json(results.rows)
+    }
+  })
+}
+
 const getCondoUnitById = (req, res) => {
   console.log('Get a specific condo unit profile')
 
@@ -186,8 +237,10 @@ const calculateTotalCondoFee = (req, res) => {
 module.exports = {
   getCondoUnits,
   getCondoUnitById,
+  getCondoUnitByUserId,
   addCondoUnit,
   removeCondoUnit,
   updateCondoUnit,
-  calculateTotalCondoFee
+  calculateTotalCondoFee,
+  assignCondoUnitToUser
 }
