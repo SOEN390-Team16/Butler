@@ -3,7 +3,6 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
-import { Link } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
@@ -435,14 +434,7 @@ const DashBoardHomeCO = () => {
         <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
           <TableCardHeader title={"Condo Fees"}>
             <div className="flex items-center gap-4">
-              {/* <Link className="underline" to={""}>
-                See more
-              </Link> */}
-
               <Modal>
-                {/* <ModalToggler>
-                  <AddButton>Add Property</AddButton>
-                </ModalToggler> */}
                 <ModalContent
                   title="Want to add a Property"
                   description="Add the information associated to the property to add it to your account"
