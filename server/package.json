@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1602.0",
     "axios": "^1.6.7",
     "cloudinary": "^2.1.0",
     "cors": "^2.8.5",
