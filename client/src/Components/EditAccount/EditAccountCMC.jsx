@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
@@ -85,77 +85,79 @@ const EditAccountCMC = () => {
   };
 
   return (
-    <div className="edit__account__home">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-profile-hero bg-cover bg-no-repeat bg-center relative">
       <div>
         <Link to="/DashBoardHomeCMC">
           <MdKeyboardDoubleArrowLeft size={40} />
         </Link>
       </div>
-      <div className="body__container">
-        <div className="card__container">
-          <div className="container">
-            <form onSubmit={handleSubmit}>
-              <div className="col-lg-12 user__title">
-                <p>CMC Page</p>
-              </div>
-              <div className="row justify-content-center">
-                <div className="col-lg-8 col-sm-12">
-                  <div className="row justify-content-center">
-                    <div className="col-lg-5 col-sm-2 headers">
-                      <p>Name: </p>
-                      <p>Email: </p>
-                      <p>Current Plan: </p>
-                    </div>
-                    <div
-                      className={`col-lg-5 col-sm-4 information ${
-                        !editProfile ? "" : "editable"
-                      }`}
-                    >
-                      {!editProfile ? (
-                        <>
-                          <p>{newProfile.company_name}</p>
-                          <p>{newProfile.email}</p>
-                          <p>{currentPlan}</p>
-                        </>
-                      ) : (
-                        <>
-                          <input
-                            type="text"
-                            value={newProfile.company_name}
-                            onChange={handleNameChange}
-                            name="name"
-                          />
-                          <input
-                            type="email"
-                            value={newProfile.email}
-                            onChange={handleEmailChange}
-                            name="email"
-                          />
-                          <p>{currentPlan}</p>
-                        </>
-                      )}
+      <div className="edit__account__home bg-white shadow-md rounded-lg overflow-hidden w-full max-w-md">
+        <div className="body__container">
+          <div className="card__container">
+            <div className="container">
+              <form onSubmit={handleSubmit}>
+                <div className="col-lg-12 user__title flex justify-center">
+                  <p className="font-bold text-2xl">CMC Page</p>
+                </div>
+                <div className="row justify-content-center">
+                  <div className="col-lg-8 col-sm-12">
+                    <div className="row justify-content-center">
+                      <div className="col-lg-5 col-sm-2 headers">
+                        <p>Name: </p>
+                        <p>Email: </p>
+                        <p>Current Plan: </p>
+                      </div>
+                      <div
+                        className={`col-lg-5 col-sm-4 information ${
+                          !editProfile ? "" : "editable"
+                        }`}
+                      >
+                        {!editProfile ? (
+                          <>
+                            <p>{newProfile.company_name}</p>
+                            <p>{newProfile.email}</p>
+                            <p>{currentPlan}</p>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="text"
+                              value={newProfile.company_name}
+                              onChange={handleNameChange}
+                              name="name"
+                            />
+                            <input
+                              type="email"
+                              value={newProfile.email}
+                              onChange={handleEmailChange}
+                              name="email"
+                            />
+                            <p>{currentPlan}</p>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="row">
-                <div className="col-lg-12 editpage__buttons">
-                  <button
-                    style={{ backgroundColor: "black", color: "white" }}
-                    onClick={() => setEditProfileActive(!editProfile)}
-                  >
-                    Update Info
-                  </button>
-                  <button
-                    style={{ color: "white", backgroundColor: "black" }}
-                    onClick={() => setEditProfileActive(!editProfile)}
-                    type="submit"
-                  >
-                    Done
-                  </button>
+                <div className="row">
+                  <div className="col-lg-12 editpage__buttons">
+                    <button
+                      style={{ backgroundColor: "black", color: "white" }}
+                      onClick={() => setEditProfileActive(!editProfile)}
+                    >
+                      Update Info
+                    </button>
+                    <button
+                      style={{ color: "white", backgroundColor: "black" }}
+                      onClick={() => setEditProfileActive(!editProfile)}
+                      type="submit"
+                    >
+                      Done
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -163,3 +165,5 @@ const EditAccountCMC = () => {
   );
 };
 export default EditAccountCMC;
+
+
