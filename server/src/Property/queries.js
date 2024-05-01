@@ -3,11 +3,7 @@ const getPropertyById =
   'SELECT pp.property_id, pp.companyid, pp.property_name, pp.unit_count, pp.parking_count, pp.locker_count, pp.address FROM property pp WHERE pp.property_id = $1;'
 const getPropertyByCompanyId =
   'SELECT * FROM property pp WHERE pp.companyid = $1;'
-const getPropertyByUserId = `SELECT DISTINCT p.*
-FROM active_registration_key ark
-JOIN condo_unit cu ON ark.condoid = cu.condoid
-JOIN property p ON cu.property_id = p.property_id
-WHERE ark.userid = $1;`
+const getPropertyByUserId = 'SELECT p.* FROM property p, condo_unit cu WHERE cu.userid = $1 AND cu.property_id = p.property_id'
 const checkIfCompanyExists =
   'SELECT * FROM condo_management_company cmc WHERE cmc.companyid = $1;'
 const checkIfPropertyNameExists =
