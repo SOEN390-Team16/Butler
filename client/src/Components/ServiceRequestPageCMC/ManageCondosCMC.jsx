@@ -99,12 +99,12 @@ const ManageCondosCMC = () => {
         authorization: `Bearer ${token}`,
       },
     })
-    .then(() => {
-      toast.success("Condo assigned successfully!");
-    })
-    .catch(() => {
-      toast.error("Error assigning condo");
-    });
+      .then(() => {
+        toast.success("Condo assigned successfully!");
+      })
+      .catch(() => {
+        toast.error("Error assigning condo");
+      });
   };
 
   const assignParking = (user) => {
@@ -115,12 +115,12 @@ const ManageCondosCMC = () => {
         authorization: `Bearer ${token}`,
       },
     })
-    .then(() => {
-      toast.success("Parking assigned successfully!");
-    })
-    .catch(() => {
-      toast.error("Error assigning parking");
-    });
+      .then(() => {
+        toast.success("Parking assigned successfully!");
+      })
+      .catch(() => {
+        toast.error("Error assigning parking");
+      });
   };
 
   const assignLocker = (user) => {
@@ -131,12 +131,12 @@ const ManageCondosCMC = () => {
         authorization: `Bearer ${token}`,
       },
     })
-    .then(() => {
-      toast.success("Locker assigned successfully!");
-    })
-    .catch(() => {
-      toast.error("Error assigning locker");
-    });
+      .then(() => {
+        toast.success("Locker assigned successfully!");
+      })
+      .catch(() => {
+        toast.error("Error assigning locker");
+      });
   };
 
   useEffect(() => {
@@ -180,37 +180,25 @@ const ManageCondosCMC = () => {
   // add the condo to the database
   const addCondoToState = (newCondo) => {
     setCondos((prevCondos) => [...prevCondos, newCondo]);
-    axios
-      .post("http://hortzcloud.com:3000/api/v1/cu/", newCondo, {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then(() => {
-        toast.success("Condo added successfully!");
-      })
-      .catch((err) => {
-        console.error("Error adding condo:", err);
-      });
   };
 
   return (
     <div className="dashboard__home">
       <IconButton
         onClick={toggleDrawer}
-        icon={<RxHamburgerMenu />}
+        icon={<RxHamburgerMenu/>}
         className="fixed top-10 shadow z-50"
         backgroundColor={"#FFFFFF"}
         rounded={"0 10px 10px 0"}
         _hover={{ backgroundColor: "#CCCCCC" }}
       />
-      <SideNavCMC isOpen={isDrawerOpen} toggleDrawer={toggleDrawer} />
+      <SideNavCMC isOpen={isDrawerOpen} toggleDrawer={toggleDrawer}/>
       <div className="container flex flex-col items-center px-24 pb-16">
 
         {/* fetch/add condo units table */}
         <div
-        className="flex flex-col justify-center items-center w-full"
-        style={{ paddingTop: 48, paddingBottom: 0 }}
+          className="flex flex-col justify-center items-center w-full"
+          style={{ paddingTop: 48, paddingBottom: 0 }}
         >
           <TableCard className={"gap-4"}>
             <TableCardHeader title={"Condo Units"}>
@@ -224,31 +212,31 @@ const ManageCondosCMC = () => {
                     title="Want to add a Condo?"
                     description="Please add the required info below."
                   >
-                    <CondoAddForm onAddCondo={addCondoToState} />
+                    <CondoAddForm onAddCondo={addCondoToState}/>
                   </ModalContent>
                 </Modal>
               </div>
             </TableCardHeader>
             {/* Body of condo card */}
             <div>
-            {condos.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <th>Condo Number</th>
-                  <th>Condo Size</th>
-                </TableHeader>
-                {currentCondos.map((condo, index) => (
-                  <TableRow key={index}>
-                    <td>{condo.condo_number}</td>
-                    <td>{condo.size || 'N/A'}</td>
-                  </TableRow>
-                ))}
-              </Table>
-            ) : (
-              <div className={"text-black text-base font-medium font-inter"}>
-                <h3>Click on the add condo button to start!</h3>
-              </div>
-            )}
+              {condos.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Condo Number</th>
+                    <th>Condo Size</th>
+                  </TableHeader>
+                  {currentCondos.map((condo, index) => (
+                    <TableRow key={index}>
+                      <td>{condo.condo_number}</td>
+                      <td>{condo.size || 'N/A'}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>Click on the add condo button to start!</h3>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center p-4">
               <button
@@ -284,9 +272,9 @@ const ManageCondosCMC = () => {
         <div
           className="flex flex-col justify-center items-center w-full"
           style={{ paddingTop: 48, paddingBottom: 0 }}
-          >
+        >
           <TableCard className={"gap-8"}>
-          <div className="flex flex-row justify-around button-container">
+            <div className="flex flex-row justify-around button-container">
               <button
                 className={
                   selectedHeading === "condoOwners" ? "selected-button" : ""
@@ -318,7 +306,7 @@ const ManageCondosCMC = () => {
                     {condoOwners.map((user, index) => (
                       <TableRow key={index}>
                         <td>
-                          <GoPerson size={24} />
+                          <GoPerson size={24}/>
                         </td>
                         <td>{user.first_name + " " + user.last_name}</td>
                         <td>
@@ -332,7 +320,7 @@ const ManageCondosCMC = () => {
                                 title="Want to assign a condo?"
                                 description="Please select property ID."
                               >
-                                <AssignCondoForm user={user} />
+                                <AssignCondoForm user={user}/>
                               </ModalContent>
                             </Modal>
                           </div>
@@ -366,13 +354,13 @@ const ManageCondosCMC = () => {
                       {condoRenters.map((user, index) => (
                         <TableRow key={index}>
                           <td>
-                            <GoPerson size={24} />
+                            <GoPerson size={24}/>
                           </td>
                           <td>{user.first_name + " " + user.last_name}</td>
                           <td>
-                          <RegisterButton onClick={() => assignCondo(user)}>
-                            Assign Condo
-                          </RegisterButton>
+                            <RegisterButton onClick={() => assignCondo(user)}>
+                              Assign Condo
+                            </RegisterButton>
                           </td>
                           <td>
                             <RegisterButton onClick={() => assignParking(user)}>
