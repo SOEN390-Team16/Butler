@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import AddButton from "../Buttons/AddButton.jsx";
 import Input from "../Forms/Input.jsx";
 import { useFormik } from "formik";
@@ -9,7 +10,11 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
 export default function CondoAddForm(props) {
+  const [property, setProperty] = useState([]);
   const {toggle} = useModal();
+
+  const token = localStorage.getItem("token");
+  const userData = JSON.parse(localStorage.getItem('userData'));
 
   let condoSchema = object({
     condoNumber: number()
@@ -38,17 +43,16 @@ export default function CondoAddForm(props) {
   }
 
   const handleSubmit = (values) => {
-    const userData = JSON.parse(localStorage.getItem('userData'));
     const storedPropertyId = localStorage.getItem('propertyId');
     const propertyId = storedPropertyId ? parseInt(storedPropertyId, 10) : null;
     const token = localStorage.getItem('token')
     console.log("company id:", userData.cmcId);
-    console.log("property id:", propertyId);
+    console.log("property id:", property.property_id);
     const condo = {
       companyid: userData.cmcId,
       condo_number: values.condoNumber,
       size: values.condoSize,
-      property_id: propertyId,
+      property_id: property.property_id,
     }
 
     axios
@@ -67,6 +71,25 @@ export default function CondoAddForm(props) {
         throw reason
       })
   }
+
+  useEffect(() => {
+    const fetchProperties = () => {
+      axios
+        .get("http://hortzcloud.com:3000/api/v1/pp", {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setProperty(res.data[37]);
+        })
+        .catch((err) => {
+          console.error("Error fetching properties:", err);
+        });
+    };
+
+    fetchProperties();
+  }, [token, userData.cmcId]);
 
   return (<>
     <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
