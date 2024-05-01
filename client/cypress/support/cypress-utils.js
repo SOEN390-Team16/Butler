@@ -3,7 +3,7 @@ export function loginPublicUser(){
         "CypressTest@email.com")
     cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashboardHome/editUser")
 }
 
@@ -16,7 +16,7 @@ export function loginRenter() {
         .should("have.value", "CypressRenter@email.com")
     cy.get("input[name='password']").type("CypressRenterPassword")
         .should("have.value","CypressRenterPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashBoardHome")
 }
 
@@ -31,7 +31,7 @@ export function loginOwner() {
         .should("have.value", "CypressOwner@email.com")
     cy.get("input[name='password']").type("CypressOwnerPassword")
         .should("have.value","CypressOwnerPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashBoardHomeCO")
 }
 

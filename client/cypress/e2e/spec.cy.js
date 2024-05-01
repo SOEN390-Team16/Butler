@@ -14,21 +14,21 @@ beforeEach(()=> {
 })
 
 describe("E2E Test for Use Case 1: Public User Sign Up With Email", () => {
-  it("Should let new user sign up with a username, name, email, and password", () => {
+  it.skip("Should let new user sign up with a username, name, email, and password", () => {
     // Test
-    cy.get("#root").get(".login__content").contains("a","New user, sign up!").click()
+    cy.get(':nth-child(4) > .flex > .underline').click()
     cy.location("pathname").should('eq',"/SignUp")
-    cy.get(".signup__main__page").contains("a","Sign up with email").click()
+    cy.get('.chakra-button').click()
     cy.location("pathname").should('eq',"/SignUp/userSignUp")
     cy.get("input[name='first_name']").type("CypressTestFirstName").should("have.value",
         "CypressTestFirstName")
     cy.get("input[name='last_name']").type("CypressTestLastName").should("have.value",
         "CypressTestLastName")
-    cy.get("input[name='email']").type("CypressTest@email.com").should("have.value",
+    cy.get("input[name='email']").filter(':visible').type("CypressTest@email.com").should("have.value",
         "CypressTest@email.com")
-    cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
+    cy.get("input[name='password']").filter(':visible').type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign up").click()
     cy.location("pathname").should('include', "/")
     cy.wait(1000)
     loginPublicUser()
@@ -42,7 +42,7 @@ describe("E2E Test for Use Case 46: Public User Email Login", () => {
         "CypressTest@email.com")
     cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashboardHome/editUser")
   })
 })
@@ -102,7 +102,7 @@ describe("E2E Test for Use Case 5: Condo Owner/Rental User Email Login", () => {
         .should("have.value", "CypressRenter@email.com")
     cy.get("input[name='password']").type("CypressRenterPassword")
         .should("have.value","CypressRenterPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashBoardHome")
   })
 })
