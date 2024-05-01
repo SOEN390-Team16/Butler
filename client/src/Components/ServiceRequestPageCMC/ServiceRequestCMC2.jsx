@@ -153,10 +153,10 @@ const ServiceRequestCMC2 = () => {
     } else if (user.role === "renter") {
       id = user.renterid;
     }
-    console.log("user:", user);
-    console.log("property id:", property.property_id);
-    console.log("id:", id);
-    console.log("user id:", user.userid);
+    // console.log("user:", user);
+    // console.log("property id:", property.property_id);
+    // console.log("id:", id);
+    // console.log("user id:", user.userid);
 
     localStorage.setItem("propertyId", property.property_id.toString());
 
@@ -170,6 +170,48 @@ const ServiceRequestCMC2 = () => {
     })
     .catch(() => {
       toast.error("Error assigning condo");
+    });
+  };
+
+  const assignParking = (user) => {
+    var id = 0;
+    if (user.role === "condo_owner") {
+      id = user.ownerid;
+    } else if (user.role === "renter") {
+      id = user.renterid;
+    }
+
+    axios.post(`http://hortzcloud.com:3000/api/v1/aps/byU/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then(() => {
+      toast.success("Parking assigned successfully!");
+    })
+    .catch(() => {
+      toast.error("Error assigning parking");
+    });
+  };
+
+  const assignLocker = (user) => {
+    var id = 0;
+    if (user.role === "condo_owner") {
+      id = user.ownerid;
+    } else if (user.role === "renter") {
+      id = user.renterid;
+    }
+
+    axios.post(`http://hortzcloud.com:3000/api/v1/al/byU/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    })
+    .then(() => {
+      toast.success("Locker assigned successfully!");
+    })
+    .catch(() => {
+      toast.error("Error assigning locker");
     });
   };
 
@@ -428,8 +470,8 @@ const ServiceRequestCMC2 = () => {
                     <TableHeader>
                       <th></th>
                       <th>Client Name</th>
-                      <th>Email Address</th>
-                      <th>User Type</th>
+                      <th></th>
+                      <th></th>
                       <th></th>
                     </TableHeader>
                     {condoOwners.map((user, index) => (
@@ -438,11 +480,19 @@ const ServiceRequestCMC2 = () => {
                           <GoPerson size={24} />
                         </td>
                         <td>{user.first_name + " " + user.last_name}</td>
-                        <td>{user.email}</td>
-                        <td>Condo Owner</td>
                         <td>
-                        <RegisterButton onClick={() => assignCondo(user)}>
+                          <RegisterButton onClick={() => assignCondo(user)}>
                             Assign Condo
+                          </RegisterButton>
+                        </td>
+                        <td>
+                          <RegisterButton onClick={() => assignParking(user)}>
+                            Assign Parking
+                          </RegisterButton>
+                        </td>
+                        <td>
+                          <RegisterButton onClick={() => assignLocker(user)}>
+                            Assign Locker
                           </RegisterButton>
                         </td>
                       </TableRow>
@@ -457,8 +507,8 @@ const ServiceRequestCMC2 = () => {
                       <TableHeader>
                         <th></th>
                         <th>Client Name</th>
-                        <th>Email Address</th>
-                        <th>User Type</th>
+                        <th></th>
+                        <th></th>
                         <th></th>
                       </TableHeader>
                       {condoRenters.map((user, index) => (
@@ -467,12 +517,20 @@ const ServiceRequestCMC2 = () => {
                             <GoPerson size={24} />
                           </td>
                           <td>{user.first_name + " " + user.last_name}</td>
-                          <td>{user.email}</td>
-                          <td>Condo Renter</td>
                           <td>
                           <RegisterButton onClick={() => assignCondo(user)}>
                             Assign Condo
                           </RegisterButton>
+                          </td>
+                          <td>
+                            <RegisterButton onClick={() => assignParking(user)}>
+                              Assign Parking
+                            </RegisterButton>
+                          </td>
+                          <td>
+                            <RegisterButton onClick={() => assignLocker(user)}>
+                              Assign Locker
+                            </RegisterButton>
                           </td>
                         </TableRow>
                       ))}
