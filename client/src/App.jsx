@@ -20,6 +20,7 @@ import ServiceRequestCMC2 from "./Components/ServiceRequestPageCMC/ServiceReques
 import FinanceHome from "./Components/Dashboard/Finance/FinanceHome.jsx";
 import ReservationPage from "./Components/Reservation/ReservationPage.jsx";
 import ReservationCMC from "./Components/Reservation/ReservationCMC.jsx";
+import ManageCondosCMC from "./Components/ServiceRequestPageCMC/ManageCondosCMC.jsx";
 function App() {
   return (
     <>
@@ -52,6 +53,7 @@ function App() {
             <Route path="/Reservation" element={<ReservationPage />} />
             <Route path="/ReservationCMC" element={<ReservationCMC />} />
             <Route path="/DashBoardHomeCMC/Finance" element={<FinanceHome />} />
+            <Route path="/ManageCondosCMC" element={<ManageCondosCMC />} />
           </Routes>
         </BrowserRouter>
         <ToastContainer />
