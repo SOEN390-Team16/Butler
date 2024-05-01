@@ -43,7 +43,6 @@ export default function CondoAddForm(props) {
   }
 
   const handleSubmit = (values) => {
-    const storedPropertyId = localStorage.getItem('propertyId');
     const token = localStorage.getItem('token')
     console.log("company id:", userData.cmcId);
     console.log("property id:", property.property_id);
