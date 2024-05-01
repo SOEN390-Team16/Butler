@@ -5,11 +5,12 @@ const assignLockerByUserId = 'INSERT INTO assigned_locker (userid, property_id, 
     'WHERE ark.userid = $1 AND ark.condoid = cu.condoid AND p.property_id = cu.property_id) AND l.lockerid NOT IN ' +
     '(SELECT al.lockerid FROM assigned_locker al)LIMIT 1))'
 
-const assignLockerByCondoId = 'INSERT INTO assigned_locker (condoid, propertyid, lockerid)' +
+const assignLockerByCondoId = 'INSERT INTO assigned_locker (condoid, propertyid, lockerid, userid)' +
     'SELECT\n' +
     '    $1,\n' +
     '    p.property_id,\n' +
-    '    l.lockerid\n' +
+    '    l.lockerid,\n' +
+    '    c.userid\n' +
     'FROM\n' +
     '    property p\n' +
     '    INNER JOIN condo_unit c ON c.property_id = p.property_id\n' +
