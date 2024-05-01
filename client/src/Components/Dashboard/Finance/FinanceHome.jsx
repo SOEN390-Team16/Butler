@@ -33,25 +33,11 @@ const FinanceHome = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [totalOperationCost, setTotalOperationCost] = useState([]);
+  const [operationalBudget, setOperationalBudget] = useState()
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
   const [annualReport, setAnnualReport] = useState([]);
 
-  // const deletePublicUser = (user) => {
-  //   axios
-  //     .delete(`http://hortzcloud.com:3000/api/v1/pu/${user.userid}`, {
-  //       headers: {
-  //         authorization: `Bearer ${token}`,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log("res for deleting user:");
-  //       console.log(res);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error deleting user:", error);
-  //     });
-  // };
 
   useEffect(() => {
     const fetchProperties = () => {
@@ -74,7 +60,6 @@ const FinanceHome = () => {
     fetchProperties();
   }, [token, userData.cmcId]);
 
-  console.log(userData);
   // REMEMBER TO CHANGE THIS TO HORTZCLOUD
   useEffect(() => {
     const fetchOperations = () => {
@@ -106,7 +91,7 @@ const FinanceHome = () => {
       })
       .then((res) => {
         toast.success("Operation added successfully!");
-        console.log(res.data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -142,10 +127,29 @@ const FinanceHome = () => {
   }, [token]);
 
   useEffect(() => {
+    const fetchOperationalBudget = axios
+    .get('http://localhost:3000/api/v1/op/operational-budget/${userData.cmcId}',
+    {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    }).then(res => {
+      setOperationalBudget(res.data)
+    }).catch(err => {
+      console.error('Error fetching operational budget: ', err)
+    })
+    fetchOperationalBudget()
+  },[token, userData.cmcId])
+
+
+  console.log('operational:', operationalBudget)
+
+
+  useEffect(() => {
     const fetchAnnualReport = () => {
       axios
         .get(
-          `http://localhost:3000/api/v1/rep/getEverythingByC/${userData.cmcId}/2024`,
+          `http://hortzcloud.com:3000/api/v1/rep/getEverythingByC/${userData.cmcId}/2024`,
 
           {
             headers: {
@@ -162,6 +166,8 @@ const FinanceHome = () => {
     };
     fetchAnnualReport();
   }, [token, userData.cmcId]);
+
+  
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);

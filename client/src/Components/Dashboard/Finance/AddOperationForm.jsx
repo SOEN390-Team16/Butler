@@ -11,8 +11,6 @@ import PropTypes from "prop-types";
 export default function AddOperationForm({ propertyList}) {
   const { toggle } = useModal();
   const token = localStorage.getItem("token");
-
-  console.log("properties: ", propertyList);
   let operationSchema = object({
     type: string().required("Please define an operation type."),
     cost: string().required("Please enter an operational cost."),
@@ -53,7 +51,7 @@ export default function AddOperationForm({ propertyList}) {
       })
       .then((res) => {
         toast.success("Operation added successfully!");
-        console.log(res.data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -61,7 +59,7 @@ export default function AddOperationForm({ propertyList}) {
     toggle();
   };
 
-  console.log(formik.values)
+ 
   return (
     <>
       <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">

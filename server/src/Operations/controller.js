@@ -152,11 +152,11 @@ const setCostByOperationId = (req, res) => {
 
 const calculateOperationalBudget = (req, res) => {
   console.log('Calculate Operational Budget')
-
+  const company_id = parseInt(req.params.company_id)
   let totalOperationalCosts = 0
   let totalCondoFees = 0
 
-  pool.query(queries.getTotalOperationalCost, (error, operationalCostsResult) => {
+  pool.query(queries.getTotalOperationalCost,[company_id], (error, operationalCostsResult) => {
     if (error) {
       console.error('Error calculating operational costs:', error)
       return res.status(500).json({ error: 'Internal Server Error' })

@@ -21,7 +21,11 @@ const calculateTotalCostPerPropertyWithinYear = `
 
 const getCostByOperationId = 'SELECT op.cost FROM operation op WHERE op.operation_id = $1'
 const setCostByOperationId = 'UPDATE operation SET cost = $1 WHERE operation_id = $2'
-const getTotalOperationalCost = 'SELECT SUM(cost) AS total_cost from operation'
+const getTotalOperationalCost = `
+select sum(o.cost)
+from operation o
+JOIN property p ON p.property_id = o.property_id
+JOIN condo_management_company cmc on p.companyid = cmc.companyID AND cmc.companyid = $1`
 const getTotalCondoFees = 'SELECT SUM(total_fees) AS total_fees from condo_unit'
 
 module.exports = {

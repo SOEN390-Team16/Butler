@@ -33,7 +33,7 @@ export default function EditOperationForm({operation, propertyList, type}) {
     validationSchema: operationSchema,
     onSubmit: (values) => handleSubmit(values),
   });
-  console.log(type)
+ 
   const errorMessage = (fieldName) => {
     if (formik.touched[fieldName] && formik.errors[fieldName]) {
       return (
@@ -65,18 +65,18 @@ export default function EditOperationForm({operation, propertyList, type}) {
   
   const handleSubmit = async (values) => {
     values.property_id = parseInt(values.property_id)
-    console.log(operation.operation_id)
+    
     await axios.patch(`http://hortzcloud.com:3000/api/v1/op/${operation.operation_id}`, values,{
       headers: {
         'authorization': `Bearer ${token}`,
       }
     }).then(res => {
       toast.success('Operation edited successfully!');
-      console.log(res.data)
+      
     }).catch(err => {
       console.log(err)
     })
-    console.log(values)
+    
 
     toggle();
     
