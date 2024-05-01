@@ -20,7 +20,8 @@ const ServiceRequestCMC2 = () => {
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [requests, setRequests] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [requestsPerPage, setRequestsPerPage] = useState(10);
+  const [requestsPerPage, setRequestsPerPage] = useState(5);
+
   const token = localStorage.getItem("token");
 
   const getAllRequests = () => {
@@ -32,7 +33,6 @@ const ServiceRequestCMC2 = () => {
       })
       .then((response) => {
         setRequests(response.data);
-        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching requests:", error);
