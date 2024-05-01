@@ -128,11 +128,11 @@ describe("E2E Test for Use Case 7: Update Condo Owner/Rental User Profile", () =
     // Test
     cy.get("#root").get(".row").contains("button","Update Info").click()
     cy.get("#root").get("form")
-        .get("input[name='first_name']").clear()
+        .get("input[name='first_name']").clear({force: true})
         .type("CypressUpdateRenterF").should("have.value", "CypressUpdateRenterF")
-        .get("input[name='last_name']").clear()
+        .get("input[name='last_name']").clear({force: true})
         .type("CypressUpdateRenterL").should("have.value", "CypressUpdateRenterL")
-        .get("input[name='email']").clear()
+        .get("input[name='email']").clear({force: true})
         .type("CypressRenter@email.com").should("have.value", "CypressRenter@email.com")
     cy.get("#root").get("form").contains("button","Done").click()
 
