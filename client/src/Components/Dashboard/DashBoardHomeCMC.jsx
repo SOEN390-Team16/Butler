@@ -61,6 +61,27 @@ const DashBoardHomeCMC = () => {
       });
   };
 
+  // useEffect(() => {
+  //   const fetchProperties = () => {
+  //     axios
+  //       .get("http://hortzcloud.com:3000/api/v1/pp", {
+  //         headers: {
+  //           authorization: `Bearer ${token}`,
+  //         },
+  //       })
+  //       .then((res) => {
+  //         setProperties(
+  //           res.data.filter((property) => property.companyid === userData.cmcId)
+  //         );
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error fetching properties:", err);
+  //       });
+  //   };
+
+  //   fetchProperties();
+  // }, [token, userData.cmcId]);
+
   useEffect(() => {
     const fetchProperties = () => {
       axios
@@ -70,15 +91,16 @@ const DashBoardHomeCMC = () => {
           },
         })
         .then((res) => {
-          setProperties(
-            res.data.filter((property) => property.companyid === userData.cmcId)
+          const filteredProperties = res.data.filter(property => 
+            property.companyid === userData.cmcId && property.property_id >= 44
           );
+          setProperties(filteredProperties);
         })
         .catch((err) => {
           console.error("Error fetching properties:", err);
         });
     };
-
+  
     fetchProperties();
   }, [token, userData.cmcId]);
 
