@@ -40,7 +40,7 @@ export function loginCompany() {
         .should("have.value", "CypressCompany@email.com")
     cy.get("input[name='password']").type("CypressCompanyPassword")
         .should("have.value","CypressCompanyPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('eq', "/DashboardHomeCMC")
 }
 
