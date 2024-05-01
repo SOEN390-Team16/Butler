@@ -9,7 +9,6 @@ import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import { GoArrowUpRight } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
-import AddButton from "../Buttons/AddButton.jsx";
 import ArrowButton from "../Buttons/ArrowButton";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
@@ -36,6 +35,8 @@ const DashBoardHomeCO = () => {
   const [condosPerPage, setCondosPerPage] = useState(5);
   const [lockerCurrentPage, setLockerCurrentPage] = useState(1);
   const [lockersPerPage, setLockersPerPage] = useState(5);
+  const [parkingCurrentPage, setParkingCurrentPage] = useState(1);
+  const [parkingsPerPage, setParkingsPerPage] = useState(5);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
@@ -83,7 +84,6 @@ const DashBoardHomeCO = () => {
         },
       })
       .then((res) => {
-        console.log("res fetch condos:", res.data);
         setCondos(res.data);
       })
       .catch((error) => {
@@ -136,6 +136,23 @@ const DashBoardHomeCO = () => {
   const handleCondoRowsChange = (event) => {
     setCondosPerPage(Number(event.target.value));
     setCondoCurrentPage(1); // reset to the first page to avoid index range issues
+  };
+
+  // Calculate the currently displayed parkings
+  const indexOfLastParking = parkingCurrentPage * parkingsPerPage;
+  const indexOfFirstParking = indexOfLastParking - parkingsPerPage;
+  const currentParkings = parkingSpots.slice(
+    indexOfFirstParking,
+    indexOfLastParking
+  );
+
+  // change page
+  const paginateParkings = (pageNumber) => setParkingCurrentPage(pageNumber);
+
+  // change number of rows per page
+  const handleParkingRowsChange = (event) => {
+    setParkingsPerPage(Number(event.target.value));
+    setParkingCurrentPage(1); // reset to the first page to avoid index range issues
   };
 
   // Calculate the currently displayed lockers
@@ -302,60 +319,121 @@ const DashBoardHomeCO = () => {
           </div>
 
           <div className="table-space"></div>
-
+          
+          {/* parking unit table */}
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Parking Units 🚗"}></TableCardHeader>
             <div>
+            {parkingSpots.length > 0 ? (
               <Table>
                 <TableHeader>
                   <th>Parking Spot ID</th>
                   <th>User ID</th>
-                  <th>Property ID</th>
                 </TableHeader>
-                {parkingSpots.map((spot) => (
+                {currentParkings.map((spot) => (
                   <TableRow key={spot.parkingid}>
                     <td>{spot.parkingid}</td>
                     <td>{userID}</td>
-                    <td>{spot.property_id}</td>
                   </TableRow>
                 ))}
               </Table>
+            ) : (
+              <div className={"text-black text-base font-medium font-inter"}>
+                <h3>You currently do not have any parkings assigned!</h3>
+              </div>
+            )}
+            </div>
+            <div className="flex justify-between items-center p-4">
+              <button
+                onClick={() => paginateParkings(parkingCurrentPage - 1)}
+                disabled={parkingCurrentPage === 1}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span>{`Showing ${indexOfFirstParking + 1} to ${indexOfLastParking > parkingSpots.length ? parkingSpots.length : indexOfLastParking} of ${parkingSpots.length}`}</span>
+              <button
+                onClick={() => paginateParkings(parkingCurrentPage + 1)}
+                disabled={indexOfLastParking >= parkingSpots.length}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+            <div className="p-4">
+              <label className="pr-2">Rows per page:</label>
+              <select
+                onChange={handleParkingRowsChange}
+                className="p-2 rounded bg-white border border-gray-300"
+              >
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
             </div>
           </TableCard>
 
           <div className="table-space"></div>
-
+          
+          {/* table for lockers */}
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"Locker Units 🔒"}>
-              <div className="flex items-center gap-4">
-                <Modal>
-                  <ModalContent
-                    title="Want to add a Locker Unit"
-                    description="Add the information associated with the locker unit to add it to your account"
-                    onExit={() => console.log("exit")}
-                  >
-                    {/* Add Locker Unit Form */}
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
+            <TableCardHeader title={"Locker Units 🔒"}></TableCardHeader>
             <div>
+            {lockers.length > 0 ? (
               <Table>
                 <TableHeader>
                   <th>Locker ID</th>
                   <th>User ID</th>
                 </TableHeader>
-                {lockers.map((locker) => (
+                {currentLockers.map((locker) => (
                   <TableRow key={locker.locker_id}>
                     <td>{lockers[0].lockerid}</td>
                     <td>{userID}</td>
                   </TableRow>
                 ))}
               </Table>
+            ) : (
+              <div className={"text-black text-base font-medium font-inter"}>
+                <h3>You currently do not have any lockers assigned!</h3>
+              </div>
+            )}
+            </div>
+            <div className="flex justify-between items-center p-4">
+              <button
+                onClick={() => paginateLockers(lockerCurrentPage - 1)}
+                disabled={lockerCurrentPage === 1}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span>{`Showing ${indexOfFirstLocker + 1} to ${indexOfLastLocker > lockers.length ? lockers.length : indexOfLastLocker} of ${lockers.length}`}</span>
+              <button
+                onClick={() => paginateLockers(lockerCurrentPage + 1)}
+                disabled={indexOfLastLocker >= lockers.length}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+            <div className="p-4">
+              <label className="pr-2">Rows per page:</label>
+              <select
+                onChange={handleLockerRowsChange}
+                className="p-2 rounded bg-white border border-gray-300"
+              >
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
             </div>
           </TableCard>
         </div>
+
         <div className="table-space"></div>
+
+        {/* condo fees table */}
         <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
           <TableCardHeader title={"Condo Fees"}>
             <div className="flex items-center gap-4">

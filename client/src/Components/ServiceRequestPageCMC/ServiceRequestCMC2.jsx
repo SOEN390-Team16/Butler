@@ -154,7 +154,7 @@ const ServiceRequestCMC2 = () => {
       id = user.renterid;
     }
     // console.log("user:", user);
-    // console.log("property id:", property.property_id);
+    console.log("property id:", property.property_id);
     // console.log("id:", id);
     // console.log("user id:", user.userid);
 
@@ -174,12 +174,10 @@ const ServiceRequestCMC2 = () => {
   };
 
   const assignParking = (user) => {
-    var id = 0;
-    if (user.role === "condo_owner") {
-      id = user.ownerid;
-    } else if (user.role === "renter") {
-      id = user.renterid;
-    }
+    var id = user.userid;
+
+    console.log("id in assign parking:", id);
+    console.log("user:", user);
 
     axios.post(`http://hortzcloud.com:3000/api/v1/aps/byU/${id}`, {
       headers: {
@@ -195,12 +193,7 @@ const ServiceRequestCMC2 = () => {
   };
 
   const assignLocker = (user) => {
-    var id = 0;
-    if (user.role === "condo_owner") {
-      id = user.ownerid;
-    } else if (user.role === "renter") {
-      id = user.renterid;
-    }
+    var id = user.userid;
 
     axios.post(`http://hortzcloud.com:3000/api/v1/al/byU/${id}`, {
       headers: {
@@ -232,7 +225,7 @@ const ServiceRequestCMC2 = () => {
           },
         })
         .then((res) => {
-          setProperty(res.data[2]);
+          setProperty(res.data[37]);
         })
         .catch((err) => {
           console.error("Error fetching properties:", err);
