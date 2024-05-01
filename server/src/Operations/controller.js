@@ -169,12 +169,12 @@ const calculateOperationalBudget = (req, res) => {
           return res.status(500).json({ error: 'Internal Server Error' })
         } else {
           totalCondoFees = parseFloat(condoFeesResult.rows[0].total_fees || 0)
-
+          
           const totalOperationalBudget = totalCondoFees - totalOperationalCosts
           const response = {
-            'Total Operational Costs': totalOperationalCosts,
-            'Total Condo Fees': totalCondoFees,
-            'Total Operational Budget': totalOperationalBudget
+            'TotalOperationalCosts': totalOperationalCosts,
+            'TotalCondoFees': totalCondoFees,
+            'TotalOperationalBudget': totalOperationalBudget
           }
           res.status(200).json(response)
         }

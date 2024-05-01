@@ -127,22 +127,25 @@ const FinanceHome = () => {
   }, [token]);
 
   useEffect(() => {
-    const fetchOperationalBudget = axios
-    .get('http://localhost:3000/api/v1/op/operational-budget/${userData.cmcId}',
+    const fetchOperationalBudget = () => {
+      axios
+    .get(`http://hortzcloud.com:3000/api/v1/op/operational_budget/${userData.cmcId}`,
     {
       headers: {
         authorization: `Bearer ${token}`,
       },
     }).then(res => {
+      console.log('res here: ', res )
       setOperationalBudget(res.data)
     }).catch(err => {
       console.error('Error fetching operational budget: ', err)
     })
+  }
     fetchOperationalBudget()
   },[token, userData.cmcId])
 
 
-  console.log('operational:', operationalBudget)
+  console.log('operational: ', operationalBudget.TotalOperationalBudget)
 
 
   useEffect(() => {
@@ -167,7 +170,7 @@ const FinanceHome = () => {
     fetchAnnualReport();
   }, [token, userData.cmcId]);
 
-  
+
 
   // for register users table
   const [currentPage, setCurrentPage] = useState(1);
@@ -231,7 +234,10 @@ const FinanceHome = () => {
 
                 {/* This is the modal that display once a button is interacted with */}
                 <Modal>
-                  <p className="font-bold">Current Operational Budget: </p>
+                  {operationalBudget && (
+                      <p className="font-bold">Current Operational Budget: {operationalBudget.TotalOperationalBudget} $</p>
+                  )}
+               
                   <ModalContent
                     title="Want to add a Transaction?"
                     description="Add the information associated to the transaction to add it to your account."
@@ -261,7 +267,7 @@ const FinanceHome = () => {
                           </Link>
                         </td>
                         <td>{property.property_name}</td>
-                        <td> ${property.total_cost}</td>
+                        <td> {property.total_cost} $</td>
                       </TableRow>
                     ))}
                   </Table>
@@ -330,9 +336,9 @@ const FinanceHome = () => {
                       <GoArrowUpRight size={24} />
                     </td>
                     <td>{report.property_name}</td>
-                    <td>{report.total_condo_fees}</td>
-                    <td>{report.total_costs}</td>
-                    <td>{report.annual_report}</td>
+                    <td>{report.total_condo_fees} $</td>
+                    <td>{report.total_costs} $</td>
+                    <td>{report.annual_report} $</td>
                   </TableRow>
                 ))}
               </Table>
@@ -385,7 +391,7 @@ const FinanceHome = () => {
                       <TableRow key={index}>
                         <td>{operation.property_name}</td>
                         <td>{operation.type}</td>
-                        <td>${operation.cost}</td>
+                        <td>{operation.cost} $</td>
                         <td>{operation.date.substring(0, 10)}</td>
                         <td>
                           <Modal>
