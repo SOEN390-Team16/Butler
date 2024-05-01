@@ -34,6 +34,8 @@ const DashBoardHomeCO = () => {
   const [condos, setCondos] = useState([]);
   const [condoCurrentPage, setCondoCurrentPage] = useState(1);
   const [condosPerPage, setCondosPerPage] = useState(5);
+  const [lockerCurrentPage, setLockerCurrentPage] = useState(1);
+  const [lockersPerPage, setLockersPerPage] = useState(5);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
@@ -134,6 +136,23 @@ const DashBoardHomeCO = () => {
   const handleCondoRowsChange = (event) => {
     setCondosPerPage(Number(event.target.value));
     setCondoCurrentPage(1); // reset to the first page to avoid index range issues
+  };
+
+  // Calculate the currently displayed lockers
+  const indexOfLastLocker = lockerCurrentPage * lockersPerPage;
+  const indexOfFirstLocker = indexOfLastLocker - lockersPerPage;
+  const currentLockers = lockers.slice(
+    indexOfFirstLocker,
+    indexOfLastLocker
+  );
+
+  // change page
+  const paginateLockers = (pageNumber) => setLockerCurrentPage(pageNumber);
+
+  // change number of rows per page
+  const handleLockerRowsChange = (event) => {
+    setLockersPerPage(Number(event.target.value));
+    setLockerCurrentPage(1); // reset to the first page to avoid index range issues
   };
 
   return (
@@ -285,19 +304,7 @@ const DashBoardHomeCO = () => {
           <div className="table-space"></div>
 
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"Parking Units 🚗"}>
-              <div className="flex items-center gap-4">
-                <Modal>
-                  <ModalContent
-                    title="Want to add a Parking Unit"
-                    description="Add the information associated with the parking unit to add it to your account"
-                    onExit={() => console.log("exit")}
-                  >
-                    {/* Add Parking Unit Form */}
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
+            <TableCardHeader title={"Parking Units 🚗"}></TableCardHeader>
             <div>
               <Table>
                 <TableHeader>
