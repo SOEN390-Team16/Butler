@@ -1,21 +1,49 @@
-import { useMediaQuery } from "react-responsive";
-import SidePicture from "../Login/SidePicture";
+import { Link, useNavigate } from "react-router-dom";
+import { FcGoogle } from "react-icons/fc";
+import { Button } from "@chakra-ui/react";
 
-import "./SignUpPage.css";
-import SignUp from "./SignUp";
+import SignCard from "../Cards/SignCard";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   // This logingPage is for hosting the googlesignup component where the software directs to when
   // youre first accessing the sign up page. its the "Parent" page for the first sign up option
 
-  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
+  const navigation = useNavigate();
 
   return (
-    <div className="signup__main__page">
-      <SidePicture>{isMobile && <SignUp />}</SidePicture>
-      {!isMobile && <SignUp />}
-    </div>
+    <SignCard title="Sign up to Butler">
+      {/* Google Sign in */}
+      <Link
+        to="/googleSignin"
+        className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
+      >
+        <FcGoogle size={25} />
+        <p className="text font-semibold">Sign up with Google</p>
+      </Link>
+
+      <p className="text-gray-500"> Or sign in with email</p>
+
+      {/* Email Sign up */}
+      <div className="w-full">
+        <Button
+          colorScheme="blue"
+          size="lg"
+          w="full"
+          onClick={() => navigation("/SignUp/userSignUp")}
+        >
+          Sign up with email
+        </Button>
+
+        {/* Sign in */}
+        <div className="flex justify-center mt-4">
+          <p>Already a user? </p>
+          <Link className="underline" to="/">
+            Sign in!
+          </Link>
+        </div>
+      </div>
+    </SignCard>
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
