@@ -52,8 +52,6 @@ const DashBoardHomeCO = () => {
       })
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
-        console.log("parking:");
-        console.log(parkingSpots);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
