@@ -5,7 +5,8 @@ const router = Router()
 
 router.get('/', authenticateToken, controller.getAssignedParkingSpots)
 router.get('/getByU/:userid', authenticateToken, controller.getAssignedParkingSpotByUserId)
-router.post('/:userid', authenticateToken, controller.assignParkingSpotByUserId)
+router.post('/byU/:userid', authenticateToken, controller.assignParkingSpotByUserId)
+router.post('/byC/:condoid', authenticateToken, controller.assignParkingSpotByCondoId)
 router.delete('/:userid', authenticateToken, controller.unassignParkingSpotByUserId)
 
 module.exports = router
