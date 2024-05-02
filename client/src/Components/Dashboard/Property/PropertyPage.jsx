@@ -1,6 +1,6 @@
 // React imports
-import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // Axios for API calls
 import axios from "axios";
@@ -9,6 +9,10 @@ import axios from "axios";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GoArrowUpRight } from "react-icons/go";
 import { IoArrowBack } from "react-icons/io5";
+import { FaDownload, FaTrash } from "react-icons/fa";
+
+// Services
+import FileService from "../../../service/property/FileService.js";
 
 // Components
 import SideNavCMC from "../../SideNav/SideNavCMC.jsx";
@@ -48,6 +52,9 @@ export default function PropertyPage() {
 
   const [lockerUnits, setLockerUnits] = useState([]);
   const [assignedLockerUnits, setAssignedLockerUnits] = useState([]);
+
+  const [propertyFiles, setPropertyFiles] = useState([])
+  const fileInputRef = useRef(null);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const token = localStorage.getItem("token");
@@ -157,11 +164,19 @@ export default function PropertyPage() {
         });
     };
 
+    const fetchPropertyFiles = () => {
+      FileService.getPropertyFilesByPropertyId(id)
+        .then(response => {
+          setPropertyFiles(response.data)
+        })
+    };
+
     fetchProperty();
     fetchCondoUnits();
     fetchAssignedParkingUnits();
     fetchParkingUnits();
     fetchLockerUnits();
+    fetchPropertyFiles();
   }, [id, token, userData.cmcId]);
 
   const toggleDrawer = () => {
@@ -186,6 +201,48 @@ export default function PropertyPage() {
       }
     }
     setAssignedLockerUnits((prevState) => [...prevState, lockerUnit]);
+  };
+
+
+  const handleDeleteFile = (property_file_id) => {
+    const property_id = id;
+    FileService.deletePropertyFilesByPropertyId(property_file_id, property_id)
+      .then(() => {
+        setPropertyFiles(currentFiles => currentFiles
+          .filter(file => file.property_file_id !== property_file_id));
+        toast.success("Successfully deleted the file!")
+      })
+      .catch(err => console.error("Error deleting the file:", err));
+  };
+
+  const handleDownloadFile = (url) => {
+    window.open(url, '_blank');
+  };
+
+  const handleUploadFilesClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const files = event.target.files;
+    if (files.length > 0) {
+      uploadFiles(files);
+    }
+  };
+
+  const uploadFiles = async (files) => {
+    const loadingToast = toast.loading('Uploading files...');
+    const property_id = id;
+    FileService.uploadPropertyFilesWithPropertyId(files, property_id)
+      .then(response => {
+        setPropertyFiles(prevFiles => [...prevFiles, ...response.data])
+        toast.dismiss(loadingToast);
+        toast.success("Files uploaded successfully", { autoClose: 500 })
+      })
+      .catch(err => {
+        console.error(err)
+        toast.dismiss(loadingToast);
+      })
   };
 
   if (!token || !userData) {
@@ -448,6 +505,56 @@ export default function PropertyPage() {
                   <h3>Add a locker unit information to see it here!</h3>
                 </div>
               )}
+            </div>
+          </TableCard>
+        </div>
+
+        {/* Property files */}
+        <div className="flex flex-col justify-center items-center w-full">
+          {/* Properties files card goes here */}
+          <TableCard className={"gap-4"}>
+            <TableCardHeader title={"Files 📂"}>
+              <input
+                type="file"
+                multiple
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <AddButton onClick={handleUploadFilesClick}>Upload Files </AddButton>
+            </TableCardHeader>
+            {/* Body of properties card */}
+            <div>
+              {propertyFiles.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>File Name</th>
+                    <th></th>
+                    <th></th>
+                  </TableHeader>
+                  {propertyFiles.map((propertyFile, index) => (
+                    <TableRow key={index}>
+                      <td>{propertyFile.file_name}</td>
+                      <td>
+                        <button onClick={() => handleDownloadFile(propertyFile.url)}
+                                className="text-blue-500 hover:text-blue-700">
+                          <FaDownload/>
+                        </button>
+                      </td>
+                      <td>
+                        <button onClick={() => handleDeleteFile(propertyFile.property_file_id)}
+                                className="text-red-500 hover:text-red-700">
+                          <FaTrash/>
+                        </button>
+                      </td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>Upload files to see them here!</h3>
+                </div>)
+              }
             </div>
           </TableCard>
         </div>
