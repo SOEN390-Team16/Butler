@@ -12,6 +12,6 @@ export default function TableCardHeader(props) {
 }
 
 TableCardHeader.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   title: PropTypes.string.isRequired,
 }
