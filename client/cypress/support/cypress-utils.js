@@ -3,7 +3,7 @@ export function loginPublicUser(){
         "CypressTest@email.com")
     cy.get("input[name='password']").type("CypressTestPassword").should("have.value",
         "CypressTestPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashboardHome/editUser")
 }
 
@@ -16,7 +16,7 @@ export function loginRenter() {
         .should("have.value", "CypressRenter@email.com")
     cy.get("input[name='password']").type("CypressRenterPassword")
         .should("have.value","CypressRenterPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashBoardHome")
 }
 
@@ -31,8 +31,17 @@ export function loginOwner() {
         .should("have.value", "CypressOwner@email.com")
     cy.get("input[name='password']").type("CypressOwnerPassword")
         .should("have.value","CypressOwnerPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('include', "/DashBoardHomeCO")
+}
+
+export function loginCompany2() {
+    cy.get("input[name='email']").type("CypressCompany2@email.com")
+        .should("have.value", "CypressCompany2@email.com")
+    cy.get("input[name='password']").type("CypressCompanyPassword")
+        .should("have.value","CypressCompanyPassword")
+    cy.contains("button", "Sign In").click()
+    cy.location("pathname").should('eq', "/DashboardHomeCMC")
 }
 
 export function loginCompany() {
@@ -40,7 +49,7 @@ export function loginCompany() {
         .should("have.value", "CypressCompany@email.com")
     cy.get("input[name='password']").type("CypressCompanyPassword")
         .should("have.value","CypressCompanyPassword")
-    cy.get(".continue__button").click()
+    cy.contains("button", "Sign In").click()
     cy.location("pathname").should('eq', "/DashboardHomeCMC")
 }
 
@@ -54,9 +63,9 @@ export function resetProfileCompany() {
     cy.get("#root").get(".row").contains("button","Update Info").click()
     cy.get("#root").get(".container").get("form")
         .get("input[name='name']").clear()
-        .type("CypressCompanyName").should("have.value", "CypressCompanyName")
+        .type("CypressCompanyName2").should("have.value", "CypressCompanyName2")
         .get("input[name='email']").clear()
-        .type("CypressCompany@email.com").should("have.value", "CypressCompany@email.com")
+        .type("CypressCompany2@email.com").should("have.value", "CypressCompany2@email.com")
     cy.get("#root").get(".container").get("form").contains("button","Done").click()
 }
 
@@ -96,7 +105,7 @@ export function createEmployee(firstName) {
         .should("have.value", firstName)
         .get("input[name='last_name']").type("CypressEmployeeL")
         .should("have.value", "CypressEmployeeL")
-        .get("select[name='property_id']").select("CypressPropertyName")
+        .get("select[name='property_id']").select("CypressPropertyName2")
         .get("input[name='role']").should("have.value", "employee")
     cy.get('.fixed > .bg-white').contains("a", "Add Employee").click()
     cy.wait(1000)
