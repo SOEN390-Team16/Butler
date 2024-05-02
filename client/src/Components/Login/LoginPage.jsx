@@ -23,6 +23,10 @@ const LoginPage = () => {
   const publicUserStore = usePublicUserStore();
   const condoManagementCompanyStore = useCondoManagementCompany();
 
+  const googleSignIn = () => {
+    window.location.href = "http://localhost:3000/api/v1/google/";
+  };
+
   // On click of button, this will login the users and redirect them to their profiles
   const handleClick = async (e) => {
     e.preventDefault();
@@ -75,13 +79,13 @@ const LoginPage = () => {
   return (
     <SignCard title={"Sign in to Butler."}>
       {/* Google Sign in */}
-      <Link
-        to="/googleSignin"
+      <button
+        onClick={googleSignIn}
         className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
       >
         <FcGoogle size={25} />
         <p className="text font-semibold">Sign in With Google</p>
-      </Link>
+      </button>
 
       <p className="text-gray-500"> Or sign in with email</p>
 

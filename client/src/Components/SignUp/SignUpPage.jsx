@@ -9,17 +9,20 @@ const SignUpPage = () => {
   // youre first accessing the sign up page. its the "Parent" page for the first sign up option
 
   const navigation = useNavigate();
+  const googleSignUp = () => {
+    window.location.href = "http://localhost:3000/api/v1/google/";
+  };
 
   return (
     <SignCard title="Sign up to Butler">
       {/* Google Sign in */}
-      <Link
-        to="/googleSignin"
+      <button
         className="flex gap-4 py-2 w-full bg-[#F0F1F5] rounded border-grey-300 border items-center justify-center"
+        onClick={googleSignUp}
       >
         <FcGoogle size={25} />
         <p className="text font-semibold">Sign up with Google</p>
-      </Link>
+      </button>
 
       <p className="text-gray-500"> Or sign in with email</p>
 
