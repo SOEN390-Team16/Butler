@@ -94,6 +94,13 @@ export default function SideNavCMC({ isOpen, toggleDrawer }) {
               >
                 Service Requests
               </Button>
+              <Button
+                variant="outline"
+                size={"lg"}
+                onClick={() => navigate("/ManageCondosCMC")}
+              >
+                Manage Units
+              </Button>
             </div>
           </DrawerBody>
 

@@ -9,7 +9,6 @@ import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
 import { GoArrowUpRight } from "react-icons/go";
 import ModalToggler from "../Modals/ModalToggler.jsx";
-import AddButton from "../Buttons/AddButton.jsx";
 import ArrowButton from "../Buttons/ArrowButton";
 import ModalContent from "../Modals/ModalContent.jsx";
 import Modal from "../Modals/Modal.jsx";
@@ -32,6 +31,13 @@ const DashBoardHomeCR = () => {
   const [parkingSpots, setParkingSpots] = useState([]);
   const [lockers, setLockers] = useState([]);
   const [condoUnit, setCondoUnit] = useState([]);
+  const [condos, setCondos] = useState([]);
+  const [condoCurrentPage, setCondoCurrentPage] = useState(1);
+  const [condosPerPage, setCondosPerPage] = useState(5);
+  const [lockerCurrentPage, setLockerCurrentPage] = useState(1);
+  const [lockersPerPage, setLockersPerPage] = useState(5);
+  const [parkingCurrentPage, setParkingCurrentPage] = useState(1);
+  const [parkingsPerPage, setParkingsPerPage] = useState(5);
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
@@ -58,9 +64,6 @@ const DashBoardHomeCR = () => {
       })
       .then((parkingSpotsResponse) => {
         setParkingSpots(parkingSpotsResponse.data);
-        // console.log(parkingSpotsResponse.data[0]);
-        // console.log("parking:");
-        console.log(parkingSpots[0]);
       })
       .catch((error) => {
         console.error("Error fetching parking spots:", error);
@@ -77,8 +80,6 @@ const DashBoardHomeCR = () => {
       })
       .then((lockersResponse) => {
         setLockers(lockersResponse.data);
-        // console.log("locker id");
-        // console.log(lockers[0].lockerid);
       })
       .catch((error) => {
         console.error("Error fetching lockers:", error);
@@ -87,12 +88,14 @@ const DashBoardHomeCR = () => {
 
   const fetchCondos = () => {
     axios
-      .get(`http://hortzcloud.com:3000/api/v1/cu`, {
+      .get(`http://hortzcloud.com:3000/api/v1/cu/getByU/${userData.userId}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-      .then(() => {})
+      .then((res) => {
+        setCondos(res.data);
+      })
       .catch((error) => {
         console.error("Error fetching condo units:", error);
       });
@@ -126,6 +129,51 @@ const DashBoardHomeCR = () => {
 
   const toggleDrawer = () => {
     setDrawerOpen(!isDrawerOpen);
+  };
+
+  // Calculate the currently displayed condos
+  const indexOfLastCondo = condoCurrentPage * condosPerPage;
+  const indexOfFirstCondo = indexOfLastCondo - condosPerPage;
+  const currentCondos = condos.slice(indexOfFirstCondo, indexOfLastCondo);
+
+  // change page
+  const paginateCondos = (pageNumber) => setCondoCurrentPage(pageNumber);
+
+  // change number of rows per page
+  const handleCondoRowsChange = (event) => {
+    setCondosPerPage(Number(event.target.value));
+    setCondoCurrentPage(1); // reset to the first page to avoid index range issues
+  };
+
+  // Calculate the currently displayed parkings
+  const indexOfLastParking = parkingCurrentPage * parkingsPerPage;
+  const indexOfFirstParking = indexOfLastParking - parkingsPerPage;
+  const currentParkings = parkingSpots.slice(
+    indexOfFirstParking,
+    indexOfLastParking
+  );
+
+  // change page
+  const paginateParkings = (pageNumber) => setParkingCurrentPage(pageNumber);
+
+  // change number of rows per page
+  const handleParkingRowsChange = (event) => {
+    setParkingsPerPage(Number(event.target.value));
+    setParkingCurrentPage(1); // reset to the first page to avoid index range issues
+  };
+
+  // Calculate the currently displayed lockers
+  const indexOfLastLocker = lockerCurrentPage * lockersPerPage;
+  const indexOfFirstLocker = indexOfLastLocker - lockersPerPage;
+  const currentLockers = lockers.slice(indexOfFirstLocker, indexOfLastLocker);
+
+  // change page
+  const paginateLockers = (pageNumber) => setLockerCurrentPage(pageNumber);
+
+  // change number of rows per page
+  const handleLockerRowsChange = (event) => {
+    setLockersPerPage(Number(event.target.value));
+    setLockerCurrentPage(1); // reset to the first page to avoid index range issues
   };
 
   return (
@@ -208,144 +256,194 @@ const DashBoardHomeCR = () => {
               </TableCard>
             </div>
           </div>
-          <div className="table-space"></div>
-          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"My Condo Units"}>
-              <div className="flex items-center gap-4">
-                <Link className="underline" to={""}>
-                  See more
-                </Link>
 
-                <Modal>
-                  {/* <ModalToggler> */}
-                  <AddButton>Add Condo Unit</AddButton>
-                  {/* </ModalToggler> */}
-                  <ModalContent
-                    title="Want to add a Property"
-                    description="Add the information associated to the property to add it to your account"
-                    onExit={() => console.log("exit")}
+          <div className="table-space"></div>
+
+          {/* condo units table */}
+          <div
+            className="flex flex-col justify-center items-center w-full"
+            style={{ paddingTop: 48, paddingBottom: 0 }}
+          >
+            {/* Properties card goes here */}
+            <TableCard className={"gap-4"}>
+              <TableCardHeader title={"My Condo Units"}></TableCardHeader>
+              {/* Body of condo card */}
+              <div>
+                {condos.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <th>Condo ID</th>
+                      <th>Condo Number</th>
+                      <th>Condo Size</th>
+                      <th>Occupant Type</th>
+                    </TableHeader>
+                    {currentCondos.map((condo, index) => (
+                      <TableRow key={index}>
+                        <td>{condo.condoid}</td>
+                        <td>{condo.condo_number}</td>
+                        <td>{condo.size || "N/A"}</td>
+                        <td>Condo Renter</td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                ) : (
+                  <div
+                    className={"text-black text-base font-medium font-inter"}
                   >
-                    <PropertyAddForm onAddProperty={addPropertyToState} />
-                  </ModalContent>
-                </Modal>
+                    <h3>
+                      You currently have no condo units associated to your
+                      account!
+                    </h3>
+                  </div>
+                )}
               </div>
-            </TableCardHeader>
+              <div className="flex justify-between items-center p-4">
+                <button
+                  onClick={() => paginateCondos(condoCurrentPage - 1)}
+                  disabled={condoCurrentPage === 1}
+                  className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+                >
+                  Previous
+                </button>
+                <span>{`Showing ${indexOfFirstCondo + 1} to ${indexOfLastCondo > condos.length ? condos.length : indexOfLastCondo} of ${condos.length}`}</span>
+                <button
+                  onClick={() => paginateCondos(condoCurrentPage + 1)}
+                  disabled={indexOfLastCondo >= condos.length}
+                  className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+                >
+                  Next
+                </button>
+              </div>
+              <div className="p-4">
+                <label className="pr-2">Rows per page:</label>
+                <select
+                  onChange={handleCondoRowsChange}
+                  className="p-2 rounded bg-white border border-gray-300"
+                >
+                  <option value="5" selected>
+                    5
+                  </option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </div>
+            </TableCard>
+          </div>
+
+          <div className="table-space"></div>
+
+          {/* parking table */}
+          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
+            <TableCardHeader title={"Parking Units 🚗"}></TableCardHeader>
             <div>
-              {properties.length > 0 ? (
+              {parkingSpots.length > 0 ? (
                 <Table>
                   <TableHeader>
-                    <th></th>
-                    <th>Property Name</th>
-                    <th>Property Address</th>
-                    <th>Unit Count</th>
-                    <th>Parking Count</th>
-                    <th>Locker Count</th>
+                    <th>Parking Spot ID</th>
+                    <th>User ID</th>
                   </TableHeader>
-                  {properties.map((property, index) => (
-                    <TableRow key={index}>
-                      <td>
-                        <GoArrowUpRight size={24} />
-                      </td>
-                      <td>{property.property_name}</td>
-                      <td>{property.address}</td>
-                      <td>{property.unit_count}</td>
-                      <td>{property.parking_count}</td>
-                      <td>{property.locker_count}</td>
+                  {currentParkings.map((spot) => (
+                    <TableRow key={spot.parkingid}>
+                      <td>{spot.parkingid}</td>
+                      <td>{userID}</td>
                     </TableRow>
                   ))}
                 </Table>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <th></th>
-                    <th>Condo ID</th>
-                    <th>Condo Number</th>
-                    <th>Company ID</th>
-                    <th>Property ID</th>
-                    <th>Occupant Type</th>
-                    <th>Size</th>
-                  </TableHeader>
-                  <TableRow>
-                    <td>
-                      <GoArrowUpRight size={24} />
-                    </td>
-                    <td>{condoUnit.condoid}</td>
-                    <td>{condoUnit.condo_number}</td>
-                    <td>{condoUnit.companyid}</td>
-                    <td>{condoUnit.property_id}</td>
-                    <td>{userData.role}</td>
-                    <td>
-                      670 m<sup>2</sup>
-                    </td>
-                  </TableRow>
-                </Table>
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any parkings assigned!</h3>
+                </div>
               )}
             </div>
-          </TableCard>
-
-          <div className="table-space"></div>
-
-          <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"Parking Units 🚗"}>
-              <div className="flex items-center gap-4">
-                <Modal>
-                  <ModalContent
-                    title="Want to add a Parking Unit"
-                    description="Add the information associated with the parking unit to add it to your account"
-                    onExit={() => console.log("exit")}
-                  >
-                    {/* Add Parking Unit Form */}
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
-            <div>
-              <Table>
-                <TableHeader>
-                  <th>Parking Spot ID</th>
-                  <th>User ID</th>
-                  <th>Property ID</th>
-                </TableHeader>
-                {parkingSpots.map((spot) => (
-                  <TableRow key={spot.parkingid}>
-                    <td>{spot.parkingid}</td>
-                    <td>{userID}</td>
-                    <td>{spot.property_id}</td>
-                  </TableRow>
-                ))}
-              </Table>
+            <div className="flex justify-between items-center p-4">
+              <button
+                onClick={() => paginateParkings(parkingCurrentPage - 1)}
+                disabled={parkingCurrentPage === 1}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span>{`Showing ${indexOfFirstParking + 1} to ${indexOfLastParking > parkingSpots.length ? parkingSpots.length : indexOfLastParking} of ${parkingSpots.length}`}</span>
+              <button
+                onClick={() => paginateParkings(parkingCurrentPage + 1)}
+                disabled={indexOfLastParking >= parkingSpots.length}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+            <div className="p-4">
+              <label className="pr-2">Rows per page:</label>
+              <select
+                onChange={handleParkingRowsChange}
+                className="p-2 rounded bg-white border border-gray-300"
+              >
+                <option value="5" selected>
+                  5
+                </option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
             </div>
           </TableCard>
 
           <div className="table-space"></div>
 
+          {/* locker table */}
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
-            <TableCardHeader title={"Locker Units 🔒"}>
-              <div className="flex items-center gap-4">
-                <Modal>
-                  <ModalContent
-                    title="Want to add a Locker Unit"
-                    description="Add the information associated with the locker unit to add it to your account"
-                    onExit={() => console.log("exit")}
-                  >
-                    {/* Add Locker Unit Form */}
-                  </ModalContent>
-                </Modal>
-              </div>
-            </TableCardHeader>
+            <TableCardHeader title={"Locker Units 🔒"}></TableCardHeader>
             <div>
-              <Table>
-                <TableHeader>
-                  <th>Locker ID</th>
-                  <th>User ID</th>
-                </TableHeader>
-                {lockers.map((locker) => (
-                  <TableRow key={locker.locker_id}>
-                    <td>{lockers[0].lockerid}</td>
-                    <td>{userID}</td>
-                  </TableRow>
-                ))}
-              </Table>
+              {lockers.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Locker ID</th>
+                    <th>User ID</th>
+                  </TableHeader>
+                  {currentLockers.map((locker) => (
+                    <TableRow key={locker.locker_id}>
+                      <td>{lockers[0].lockerid}</td>
+                      <td>{userID}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any lockers assigned!</h3>
+                </div>
+              )}
+            </div>
+            <div className="flex justify-between items-center p-4">
+              <button
+                onClick={() => paginateLockers(lockerCurrentPage - 1)}
+                disabled={lockerCurrentPage === 1}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Previous
+              </button>
+              <span>{`Showing ${indexOfFirstLocker + 1} to ${indexOfLastLocker > lockers.length ? lockers.length : indexOfLastLocker} of ${lockers.length}`}</span>
+              <button
+                onClick={() => paginateLockers(lockerCurrentPage + 1)}
+                disabled={indexOfLastLocker >= lockers.length}
+                className="p-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:bg-gray-300"
+              >
+                Next
+              </button>
+            </div>
+            <div className="p-4">
+              <label className="pr-2">Rows per page:</label>
+              <select
+                onChange={handleLockerRowsChange}
+                className="p-2 rounded bg-white border border-gray-300"
+              >
+                <option value="5" selected>
+                  5
+                </option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
             </div>
           </TableCard>
         </div>
