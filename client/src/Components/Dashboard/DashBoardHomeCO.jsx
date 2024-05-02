@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import TableCard from "../Cards/Tables/TableCard.jsx";
@@ -21,6 +21,8 @@ import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
+import { FaDownload } from "react-icons/fa";
+import FileService from "../../service/property/FileService.js";
 import { jwtDecode } from "jwt-decode";
 
 // Dashboard home is the home component where clients will enter
@@ -38,6 +40,7 @@ const DashBoardHomeCO = () => {
   const [lockersPerPage, setLockersPerPage] = useState(5);
   const [parkingCurrentPage, setParkingCurrentPage] = useState(1);
   const [parkingsPerPage, setParkingsPerPage] = useState(5);
+  const [propertyFiles, setPropertyFiles] = useState([]);
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
 
@@ -117,6 +120,27 @@ const DashBoardHomeCO = () => {
       })
       .then((res) => {
         setCondos(res.data);
+        const uniquePropertyIds = Array.from(
+          new Set(res.data.map((condo) => condo.property_id))
+        );
+        for (const propertyId of uniquePropertyIds) {
+          FileService.getPropertyFilesByPropertyId(propertyId).then(
+            (response) => {
+              setPropertyFiles((currentFiles) => {
+                const fileMap = new Map();
+                currentFiles.forEach((file) => {
+                  fileMap.set(file.property_file_id, file);
+                });
+
+                response.data.forEach((file) => {
+                  fileMap.set(file.property_file_id, file);
+                });
+
+                return Array.from(fileMap.values());
+              });
+            }
+          );
+        }
       })
       .catch((error) => {
         console.error("Error fetching condo units:", error);
@@ -196,6 +220,10 @@ const DashBoardHomeCO = () => {
   const handleLockerRowsChange = (event) => {
     setLockersPerPage(Number(event.target.value));
     setLockerCurrentPage(1); // reset to the first page to avoid index range issues
+  };
+
+  const handleDownloadFile = (url) => {
+    window.open(url, "_blank");
   };
 
   return (
@@ -574,6 +602,47 @@ const DashBoardHomeCO = () => {
               <CompanyContactDisplayForm />
             </ModalContent>
           </Modal>
+        </div>
+        {/* Property files */}
+        <div className="flex flex-col justify-center items-center w-full">
+          {/* Properties files card goes here */}
+          <TableCard className={"gap-4"}>
+            <TableCardHeader title={"Files 📂"} />
+            {/* Body of properties card */}
+            <div>
+              {propertyFiles.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>File Name</th>
+                    <th>Property ID</th>
+                    <th></th>
+                    <th></th>
+                  </TableHeader>
+                  {propertyFiles.map((propertyFile, index) => (
+                    <TableRow key={index}>
+                      <td>{propertyFile.file_name}</td>
+                      <td>{propertyFile.property_id}</td>
+                      <td></td>
+                      <td>
+                        <button
+                          onClick={() => handleDownloadFile(propertyFile.url)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <FaDownload />
+                        </button>
+                      </td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>
+                    Your condo management company has not uploaded any file yet!
+                  </h3>
+                </div>
+              )}
+            </div>
+          </TableCard>
         </div>
       </div>
     </div>
