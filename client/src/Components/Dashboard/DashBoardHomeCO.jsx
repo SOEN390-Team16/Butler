@@ -3,7 +3,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
@@ -22,6 +22,7 @@ import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
+import { jwtDecode } from "jwt-decode";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -31,10 +32,21 @@ const DashBoardHomeCO = () => {
   const [parkingSpots, setParkingSpots] = useState([]);
   const [lockers, setLockers] = useState([]);
   const [condoUnit, setCondoUnit] = useState([]);
-  const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
-  const token = localStorage.getItem("token");
+
+  const [searchParams] = useSearchParams();
+  var token = searchParams.get("token");
+  var userData;
+
+  if (token) {
+    console.log("Token: ", token);
+    userData = jwtDecode(token);
+    localStorage.setItem("userData", JSON.stringify(userData));
+  } else {
+    token = localStorage.getItem("token");
+    userData = JSON.parse(localStorage.getItem("userData"));
+  }
 
   const [request, setRequest] = useState([]);
   const getRequestByUserID = () => {
