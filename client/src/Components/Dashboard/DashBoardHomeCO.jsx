@@ -3,6 +3,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
+import { Link, useSearchParams } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
@@ -22,6 +23,7 @@ import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
 import { FaDownload } from "react-icons/fa";
 import FileService from "../../service/property/FileService.js";
+import { jwtDecode } from "jwt-decode";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -38,11 +40,44 @@ const DashBoardHomeCO = () => {
   const [lockersPerPage, setLockersPerPage] = useState(5);
   const [parkingCurrentPage, setParkingCurrentPage] = useState(1);
   const [parkingsPerPage, setParkingsPerPage] = useState(5);
-  const [propertyFiles, setPropertyFiles] = useState([])
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const [propertyFiles, setPropertyFiles] = useState([]);
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
-  const token = localStorage.getItem("token");
+
+  const [searchParams] = useSearchParams();
+  var token = searchParams.get("token");
+  var userData;
+
+  if (token) {
+    console.log("Token: ", token);
+    userData = jwtDecode(token);
+    localStorage.setItem("userData", JSON.stringify(userData));
+  } else {
+    token = localStorage.getItem("token");
+    userData = JSON.parse(localStorage.getItem("userData"));
+  }
+
+  const [request, setRequest] = useState([]);
+  const getRequestByUserID = () => {
+    axios
+      .get(`http://hortzcloud.com:3000/api/v1/req?userid=${userID}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((requestResponse) => {
+        setRequest(requestResponse.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching requests:", error);
+      });
+  };
+
+  useEffect(() => {
+    if (request.length > 0) {
+      console.log("requests:", request);
+    }
+  }, [request]);
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
@@ -85,23 +120,26 @@ const DashBoardHomeCO = () => {
       })
       .then((res) => {
         setCondos(res.data);
-        const uniquePropertyIds = Array.from(new Set(res.data.map(condo => condo.property_id)));
+        const uniquePropertyIds = Array.from(
+          new Set(res.data.map((condo) => condo.property_id))
+        );
         for (const propertyId of uniquePropertyIds) {
-          FileService.getPropertyFilesByPropertyId(propertyId)
-            .then(response => {
-              setPropertyFiles(currentFiles => {
+          FileService.getPropertyFilesByPropertyId(propertyId).then(
+            (response) => {
+              setPropertyFiles((currentFiles) => {
                 const fileMap = new Map();
-                currentFiles.forEach(file => {
+                currentFiles.forEach((file) => {
                   fileMap.set(file.property_file_id, file);
                 });
 
-                response.data.forEach(file => {
+                response.data.forEach((file) => {
                   fileMap.set(file.property_file_id, file);
                 });
 
                 return Array.from(fileMap.values());
               });
-            })
+            }
+          );
         }
       })
       .catch((error) => {
@@ -142,10 +180,7 @@ const DashBoardHomeCO = () => {
   // Calculate the currently displayed condos
   const indexOfLastCondo = condoCurrentPage * condosPerPage;
   const indexOfFirstCondo = indexOfLastCondo - condosPerPage;
-  const currentCondos = condos.slice(
-    indexOfFirstCondo,
-    indexOfLastCondo
-  );
+  const currentCondos = condos.slice(indexOfFirstCondo, indexOfLastCondo);
 
   // change page
   const paginateCondos = (pageNumber) => setCondoCurrentPage(pageNumber);
@@ -176,10 +211,7 @@ const DashBoardHomeCO = () => {
   // Calculate the currently displayed lockers
   const indexOfLastLocker = lockerCurrentPage * lockersPerPage;
   const indexOfFirstLocker = indexOfLastLocker - lockersPerPage;
-  const currentLockers = lockers.slice(
-    indexOfFirstLocker,
-    indexOfLastLocker
-  );
+  const currentLockers = lockers.slice(indexOfFirstLocker, indexOfLastLocker);
 
   // change page
   const paginateLockers = (pageNumber) => setLockerCurrentPage(pageNumber);
@@ -191,7 +223,7 @@ const DashBoardHomeCO = () => {
   };
 
   const handleDownloadFile = (url) => {
-    window.open(url, '_blank');
+    window.open(url, "_blank");
   };
 
   return (
@@ -277,36 +309,41 @@ const DashBoardHomeCO = () => {
 
           {/* condo units table */}
           <div
-          className="flex flex-col justify-center items-center w-full"
-          style={{ paddingTop: 48, paddingBottom: 0 }}
+            className="flex flex-col justify-center items-center w-full"
+            style={{ paddingTop: 48, paddingBottom: 0 }}
           >
             {/* Properties card goes here */}
             <TableCard className={"gap-4"}>
               <TableCardHeader title={"My Condo Units"}></TableCardHeader>
               {/* Body of condo card */}
               <div>
-              {condos.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <th>Condo ID</th>
-                    <th>Condo Number</th>
-                    <th>Condo Size</th>
-                    <th>Occupant Type</th>
-                  </TableHeader>
-                  {currentCondos.map((condo, index) => (
-                    <TableRow key={index}>
-                      <td>{condo.condoid}</td>
-                      <td>{condo.condo_number}</td>
-                      <td>{condo.size || 'N/A'}</td>
-                      <td>Condo Owner</td>
-                    </TableRow>
-                  ))}
-                </Table>
-              ) : (
-                <div className={"text-black text-base font-medium font-inter"}>
-                  <h3>You currently have no condo units associated to your account!</h3>
-                </div>
-              )}
+                {condos.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <th>Condo ID</th>
+                      <th>Condo Number</th>
+                      <th>Condo Size</th>
+                      <th>Occupant Type</th>
+                    </TableHeader>
+                    {currentCondos.map((condo, index) => (
+                      <TableRow key={index}>
+                        <td>{condo.condoid}</td>
+                        <td>{condo.condo_number}</td>
+                        <td>{condo.size || "N/A"}</td>
+                        <td>Condo Owner</td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                ) : (
+                  <div
+                    className={"text-black text-base font-medium font-inter"}
+                  >
+                    <h3>
+                      You currently have no condo units associated to your
+                      account!
+                    </h3>
+                  </div>
+                )}
               </div>
               <div className="flex justify-between items-center p-4">
                 <button
@@ -331,7 +368,9 @@ const DashBoardHomeCO = () => {
                   onChange={handleCondoRowsChange}
                   className="p-2 rounded bg-white border border-gray-300"
                 >
-                  <option value="5" selected>5</option>
+                  <option value="5" selected>
+                    5
+                  </option>
                   <option value="10">10</option>
                   <option value="15">15</option>
                   <option value="20">20</option>
@@ -341,29 +380,29 @@ const DashBoardHomeCO = () => {
           </div>
 
           <div className="table-space"></div>
-          
+
           {/* parking unit table */}
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Parking Units 🚗"}></TableCardHeader>
             <div>
-            {parkingSpots.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <th>Parking Spot ID</th>
-                  <th>User ID</th>
-                </TableHeader>
-                {currentParkings.map((spot) => (
-                  <TableRow key={spot.parkingid}>
-                    <td>{spot.parkingid}</td>
-                    <td>{userID}</td>
-                  </TableRow>
-                ))}
-              </Table>
-            ) : (
-              <div className={"text-black text-base font-medium font-inter"}>
-                <h3>You currently do not have any parkings assigned!</h3>
-              </div>
-            )}
+              {parkingSpots.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Parking Spot ID</th>
+                    <th>User ID</th>
+                  </TableHeader>
+                  {currentParkings.map((spot) => (
+                    <TableRow key={spot.parkingid}>
+                      <td>{spot.parkingid}</td>
+                      <td>{userID}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any parkings assigned!</h3>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center p-4">
               <button
@@ -388,7 +427,9 @@ const DashBoardHomeCO = () => {
                 onChange={handleParkingRowsChange}
                 className="p-2 rounded bg-white border border-gray-300"
               >
-                <option value="5" selected>5</option>
+                <option value="5" selected>
+                  5
+                </option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
@@ -397,29 +438,29 @@ const DashBoardHomeCO = () => {
           </TableCard>
 
           <div className="table-space"></div>
-          
+
           {/* table for lockers */}
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Locker Units 🔒"}></TableCardHeader>
             <div>
-            {lockers.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <th>Locker ID</th>
-                  <th>User ID</th>
-                </TableHeader>
-                {currentLockers.map((locker) => (
-                  <TableRow key={locker.locker_id}>
-                    <td>{lockers[0].lockerid}</td>
-                    <td>{userID}</td>
-                  </TableRow>
-                ))}
-              </Table>
-            ) : (
-              <div className={"text-black text-base font-medium font-inter"}>
-                <h3>You currently do not have any lockers assigned!</h3>
-              </div>
-            )}
+              {lockers.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Locker ID</th>
+                    <th>User ID</th>
+                  </TableHeader>
+                  {currentLockers.map((locker) => (
+                    <TableRow key={locker.locker_id}>
+                      <td>{lockers[0].lockerid}</td>
+                      <td>{userID}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any lockers assigned!</h3>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center p-4">
               <button
@@ -444,7 +485,9 @@ const DashBoardHomeCO = () => {
                 onChange={handleLockerRowsChange}
                 className="p-2 rounded bg-white border border-gray-300"
               >
-                <option value="5" selected>5</option>
+                <option value="5" selected>
+                  5
+                </option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
@@ -564,7 +607,7 @@ const DashBoardHomeCO = () => {
         <div className="flex flex-col justify-center items-center w-full">
           {/* Properties files card goes here */}
           <TableCard className={"gap-4"}>
-            <TableCardHeader title={"Files 📂"}/>
+            <TableCardHeader title={"Files 📂"} />
             {/* Body of properties card */}
             <div>
               {propertyFiles.length > 0 ? (
@@ -581,9 +624,11 @@ const DashBoardHomeCO = () => {
                       <td>{propertyFile.property_id}</td>
                       <td></td>
                       <td>
-                        <button onClick={() => handleDownloadFile(propertyFile.url)}
-                                className="text-blue-500 hover:text-blue-700">
-                          <FaDownload/>
+                        <button
+                          onClick={() => handleDownloadFile(propertyFile.url)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          <FaDownload />
                         </button>
                       </td>
                     </TableRow>
@@ -591,9 +636,11 @@ const DashBoardHomeCO = () => {
                 </Table>
               ) : (
                 <div className={"text-black text-base font-medium font-inter"}>
-                  <h3>Your condo management company has not uploaded any file yet!</h3>
-                </div>)
-              }
+                  <h3>
+                    Your condo management company has not uploaded any file yet!
+                  </h3>
+                </div>
+              )}
             </div>
           </TableCard>
         </div>

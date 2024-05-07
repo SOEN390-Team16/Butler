@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { toast } from "react-toastify";
 import Modal from "../Modals/Modal.jsx";
@@ -9,19 +9,38 @@ import RegisterUserForm from "./RegisterUserForm.jsx";
 import usePublicUserStore from "../../store/user/public-user.store.js";
 import CloudinaryImageService from "../../service/asset/image.service.js";
 import "./EditAccount.css";
+import { jwtDecode } from "jwt-decode";
 
 const EditAccount = () => {
-  const publicUserStore = usePublicUserStore()
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const entity = publicUserStore.getEntity()
+  const [searchParams] = useSearchParams();
+  var token = searchParams.get("token");
+  var userData;
+
+  console.log("Token: ", token);
+  if (token) {
+    console.log("Token: ", token);
+    userData = jwtDecode(token);
+    localStorage.setItem("userData", JSON.stringify(userData));
+  } else {
+    token = localStorage.getItem("token");
+    userData = JSON.parse(localStorage.getItem("userData"));
+  }
+
+  const publicUserStore = usePublicUserStore();
+  const entity = publicUserStore.getEntity();
+  if (!entity) {
+    publicUserStore.setEntity(userData);
+  }
+
   const [editProfile, setEditProfileActive] = useState(false);
   const [newProfile, setNewProfile] = useState({
-    userid: entity.userid ? entity.userid : "",
-    first_name: entity.first_name ? entity.first_name : "",
-    last_name: entity.last_name ? entity.last_name : "",
-    email: entity.email ? entity.email : "",
+    userid: entity && entity.userid ? entity.userid : "",
+    first_name: entity && entity.first_name ? entity.first_name : "",
+    last_name: entity && entity.last_name ? entity.last_name : "",
+    email: entity && entity.email ? entity.email : "",
   });
   const [isHovering, setIsHovering] = useState(false);
+
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
@@ -58,33 +77,34 @@ const EditAccount = () => {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     let url;
-    if (!file)
-      return
+    if (!file) return;
 
-    const loadingToast = toast.loading('Saving image...');
+    const loadingToast = toast.loading("Saving image...");
     try {
-      const response = await CloudinaryImageService.uploadImage(file)
-      url = response.data.url
+      const response = await CloudinaryImageService.uploadImage(file);
+      url = response.data.url;
     } catch (err) {
       toast.dismiss(loadingToast);
-      console.log(err)
-      return
+      console.log(err);
+      return;
     }
 
     if (url) {
-      const publicUser = publicUserStore.getEntity()
-      await publicUserStore.updatePublicUser({ ...publicUser, profile_picture: url })
+      const publicUser = publicUserStore.getEntity();
+      await publicUserStore.updatePublicUser({
+        ...publicUser,
+        profile_picture: url,
+      });
     }
     toast.dismiss(loadingToast);
-    toast.success("Profile picture updated successfully", { autoClose: 500 })
+    toast.success("Profile picture updated successfully", { autoClose: 500 });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const status = await publicUserStore.updatePublicUser(newProfile);
     if (status) {
-      toast.success("Account updated successfully", { autoClose: 500 })
+      toast.success("Account updated successfully", { autoClose: 500 });
     }
   };
 
@@ -93,10 +113,10 @@ const EditAccount = () => {
       className="min-h-screen flex flex-col justify-start items-center bg-profile-hero bg-cover bg-no-repeat
       bg-center relative"
     >
-      {entity.role !== "public_user" && (
+      {entity && entity.role !== "public_user" && (
         <div className={"absolute top-0 left-0"}>
           <button onClick={() => navigate(-1)}>
-            <MdKeyboardDoubleArrowLeft size={40}/>
+            <MdKeyboardDoubleArrowLeft size={40} />
           </button>
         </div>
       )}
@@ -131,9 +151,11 @@ const EditAccount = () => {
                       className={`absolute inset-0 z-10 flex items-center justify-center cursor-pointer ${
                         isHovering ? "opacity-100" : "opacity-0"
                       }`}
-                      style={{ transition: 'opacity 0.3s' }}
+                      style={{ transition: "opacity 0.3s" }}
                     >
-                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">Upload Image</p>
+                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">
+                        Upload Image
+                      </p>
                     </label>
                     <input
                       type="file"
@@ -145,9 +167,15 @@ const EditAccount = () => {
                   </>
                 ) : (
                   <>
-                    <label htmlFor="imageInput"
-                           className={'absolute inset-0 z-10 flex items-center justify-center cursor-pointer'}>
-                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">Upload Image</p>
+                    <label
+                      htmlFor="imageInput"
+                      className={
+                        "absolute inset-0 z-10 flex items-center justify-center cursor-pointer"
+                      }
+                    >
+                      <p className="text-white text-center bg-black bg-opacity-50 px-2 py-1 rounded">
+                        Upload Image
+                      </p>
                     </label>
                     <input
                       type="file"
@@ -228,8 +256,8 @@ const EditAccount = () => {
                       type={"button"}
                       style={{ backgroundColor: "black", color: "white" }}
                       onClick={(event) => {
-                        event.preventDefault()
-                        setEditProfileActive(!editProfile)
+                        event.preventDefault();
+                        setEditProfileActive(!editProfile);
                       }}
                     >
                       Activate Registration Key
@@ -242,7 +270,7 @@ const EditAccount = () => {
                       "account."
                     }
                   >
-                    <RegisterUserForm/>
+                    <RegisterUserForm />
                   </ModalContent>
                 </Modal>
               </div>

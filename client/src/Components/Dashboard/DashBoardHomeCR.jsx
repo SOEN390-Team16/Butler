@@ -3,6 +3,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import "./DashBoardHome.css";
 import TableCard from "../Cards/Tables/TableCard.jsx";
 import TableCardHeader from "../Cards/Tables/TableCardHeader.jsx";
+import { Link, useSearchParams } from "react-router-dom";
 import Table from "../Tables/Table.jsx";
 import TableHeader from "../Tables/TableHeader.jsx";
 import TableRow from "../Tables/TableRow.jsx";
@@ -20,6 +21,7 @@ import MakePaymentButton from "../Buttons/MakePaymentButton.jsx";
 import FeeBreakdownButton from "../Buttons/FeeBreakdownButton.jsx";
 import SideNav from "../SideNav/SideNav.jsx";
 import { IconButton } from "@chakra-ui/react";
+import { jwtDecode } from "jwt-decode";
 
 // Dashboard home is the home component where clients will enter
 // It will host the side drawer, profile information, condo information all that
@@ -36,10 +38,21 @@ const DashBoardHomeCR = () => {
   const [lockersPerPage, setLockersPerPage] = useState(5);
   const [parkingCurrentPage, setParkingCurrentPage] = useState(1);
   const [parkingsPerPage, setParkingsPerPage] = useState(5);
-  const userData = JSON.parse(localStorage.getItem("userData"));
   const userDataArray = userData ? Object.entries(userData) : [];
   const userID = userDataArray.length > 1 ? userDataArray[0][1] : "";
-  const token = localStorage.getItem("token");
+
+  const [searchParams] = useSearchParams();
+  var token = searchParams.get("token");
+  var userData;
+
+  if (token) {
+    console.log("Token: ", token);
+    userData = jwtDecode(token);
+    localStorage.setItem("userData", JSON.stringify(userData));
+  } else {
+    token = localStorage.getItem("token");
+    userData = JSON.parse(localStorage.getItem("userData"));
+  }
 
   // Fetch parking spots data
   const fetchParkingSpots = () => {
@@ -121,10 +134,7 @@ const DashBoardHomeCR = () => {
   // Calculate the currently displayed condos
   const indexOfLastCondo = condoCurrentPage * condosPerPage;
   const indexOfFirstCondo = indexOfLastCondo - condosPerPage;
-  const currentCondos = condos.slice(
-    indexOfFirstCondo,
-    indexOfLastCondo
-  );
+  const currentCondos = condos.slice(indexOfFirstCondo, indexOfLastCondo);
 
   // change page
   const paginateCondos = (pageNumber) => setCondoCurrentPage(pageNumber);
@@ -155,10 +165,7 @@ const DashBoardHomeCR = () => {
   // Calculate the currently displayed lockers
   const indexOfLastLocker = lockerCurrentPage * lockersPerPage;
   const indexOfFirstLocker = indexOfLastLocker - lockersPerPage;
-  const currentLockers = lockers.slice(
-    indexOfFirstLocker,
-    indexOfLastLocker
-  );
+  const currentLockers = lockers.slice(indexOfFirstLocker, indexOfLastLocker);
 
   // change page
   const paginateLockers = (pageNumber) => setLockerCurrentPage(pageNumber);
@@ -254,36 +261,41 @@ const DashBoardHomeCR = () => {
 
           {/* condo units table */}
           <div
-          className="flex flex-col justify-center items-center w-full"
-          style={{ paddingTop: 48, paddingBottom: 0 }}
+            className="flex flex-col justify-center items-center w-full"
+            style={{ paddingTop: 48, paddingBottom: 0 }}
           >
             {/* Properties card goes here */}
             <TableCard className={"gap-4"}>
               <TableCardHeader title={"My Condo Units"}></TableCardHeader>
               {/* Body of condo card */}
               <div>
-              {condos.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <th>Condo ID</th>
-                    <th>Condo Number</th>
-                    <th>Condo Size</th>
-                    <th>Occupant Type</th>
-                  </TableHeader>
-                  {currentCondos.map((condo, index) => (
-                    <TableRow key={index}>
-                      <td>{condo.condoid}</td>
-                      <td>{condo.condo_number}</td>
-                      <td>{condo.size || 'N/A'}</td>
-                      <td>Condo Renter</td>
-                    </TableRow>
-                  ))}
-                </Table>
-              ) : (
-                <div className={"text-black text-base font-medium font-inter"}>
-                  <h3>You currently have no condo units associated to your account!</h3>
-                </div>
-              )}
+                {condos.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <th>Condo ID</th>
+                      <th>Condo Number</th>
+                      <th>Condo Size</th>
+                      <th>Occupant Type</th>
+                    </TableHeader>
+                    {currentCondos.map((condo, index) => (
+                      <TableRow key={index}>
+                        <td>{condo.condoid}</td>
+                        <td>{condo.condo_number}</td>
+                        <td>{condo.size || "N/A"}</td>
+                        <td>Condo Renter</td>
+                      </TableRow>
+                    ))}
+                  </Table>
+                ) : (
+                  <div
+                    className={"text-black text-base font-medium font-inter"}
+                  >
+                    <h3>
+                      You currently have no condo units associated to your
+                      account!
+                    </h3>
+                  </div>
+                )}
               </div>
               <div className="flex justify-between items-center p-4">
                 <button
@@ -308,7 +320,9 @@ const DashBoardHomeCR = () => {
                   onChange={handleCondoRowsChange}
                   className="p-2 rounded bg-white border border-gray-300"
                 >
-                  <option value="5" selected>5</option>
+                  <option value="5" selected>
+                    5
+                  </option>
                   <option value="10">10</option>
                   <option value="15">15</option>
                   <option value="20">20</option>
@@ -323,24 +337,24 @@ const DashBoardHomeCR = () => {
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Parking Units 🚗"}></TableCardHeader>
             <div>
-            {parkingSpots.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <th>Parking Spot ID</th>
-                  <th>User ID</th>
-                </TableHeader>
-                {currentParkings.map((spot) => (
-                  <TableRow key={spot.parkingid}>
-                    <td>{spot.parkingid}</td>
-                    <td>{userID}</td>
-                  </TableRow>
-                ))}
-              </Table>
-            ) : (
-              <div className={"text-black text-base font-medium font-inter"}>
-                <h3>You currently do not have any parkings assigned!</h3>
-              </div>
-            )}
+              {parkingSpots.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Parking Spot ID</th>
+                    <th>User ID</th>
+                  </TableHeader>
+                  {currentParkings.map((spot) => (
+                    <TableRow key={spot.parkingid}>
+                      <td>{spot.parkingid}</td>
+                      <td>{userID}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any parkings assigned!</h3>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center p-4">
               <button
@@ -365,7 +379,9 @@ const DashBoardHomeCR = () => {
                 onChange={handleParkingRowsChange}
                 className="p-2 rounded bg-white border border-gray-300"
               >
-                <option value="5" selected>5</option>
+                <option value="5" selected>
+                  5
+                </option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
@@ -379,24 +395,24 @@ const DashBoardHomeCR = () => {
           <TableCard className={"gap-4"} style={{ marginBottom: "48px" }}>
             <TableCardHeader title={"Locker Units 🔒"}></TableCardHeader>
             <div>
-            {lockers.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <th>Locker ID</th>
-                  <th>User ID</th>
-                </TableHeader>
-                {currentLockers.map((locker) => (
-                  <TableRow key={locker.locker_id}>
-                    <td>{lockers[0].lockerid}</td>
-                    <td>{userID}</td>
-                  </TableRow>
-                ))}
-              </Table>
-            ) : (
-              <div className={"text-black text-base font-medium font-inter"}>
-                <h3>You currently do not have any lockers assigned!</h3>
-              </div>
-            )}
+              {lockers.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <th>Locker ID</th>
+                    <th>User ID</th>
+                  </TableHeader>
+                  {currentLockers.map((locker) => (
+                    <TableRow key={locker.locker_id}>
+                      <td>{lockers[0].lockerid}</td>
+                      <td>{userID}</td>
+                    </TableRow>
+                  ))}
+                </Table>
+              ) : (
+                <div className={"text-black text-base font-medium font-inter"}>
+                  <h3>You currently do not have any lockers assigned!</h3>
+                </div>
+              )}
             </div>
             <div className="flex justify-between items-center p-4">
               <button
@@ -421,7 +437,9 @@ const DashBoardHomeCR = () => {
                 onChange={handleLockerRowsChange}
                 className="p-2 rounded bg-white border border-gray-300"
               >
-                <option value="5" selected>5</option>
+                <option value="5" selected>
+                  5
+                </option>
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="20">20</option>
