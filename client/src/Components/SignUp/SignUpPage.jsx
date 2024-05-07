@@ -10,7 +10,7 @@ const SignUpPage = () => {
 
   const navigation = useNavigate();
   const googleSignUp = () => {
-    window.location.href = "http://localhost:3000/api/v1/google/";
+    window.location.href = "http://hortzcloud.com:3000/api/v1/google/";
   };
 
   return (

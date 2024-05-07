@@ -24,7 +24,7 @@ const LoginPage = () => {
   const condoManagementCompanyStore = useCondoManagementCompany();
 
   const googleSignIn = () => {
-    window.location.href = "http://localhost:3000/api/v1/google/";
+    window.location.href = "http://hortzcloud.com:3000/api/v1/google/";
   };
 
   // On click of button, this will login the users and redirect them to their profiles
